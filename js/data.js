@@ -1984,3 +1984,105 @@ const POSITIONS = [
 ];
 
 const START_YEAR = new Date().getFullYear();
+
+// --- CareerSim V3: formatos, mercado, temas e eventos ---
+const LEAGUE_FORMATS = {
+  BR:{teams:20,matches:38,mode:'double_round_robin',championPoints:80,label:'20 clubes · 38 rodadas · 19 em casa e 19 fora'},
+  ES:{teams:20,matches:38,mode:'double_round_robin',championPoints:82,label:'20 clubes · 38 rodadas · turno e returno'},
+  ENG:{teams:20,matches:38,mode:'double_round_robin',championPoints:84,label:'20 clubes · 38 rodadas · turno e returno'},
+  IT:{teams:20,matches:38,mode:'double_round_robin',championPoints:82,label:'20 clubes · 38 rodadas · turno e returno'},
+  DE:{teams:18,matches:34,mode:'double_round_robin',championPoints:73,label:'18 clubes · 34 rodadas · turno e returno'},
+  FR:{teams:18,matches:34,mode:'double_round_robin',championPoints:74,label:'18 clubes · 34 rodadas · turno e returno'},
+  PT:{teams:18,matches:34,mode:'double_round_robin',championPoints:77,label:'18 clubes · 34 rodadas · turno e returno'},
+  NL:{teams:18,matches:34,mode:'double_round_robin',championPoints:77,label:'18 clubes · 34 rodadas · turno e returno'},
+  BE:{teams:18,matches:34,mode:'double_round_robin',championPoints:72,label:'18 clubes · fase regular em turno e returno (play-off simplificado)'},
+  TR:{teams:18,matches:34,mode:'double_round_robin',championPoints:74,label:'18 clubes · 34 rodadas · turno e returno'},
+  SA:{teams:18,matches:34,mode:'double_round_robin',championPoints:74,label:'18 clubes · 34 rodadas · turno e returno'},
+  JP:{teams:20,matches:38,mode:'double_round_robin',championPoints:72,label:'20 clubes · turno e returno (modelo padrão da J1)'},
+  MX:{teams:18,matches:34,mode:'split_season',championPoints:66,label:'Apertura + Clausura, 17 partidas em cada fase (play-offs simplificados)'},
+  US:{teams:30,matches:34,mode:'regional',championPoints:67,label:'34 jogos de temporada regular + playoffs simplificados'},
+  AR:{teams:30,matches:32,mode:'groups',championPoints:62,label:'zonas + mata-mata, adaptado para a simulação anual'},
+  UY:{teams:16,matches:30,mode:'double_round_robin',championPoints:61,label:'16 clubes · 30 jogos no modelo anual simplificado'},
+  CO:{teams:20,matches:38,mode:'split_season',championPoints:70,label:'Apertura + Finalización, adaptados para 38 jogos regulares'},
+  CL:{teams:16,matches:30,mode:'double_round_robin',championPoints:60,label:'16 clubes · 30 rodadas · turno e returno'},
+  GB:{teams:12,matches:38,mode:'split',championPoints:78,label:'fase regular + divisão em grupos, modelo simplificado'}
+};
+
+const LEAGUE_CLUB_POOLS = {
+  BR:['Athletico Paranaense','Atlético Mineiro','Bahia','Botafogo','Chapecoense','Corinthians','Coritiba','Cruzeiro','Flamengo','Fluminense','Grêmio','Internacional','Mirassol','Palmeiras','Red Bull Bragantino','Remo','Santos','São Paulo','Vasco da Gama','Vitória'],
+  ES:['Athletic Club','Atlético de Madrid','Barcelona','Real Betis','Celta de Vigo','Deportivo La Coruña','Espanyol','Getafe','Levante','Málaga','Osasuna','Racing Santander','Rayo Vallecano','Real Madrid','Real Sociedad','Sevilla','Valencia','Villarreal','Alavés','Elche'],
+  ENG:['Arsenal','Aston Villa','Bournemouth','Brentford','Brighton','Chelsea','Coventry City','Crystal Palace','Everton','Fulham','Hull City','Ipswich Town','Leeds United','Liverpool','Manchester City','Manchester United','Newcastle United','Nottingham Forest','Sunderland','Tottenham'],
+  DE:['Bayern de Munique','Borussia Dortmund','RB Leipzig','Bayer Leverkusen','Eintracht Frankfurt','Stuttgart','Wolfsburg','Freiburg','Mainz','Werder Bremen','Borussia Mönchengladbach','Hoffenheim','Augsburg','Union Berlin','Hamburgo','Köln','St. Pauli','Heidenheim'],
+  IT:['Inter de Milão','Milan','Juventus','Napoli','Roma','Lazio','Atalanta','Fiorentina','Bologna','Torino','Udinese','Genoa','Cagliari','Parma','Lecce','Como','Verona','Sassuolo','Pisa','Cremonese'],
+  FR:['Paris Saint-Germain','Marseille','Monaco','Lyon','Lille','Nice','Lens','Rennes','Strasbourg','Toulouse','Nantes','Auxerre','Angers','Brest','Le Havre','Metz','Lorient','Paris FC'],
+  PT:['Benfica','Porto','Sporting CP','Braga','Vitória de Guimarães','Boavista','Famalicão','Rio Ave','Moreirense','Casa Pia','Estoril','Arouca','Gil Vicente','Santa Clara','Nacional','AVS','Alverca','Tondela'],
+  NL:['Ajax','PSV','Feyenoord','AZ Alkmaar','Twente','Utrecht','Heerenveen','Sparta Rotterdam','Groningen','NEC','Go Ahead Eagles','Heracles','Fortuna Sittard','PEC Zwolle','NAC Breda','Excelsior','Volendam','Telstar'],
+  SA:['Al-Hilal','Al-Nassr','Al-Ittihad','Al-Ahli','Al-Ettifaq','Al-Shabab','Al-Taawoun','Al-Fateh','Damac','Al-Fayha','Al-Khaleej','Al-Raed','Al-Riyadh','Al-Wehda','Al-Okhdood','Al-Qadsiah','Al-Kholood','Neom SC']
+};
+
+const DOMESTIC_CUP_FORMATS = {
+  BR:{stages:[{name:'5ª fase',legs:2},{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
+  ES:{stages:[{name:'Fase inicial',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
+  ENG:{stages:[{name:'3ª fase',legs:1},{name:'4ª fase',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:1},{name:'Final',legs:1}]},
+  DE:{stages:[{name:'2ª fase',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:1},{name:'Final',legs:1}]},
+  FR:{stages:[{name:'32-avos',legs:1},{name:'16-avos',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:1},{name:'Final',legs:1}]},
+  PT:{stages:[{name:'3ª eliminatória',legs:1},{name:'4ª eliminatória',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:2},{name:'Final',legs:1}]}
+};
+
+const CONTINENTAL_FORMATS = {
+  'UEFA Champions League':{phaseMatches:8,phase:'Fase de liga',qualifyPoints:10,directPoints:15,knockout:[{name:'Play-off',legs:2,conditional:true},{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
+  'UEFA Europa League':{phaseMatches:8,phase:'Fase de liga',qualifyPoints:9,directPoints:14,knockout:[{name:'Play-off',legs:2,conditional:true},{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
+  'UEFA Conference League':{phaseMatches:6,phase:'Fase de liga',qualifyPoints:7,directPoints:12,knockout:[{name:'Play-off',legs:2,conditional:true},{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
+  'CONMEBOL Libertadores':{phaseMatches:6,phase:'Fase de grupos',qualifyPoints:9,directPoints:9,knockout:[{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
+  'CONMEBOL Sul-Americana':{phaseMatches:6,phase:'Fase de grupos',qualifyPoints:9,directPoints:12,knockout:[{name:'Play-off',legs:2,conditional:true},{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
+  'CONCACAF Champions Cup':{phaseMatches:0,phase:'Mata-mata',qualifyPoints:0,directPoints:0,knockout:[{name:'Primeira fase',legs:2},{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
+  'AFC Champions League Elite':{phaseMatches:8,phase:'Fase de liga',qualifyPoints:10,directPoints:10,knockout:[{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:1},{name:'Final',legs:1}]},
+  'AFC Champions League Two':{phaseMatches:6,phase:'Fase de grupos',qualifyPoints:9,directPoints:9,knockout:[{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]}
+};
+
+const TRANSFER_TARGETS = [
+  {name:'Braga',countryCode:'PT',minOverall:72,strength:78},{name:'Ajax',countryCode:'NL',minOverall:73,strength:82},
+  {name:'Benfica',countryCode:'PT',minOverall:75,strength:84},{name:'Porto',countryCode:'PT',minOverall:76,strength:84},{name:'Sporting CP',countryCode:'PT',minOverall:77,strength:85},
+  {name:'Borussia Dortmund',countryCode:'DE',minOverall:80,strength:87},{name:'Napoli',countryCode:'IT',minOverall:81,strength:87},{name:'Atlético de Madrid',countryCode:'ES',minOverall:82,strength:88},
+  {name:'Arsenal',countryCode:'ENG',minOverall:84,strength:89},{name:'Chelsea',countryCode:'ENG',minOverall:85,strength:88},{name:'Liverpool',countryCode:'ENG',minOverall:86,strength:91},{name:'Manchester City',countryCode:'ENG',minOverall:87,strength:92},
+  {name:'Inter de Milão',countryCode:'IT',minOverall:86,strength:90},{name:'Paris Saint-Germain',countryCode:'FR',minOverall:87,strength:91},
+  {name:'Bayern de Munique',countryCode:'DE',minOverall:90,strength:93},{name:'Barcelona',countryCode:'ES',minOverall:90,strength:93},{name:'Real Madrid',countryCode:'ES',minOverall:91,strength:94}
+];
+
+const CLUB_THEMES = {
+  'Santos':{accent:'#f4f4f4',bg:'#070707',panel:'#111111',panel2:'#191919',border:'#343434'},
+  'Cruzeiro':{accent:'#68a7ff',bg:'#06142b',panel:'#0b2346',panel2:'#11315f',border:'#244d82'},
+  'Chelsea':{accent:'#6aa8ff',bg:'#06142e',panel:'#0b2350',panel2:'#103168',border:'#21477e'},
+  'Barcelona':{accent:'#f5c84b',bg:'#170715',panel:'#28102b',panel2:'#361542',border:'#5c265f'},
+  'Real Madrid':{accent:'#d6c7ff',bg:'#111018',panel:'#1c1a28',panel2:'#272338',border:'#443d5c'},
+  'Bayern de Munique':{accent:'#ff6f7a',bg:'#21080d',panel:'#341016',panel2:'#48151d',border:'#6c2630'},
+  'Benfica':{accent:'#ff6d6d',bg:'#220909',panel:'#351010',panel2:'#481717',border:'#6b2929'},
+  'Flamengo':{accent:'#ff5151',bg:'#160707',panel:'#290b0b',panel2:'#3b1010',border:'#5e2020'},
+  'Palmeiras':{accent:'#65e69a',bg:'#06170f',panel:'#0b281b',panel2:'#103a27',border:'#245c42'},
+  'Grêmio':{accent:'#69c9ff',bg:'#071722',panel:'#0c2838',panel2:'#113b52',border:'#285d78'},
+  'Internacional':{accent:'#ff6a6a',bg:'#200808',panel:'#330d0d',panel2:'#481313',border:'#702727'},
+  'Manchester City':{accent:'#89d7ff',bg:'#071b25',panel:'#0d2b39',panel2:'#123e50',border:'#2b6074'},
+  'Liverpool':{accent:'#ff6b6b',bg:'#1d0909',panel:'#310e0e',panel2:'#451515',border:'#6d2727'},
+  'Arsenal':{accent:'#ff7171',bg:'#21090d',panel:'#350f16',panel2:'#491620',border:'#6c2934'},
+  'Paris Saint-Germain':{accent:'#ff6c78',bg:'#07132b',panel:'#0c2148',panel2:'#11305f',border:'#294d7d'},
+  'Ajax':{accent:'#ff7171',bg:'#1e0a0a',panel:'#321010',panel2:'#461717',border:'#692b2b'},
+  'Porto':{accent:'#74a9ff',bg:'#07152b',panel:'#0c2247',panel2:'#12325f',border:'#28517e'}
+};
+
+const CAREER_EVENTS = [
+  {id:'training',title:'Semana livre para treinar',description:'O treinador oferece uma sessão extra. Você pode forçar o desenvolvimento ou preservar o físico.',choices:[
+    {label:'Treinar forte',action:'train_hard',effect:'+ chance de evolução; - moral se der errado'},
+    {label:'Focar em recuperação',action:'recover',effect:'+ moral e consistência'}]},
+  {id:'media',title:'Entrevista após boa atuação',description:'A imprensa pergunta onde você pretende chegar na carreira.',choices:[
+    {label:'“Quero ser o melhor do mundo.”',action:'ambitious',effect:'+ reputação; + pressão'},
+    {label:'“Só penso no próximo jogo.”',action:'humble',effect:'+ moral; evolução mais estável'}]},
+  {id:'coach',title:'Conversa com o treinador',description:'A comissão técnica quer saber se você deseja assumir mais responsabilidade dentro do time.',choices:[
+    {label:'Pedir protagonismo',action:'leadership',effect:'+ reputação; pequena chance de +GER'},
+    {label:'Continuar aprendendo',action:'learn',effect:'+ potencial se ainda for jovem'}]},
+  {id:'agent',title:'Seu empresário traz uma decisão',description:'Há interesse de clubes, mas uma mudança de postura pode afetar seu futuro.',choices:[
+    {label:'Buscar um salto na carreira',action:'market_push',effect:'+ chance de receber mais propostas'},
+    {label:'Priorizar estabilidade',action:'stability',effect:'+ moral no clube atual'}]},
+  {id:'fatigue',title:'Sequência pesada de jogos',description:'Você sente o desgaste do calendário e precisa decidir como lidar com a próxima semana.',choices:[
+    {label:'Jogar mesmo cansado',action:'play_tired',effect:'risco de queda de moral; + reputação'},
+    {label:'Pedir descanso',action:'rest',effect:'+ moral; sem bônus de reputação'}]}
+];
