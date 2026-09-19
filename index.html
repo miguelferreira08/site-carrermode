@@ -125,7 +125,7 @@
             <div id="favorite-line">Favoritismo calculado pela força e mando de campo.</div>
             <small id="strength-line"></small>
           </div>
-          <button class="primary full" id="simulate-btn">Simular temporada completa →</button>
+          <button class="primary full" id="simulate-btn">Simular temporada →</button>
         </article>
 
         <article class="panel season-card">
@@ -219,6 +219,33 @@
       <div id="spotlight-moments" class="match-timeline"></div>
       <div id="spotlight-stats" class="stat-row"></div>
       <button id="close-spotlight" class="primary full" type="button">Ver resumo da temporada →</button>
+    </div>
+  </div>
+
+
+  <div id="match-decision-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card decision-card">
+      <p class="eyebrow" id="decision-competition">MOMENTO DECISIVO</p>
+      <h2 id="decision-title"></h2>
+      <p id="decision-match" class="spotlight-favorite"></p>
+      <p id="decision-description"></p>
+      <div id="decision-choices" class="event-choices"></div>
+      <div id="decision-result" class="decision-result hidden"></div>
+      <button id="decision-continue" class="primary full hidden" type="button">Continuar simulando a temporada →</button>
+    </div>
+  </div>
+
+  <div id="season-summary-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card season-summary-card">
+      <p class="eyebrow" id="summary-year">TEMPORADA</p>
+      <h2 id="summary-title">Resumo da temporada</h2>
+      <p id="summary-subtitle"></p>
+      <h3>Classificação da liga</h3>
+      <div class="summary-table-wrap"><table class="summary-table"><thead><tr><th>#</th><th>Clube</th><th>J</th><th>V</th><th>E</th><th>D</th><th>SG</th><th>PTS</th></tr></thead><tbody id="summary-standings"></tbody></table></div>
+      <h3>Copas</h3><div id="summary-cups" class="summary-statuses"></div>
+      <h3>Suas decisões</h3><div id="summary-decisions" class="summary-decisions"></div>
+      <h3>Propostas recebidas</h3><div id="summary-offers" class="summary-offers"></div>
+      <div class="summary-actions"><button id="summary-close" class="secondary" type="button">Fechar resumo</button><button id="summary-market" class="primary" type="button">Ver propostas →</button></div>
     </div>
   </div>
 
