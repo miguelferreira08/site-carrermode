@@ -2069,6 +2069,33 @@ const CLUB_THEMES = {
   'Porto':{accent:'#74a9ff',bg:'#07152b',panel:'#0c2247',panel2:'#12325f',border:'#28517e'}
 };
 
+
+Object.assign(CLUB_THEMES,{
+  'Santos':{accent:'#f5f5f5',secondary:'#bfc2c4',bg:'#050505',panel:'#101010',panel2:'#1a1a1a',border:'#3b3b3b',buttonText:'#080808'},
+  'Cruzeiro':{accent:'#3277e8',secondary:'#ffffff',bg:'#04142e',panel:'#09234a',panel2:'#10366f',border:'#2a5791',buttonText:'#ffffff'},
+  'Chelsea':{accent:'#2468d8',secondary:'#ffffff',bg:'#04132e',panel:'#09224d',panel2:'#0f3473',border:'#2a5791',buttonText:'#ffffff'},
+  'Bayern de Munique':{accent:'#e33445',secondary:'#ffffff',bg:'#21070b',panel:'#371016',panel2:'#50151e',border:'#7c2b36',buttonText:'#ffffff'},
+  'Barcelona':{accent:'#d8ad2f',secondary:'#2d6cc5',bg:'#160716',panel:'#29102d',panel2:'#3c1748',border:'#642b68',buttonText:'#160716'},
+  'Real Madrid':{accent:'#f4f1ff',secondary:'#806bc9',bg:'#0d0c14',panel:'#1b1927',panel2:'#29253c',border:'#50496b',buttonText:'#17131f'},
+  'Benfica':{accent:'#e63c45',secondary:'#ffffff',bg:'#210707',panel:'#351010',panel2:'#4c1717',border:'#762929',buttonText:'#ffffff'},
+  'Porto':{accent:'#2c6fd5',secondary:'#ffffff',bg:'#06142c',panel:'#0b2249',panel2:'#10336b',border:'#2a5790',buttonText:'#ffffff'},
+  'Sporting CP':{accent:'#2ea968',secondary:'#ffffff',bg:'#051b12',panel:'#0b2d1f',panel2:'#10452e',border:'#296747',buttonText:'#ffffff'},
+  'Braga':{accent:'#e24b52',secondary:'#ffffff',bg:'#21090b',panel:'#351116',panel2:'#4c1820',border:'#74303a',buttonText:'#ffffff'},
+  'Borussia Dortmund':{accent:'#f0d52f',secondary:'#111111',bg:'#0d0d08',panel:'#1c1b0c',panel2:'#302d10',border:'#5d5720',buttonText:'#111111'},
+  'Napoli':{accent:'#55b8e8',secondary:'#ffffff',bg:'#071a25',panel:'#0d2b3a',panel2:'#124358',border:'#2c667e',buttonText:'#071a25'},
+  'Atlético de Madrid':{accent:'#e54654',secondary:'#ffffff',bg:'#1d080c',panel:'#311017',panel2:'#481620',border:'#73303b',buttonText:'#ffffff'},
+  'Arsenal':{accent:'#df3340',secondary:'#ffffff',bg:'#20070b',panel:'#351018',panel2:'#4b1721',border:'#74303a',buttonText:'#ffffff'},
+  'Liverpool':{accent:'#d9343f',secondary:'#ffffff',bg:'#1b0708',panel:'#300e11',panel2:'#451519',border:'#702a30',buttonText:'#ffffff'},
+  'Manchester City':{accent:'#6ec4ec',secondary:'#ffffff',bg:'#071b27',panel:'#0c2d3d',panel2:'#12475d',border:'#2c6a81',buttonText:'#071b27'},
+  'Inter de Milão':{accent:'#397be3',secondary:'#111111',bg:'#050d1f',panel:'#0a1935',panel2:'#0e2852',border:'#24497a',buttonText:'#ffffff'},
+  'Paris Saint-Germain':{accent:'#2458b7',secondary:'#e43c4b',bg:'#061129',panel:'#0b2048',panel2:'#103264',border:'#294e80',buttonText:'#ffffff'},
+  'Flamengo':{accent:'#d83039',secondary:'#111111',bg:'#150505',panel:'#290b0c',panel2:'#3e1013',border:'#652329',buttonText:'#ffffff'},
+  'Palmeiras':{accent:'#29965c',secondary:'#ffffff',bg:'#05170f',panel:'#0a291b',panel2:'#0f4029',border:'#276344',buttonText:'#ffffff'},
+  'Grêmio':{accent:'#4fafe1',secondary:'#ffffff',bg:'#061722',panel:'#0b2a3a',panel2:'#10435a',border:'#2a647e',buttonText:'#071722'},
+  'Internacional':{accent:'#dd3942',secondary:'#ffffff',bg:'#1d0708',panel:'#321013',panel2:'#48171b',border:'#722b31',buttonText:'#ffffff'},
+  'Ajax':{accent:'#de3c45',secondary:'#ffffff',bg:'#1d0808',panel:'#311010',panel2:'#471717',border:'#6d2b2b',buttonText:'#ffffff'}
+});
+
 const CAREER_EVENTS = [
   {id:'training',title:'Semana livre para treinar',description:'O treinador oferece uma sessão extra. Você pode forçar o desenvolvimento ou preservar o físico.',choices:[
     {label:'Treinar forte',action:'train_hard',effect:'+ chance de evolução; - moral se der errado'},

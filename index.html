@@ -121,7 +121,11 @@
           <h3 id="match-title">Clube A x Clube B</h3>
           <p class="muted" id="match-context">Temporada</p>
           <div class="versus"><span id="home-team"></span><b>×</b><span id="away-team"></span></div>
-          <button class="primary full" id="simulate-btn">Simular partida →</button>
+          <div class="favoritism-box">
+            <div id="favorite-line">Favoritismo calculado pela força e mando de campo.</div>
+            <small id="strength-line"></small>
+          </div>
+          <button class="primary full" id="simulate-btn">Simular temporada completa →</button>
         </article>
 
         <article class="panel season-card">
@@ -206,6 +210,17 @@
       <div id="offers" class="offers"></div>
     </section>
   </main>
+
+  <div id="season-spotlight" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card spotlight-card">
+      <p class="eyebrow" id="spotlight-competition">PARTIDA EM DESTAQUE</p>
+      <h2 id="spotlight-title"></h2>
+      <p id="spotlight-favorite" class="spotlight-favorite"></p>
+      <div id="spotlight-moments" class="match-timeline"></div>
+      <div id="spotlight-stats" class="stat-row"></div>
+      <button id="close-spotlight" class="primary full" type="button">Ver resumo da temporada →</button>
+    </div>
+  </div>
 
   <div id="event-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
