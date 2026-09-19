@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerSim — Sua história. Seu futebol.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="#" data-view="home">Career<span>Sim</span></a>
+    <nav id="nav">
+      <button data-view="home" class="active">Início</button>
+      <button data-view="career">Carreira</button>
+      <button data-view="stats">Estatísticas</button>
+      <button data-view="market">Mercado</button>
+    </nav>
+    <div id="mini-profile" class="mini-profile hidden"></div>
+  </header>
+
+  <main>
+    <section id="home" class="view active hero">
+      <div class="hero-glow"></div>
+      <div class="hero-content">
+        <p class="eyebrow">SIMULADOR DE CARREIRA</p>
+        <h1>Sua história.<br><span>Seu futebol.</span></h1>
+        <p class="lead">Crie seu jogador, evolua temporada após temporada, receba propostas e construa uma carreira inesquecível.</p>
+        <button class="primary big" id="start-btn">Começar agora →</button>
+        <div class="hero-stats">
+          <div><strong>12</strong><small>clubes</small></div>
+          <div><strong>6</strong><small>ligas</small></div>
+          <div><strong>∞</strong><small>possibilidades</small></div>
+        </div>
+      </div>
+      <div class="player-silhouette"><span>10</span></div>
+    </section>
+
+    <section id="create" class="view page">
+      <div class="page-head">
+        <p class="eyebrow">PASSO 1 DE 1</p>
+        <h2>Crie seu jogador</h2>
+        <p>Essas informações serão usadas para iniciar sua carreira.</p>
+      </div>
+      <form id="player-form" class="panel form-grid">
+        <label>Nome<input id="name" required maxlength="24" placeholder="João Silva"></label>
+        <label>Nacionalidade
+          <select id="nationality"><option>Brasil</option><option>Argentina</option><option>Portugal</option><option>Espanha</option><option>França</option></select>
+        </label>
+        <label>Posição
+          <select id="position"><option value="ATA">Atacante</option><option value="PE">Ponta Esquerda</option><option value="PD">Ponta Direita</option><option value="MEI">Meia Ofensivo</option><option value="MC">Meio-campista</option><option value="ZAG">Zagueiro</option></select>
+        </label>
+        <label>Pé dominante<select id="foot"><option>Direito</option><option>Esquerdo</option></select></label>
+        <label>Clube inicial
+          <select id="club">
+            <option>Santos</option><option>Grêmio</option><option>Internacional</option><option>Fluminense</option>
+          </select>
+        </label>
+        <label>Número<input id="number" type="number" min="1" max="99" value="10"></label>
+        <button class="primary full" type="submit">Iniciar carreira →</button>
+      </form>
+    </section>
+
+    <section id="career" class="view page">
+      <div class="dashboard-grid">
+        <article class="panel profile-card">
+          <div class="avatar" id="avatar">10</div>
+          <div><p class="muted">JOGADOR</p><h2 id="p-name">Jogador</h2><p><span id="p-pos"></span> · <span id="p-age"></span> anos</p></div>
+          <div class="overall"><strong id="p-overall">67</strong><small>GER</small></div>
+          <div class="club-line"><div class="club-badge">⚽</div><div><strong id="p-club"></strong><small id="p-league"></small></div></div>
+          <div class="value-line"><span>Valor de mercado</span><strong id="p-value"></strong></div>
+        </article>
+
+        <article class="panel next-match">
+          <p class="muted">PRÓXIMA PARTIDA</p>
+          <h3 id="match-title">Santos x Palmeiras</h3>
+          <p class="muted">Campeonato nacional · Temporada <span id="season-label"></span></p>
+          <div class="versus"><span id="home-team"></span><b>×</b><span id="away-team"></span></div>
+          <button class="primary full" id="simulate-btn">Simular partida →</button>
+        </article>
+
+        <article class="panel season-card">
+          <div class="section-title"><h3>Temporada <span id="season-year"></span></h3><span id="form-badge">Em andamento</span></div>
+          <div class="stat-row">
+            <div><strong id="s-games">0</strong><small>Jogos</small></div>
+            <div><strong id="s-goals">0</strong><small>Gols</small></div>
+            <div><strong id="s-assists">0</strong><small>Assist.</small></div>
+            <div><strong id="s-rating">-</strong><small>Nota</small></div>
+          </div>
+          <button class="secondary full" id="finish-season">Encerrar temporada</button>
+        </article>
+
+        <article class="panel news-card">
+          <div class="section-title"><h3>Últimas notícias</h3></div>
+          <div id="news"></div>
+        </article>
+      </div>
+
+      <article id="match-result" class="panel match-result hidden">
+        <div class="section-title"><h3>Resultado da partida</h3><button class="icon-btn" id="close-result">×</button></div>
+        <div class="score"><span id="result-home"></span><strong id="score"></strong><span id="result-away"></span></div>
+        <div id="player-match-stats" class="stat-row"></div>
+      </article>
+    </section>
+
+    <section id="stats" class="view page">
+      <div class="page-head"><p class="eyebrow">DESEMPENHO</p><h2>Estatísticas da carreira</h2></div>
+      <div class="stats-overview">
+        <div class="panel big-stat"><strong id="career-games">0</strong><span>Jogos</span></div>
+        <div class="panel big-stat"><strong id="career-goals">0</strong><span>Gols</span></div>
+        <div class="panel big-stat"><strong id="career-assists">0</strong><span>Assistências</span></div>
+        <div class="panel big-stat"><strong id="career-titles">0</strong><span>Títulos</span></div>
+      </div>
+      <article class="panel">
+        <div class="section-title"><h3>Histórico</h3></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Temporada</th><th>Clube</th><th>Jogos</th><th>Gols</th><th>Assist.</th><th>Nota</th></tr></thead><tbody id="history-body"></tbody></table>
+        </div>
+      </article>
+    </section>
+
+    <section id="market" class="view page">
+      <div class="page-head"><p class="eyebrow">MERCADO</p><h2>Propostas de transferência</h2><p>Boas atuações aumentam sua chance de receber propostas.</p></div>
+      <div id="offers" class="offers"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
