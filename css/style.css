@@ -293,3 +293,114 @@ body{transition:background .35s ease,color .25s ease}
 /* V7.2: atributo principal da posição */
 .draft-attribute-choice.role-primary,.player-attribute.role-primary{box-shadow:0 0 0 1px var(--green) inset;border-color:var(--green)!important}
 .draft-attribute-choice.role-primary small,.player-attribute.role-primary small{color:var(--green)}
+
+/* ===== V7.5: carreira mais leve visualmente ===== */
+.dashboard-grid{
+  grid-template-columns:1.15fr .95fr .95fr;
+  grid-template-areas:
+    "profile next next"
+    "profile attrs attrs"
+    "season comps national"
+    "news news news";
+  align-items:start;
+}
+.profile-card{grid-area:profile}
+.next-match{grid-area:next}
+.player-attributes-card{grid-area:attrs}
+.season-card{grid-area:season}
+.competitions-card{grid-area:comps}
+.national-card{grid-area:national}
+.news-card{grid-area:news}
+.dashboard-grid .panel{
+  padding:18px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 92%,#111),color-mix(in srgb,var(--panel2) 68%,#05090d));
+  box-shadow:0 12px 28px rgba(0,0,0,.16);
+}
+.profile-card .muted:first-child,.next-match .muted:first-child{letter-spacing:.12em;text-transform:uppercase}
+.section-title h3{display:flex;align-items:center;gap:8px;font-size:16px;margin:0}
+.player-attributes-card .section-title h3::before{content:"🧬"}
+.competitions-card .section-title h3::before{content:"🏁"}
+.national-card .section-title h3::before{content:"🌍"}
+.news-card .section-title h3::before{content:"📰"}
+.profile-card{row-gap:14px}
+.rating-stack{display:flex;gap:10px;align-items:stretch}
+.overall,.potential{min-width:74px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:color-mix(in srgb,var(--panel) 78%,#000)}
+.overall strong,.potential strong{font-family:"Space Grotesk",Inter,sans-serif;line-height:1}
+.value-line,.club-line{background:color-mix(in srgb,var(--panel) 70%,#05090d)}
+.player-attributes{grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.player-attribute{padding:11px 10px 12px;gap:5px;border-radius:12px;background:color-mix(in srgb,var(--panel) 72%,#020406)}
+.player-attribute span{display:flex;align-items:center;gap:6px}
+.player-attribute span em{font-style:normal;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;background:color-mix(in srgb,var(--green) 18%,transparent);font-size:11px}
+.player-attribute strong{font-family:"Space Grotesk",Inter,sans-serif;font-size:21px;line-height:1}
+.player-attribute small{font-size:9px;line-height:1.4}
+.competition-list{display:grid;grid-template-columns:1fr;gap:8px}
+.competition-item{padding:12px 13px;border-radius:10px}
+.competition-item strong,.competition-item small{display:block}
+.competition-item small{margin-top:4px;color:var(--muted);line-height:1.35}
+.news-item{display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start}
+.news-item .news-icon{color:var(--green);font-size:14px;line-height:1.2;margin-top:1px}
+.news-item small{display:block;margin-top:4px}
+.next-match .versus{padding:18px 0 14px}
+.next-match .primary{margin-top:8px}
+.market-tier strong{display:block;margin-bottom:6px}
+.market-tier p{margin:0;color:var(--muted)}
+
+/* ===== V7.5: decisões de jogo visuais ===== */
+.decision-card{max-width:760px}
+.decision-visual{margin-top:18px}
+.decision-visual-label{margin-bottom:10px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+.decision-visual .visual-stage{position:relative;overflow:hidden;border-radius:18px;border:1px solid var(--border);background:linear-gradient(180deg,#11311f 0,#0f4424 30%,#0c3a1c 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03)}
+.decision-visual .visual-stage::before,.decision-visual .visual-stage::after{content:"";position:absolute;pointer-events:none}
+.goal-mouth .visual-stage{height:290px}
+.goal-mouth .visual-stage::before{left:12%;right:12%;top:22px;height:120px;border:6px solid rgba(238,243,245,.92);border-bottom:0;border-radius:10px 10px 0 0;box-shadow:0 16px 0 -10px rgba(255,255,255,.1)}
+.goal-mouth .visual-stage::after{left:0;right:0;bottom:40px;height:2px;background:rgba(255,255,255,.22)}
+.goal-mouth .visual-choice{position:absolute;top:36px;width:26%;min-height:104px}
+.goal-mouth .slot-left{left:9%}
+.goal-mouth .slot-center{left:37%}
+.goal-mouth .slot-right{right:9%}
+.goal-mouth .visual-choice:nth-child(4){top:auto;bottom:26px;left:50%;transform:translateX(-50%);width:min(260px,72%);min-height:86px}
+.goalkeeper-board .visual-stage,.defense-board .visual-stage,.build-board .visual-stage{height:250px;background:linear-gradient(180deg,#123824 0,#0d4b28 36%,#0d3c21 100%)}
+.goalkeeper-board .visual-stage::before,.defense-board .visual-stage::before,.build-board .visual-stage::before{inset:18px;border:1px solid rgba(255,255,255,.12);border-radius:14px}
+.goalkeeper-board .visual-stage::after{left:28%;right:28%;top:18px;height:58px;border:4px solid rgba(238,243,245,.9);border-bottom:0;border-radius:8px 8px 0 0}
+.defense-board .visual-stage::after{left:50%;top:18px;bottom:18px;width:1px;background:rgba(255,255,255,.12)}
+.build-board .visual-stage::after{left:12%;right:12%;top:50%;height:1px;background:rgba(255,255,255,.12)}
+.goalkeeper-board .visual-choice,.defense-board .visual-choice,.build-board .visual-choice{position:absolute;width:28%;min-height:94px}
+.goalkeeper-board .lane-left,.defense-board .lane-left,.build-board .build-left{left:7%;top:50%;transform:translateY(-50%)}
+.goalkeeper-board .lane-center,.defense-board .lane-center,.build-board .build-center{left:36%;top:18px}
+.goalkeeper-board .lane-right,.defense-board .lane-right,.build-board .build-right{right:7%;top:50%;transform:translateY(-50%)}
+.defense-board .lane-center{top:auto;bottom:18px}
+.build-board .build-center{top:auto;left:50%;bottom:18px;transform:translateX(-50%)}
+.visual-choice{
+  display:grid;align-content:start;gap:4px;text-align:left;padding:12px;border-radius:14px;
+  border:1px solid color-mix(in srgb,var(--green) 22%,var(--border));
+  background:rgba(7,16,22,.86);color:#fff;backdrop-filter:blur(6px)
+}
+.visual-choice:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.22)}
+.goalkeeper-board .lane-left:hover,.goalkeeper-board .lane-right:hover,.defense-board .lane-left:hover,.defense-board .lane-right:hover,.build-board .build-left:hover,.build-board .build-right:hover{transform:translateY(-50%) translateY(-2px)}
+.goalkeeper-board .lane-center:hover,.defense-board .lane-center:hover{transform:translateY(-2px)}
+.build-board .build-center:hover{transform:translateX(-50%) translateY(-2px)}
+.visual-choice span{font-size:18px;line-height:1}
+.visual-choice strong{font-size:13px}
+.visual-choice small{font-size:10px;color:#b8c5cb;line-height:1.35}
+
+@media(max-width:1100px){
+  .dashboard-grid{
+    grid-template-columns:1fr 1fr;
+    grid-template-areas:
+      "profile next"
+      "attrs attrs"
+      "season comps"
+      "national news";
+  }
+  .player-attributes{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:860px){
+  .dashboard-grid{grid-template-columns:1fr;grid-template-areas:none}
+  .profile-card,.next-match,.player-attributes-card,.season-card,.competitions-card,.national-card,.news-card{grid-area:auto}
+}
+@media(max-width:620px){
+  .player-attributes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .goal-mouth .visual-stage,.goalkeeper-board .visual-stage,.defense-board .visual-stage,.build-board .visual-stage{height:auto;display:grid;gap:10px;padding:18px}
+  .goal-mouth .visual-stage::before,.goal-mouth .visual-stage::after,.goalkeeper-board .visual-stage::before,.goalkeeper-board .visual-stage::after,.defense-board .visual-stage::before,.defense-board .visual-stage::after,.build-board .visual-stage::before,.build-board .visual-stage::after{display:none}
+  .goal-mouth .visual-choice,.goalkeeper-board .visual-choice,.defense-board .visual-choice,.build-board .visual-choice{position:static;width:auto;transform:none!important;min-height:unset}
+}
