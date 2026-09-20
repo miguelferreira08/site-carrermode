@@ -485,3 +485,13 @@ body{transition:background .35s ease,color .25s ease}
 .legacy-club-chip b{font-size:11px;font-weight:700}
 @media(max-width:760px){.legacy-card-mainstats{grid-template-columns:repeat(2,1fr)}.legacy-major-titles{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.legacy-major-titles{grid-template-columns:1fr}}
+
+/* ===== V7.9: imagens resilientes e ranking histórico ===== */
+.celebration-icon{min-height:96px;display:grid;place-items:center;line-height:1}
+.celebration-icon img{display:block;max-width:110px;max-height:110px;width:auto;height:auto;object-fit:contain;background:transparent!important;border-radius:0!important}
+.honour-art{background:transparent!important;border-color:color-mix(in srgb,var(--border) 75%,transparent)}
+.honour-art img{background:transparent!important;max-width:100%;max-height:100%;object-fit:contain}
+.legacy-club-chip .crest-shell.small{position:static;left:auto;top:auto;width:34px;height:34px;flex:0 0 34px;border-radius:9px}
+.legacy-rank-explain{margin-top:16px;padding:13px 14px;border:1px solid color-mix(in srgb,var(--green) 30%,var(--border));border-radius:12px;background:color-mix(in srgb,var(--green) 5%,var(--panel))}
+.legacy-rank-explain strong{display:block;color:var(--green);font-size:12px;margin-bottom:5px}
+.legacy-rank-explain p{margin:0!important;color:var(--muted)!important;font-size:10px!important;line-height:1.55!important}
