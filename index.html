@@ -8,8 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="css/style.css?v=7.7">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=7.8">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=7.8">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=7.8">
+  <link rel="stylesheet" href="css/style.css?v=7.8">
 </head>
 <body>
   <header class="topbar">
@@ -390,10 +392,12 @@
       <div class="legacy-card-hero">
         <div class="legacy-shirt"><span id="legacy-shirt-name">JOGADOR</span><strong id="legacy-shirt-number">10</strong></div>
         <div class="legacy-card-mainstats">
-          <div><small>Pico de GER</small><strong id="legacy-peak-overall">—</strong></div>
+          <div><small>GER final</small><strong id="legacy-final-overall">—</strong></div>
+          <div><small>Auge</small><strong id="legacy-peak-overall">—</strong></div>
           <div><small>Temporadas</small><strong id="legacy-seasons">—</strong></div>
           <div><small>Títulos</small><strong id="legacy-titles">—</strong></div>
           <div><small>Prêmios</small><strong id="legacy-awards">—</strong></div>
+          <div><small>Posição</small><strong id="legacy-position">—</strong></div>
         </div>
       </div>
       <div class="legacy-card-stats">
@@ -401,6 +405,14 @@
         <div><strong id="legacy-goals">0</strong><small>Gols</small></div>
         <div><strong id="legacy-assists">0</strong><small>Assistências</small></div>
         <div><strong id="legacy-nt">0</strong><small>Jogos pela seleção</small></div>
+      </div>
+      <div class="legacy-major-wrap">
+        <h3>Títulos mais importantes</h3>
+        <div id="legacy-major-titles" class="legacy-major-titles"></div>
+      </div>
+      <div class="legacy-clubs-wrap">
+        <h3>Clubes da carreira</h3>
+        <div id="legacy-clubs" class="legacy-clubs-list"></div>
       </div>
       <div id="legacy-honours-preview" class="legacy-honours-preview"></div>
       <p class="legacy-rank-note">*Ranking estimado pelo simulador a partir de desempenho, pico de GER, títulos, prêmios e carreira internacional.</p>
@@ -420,7 +432,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=7.7"></script>
-  <script src="js/app.js?v=7.7"></script>
+  <script src="js/data.js?v=7.8"></script>
+  <script src="js/app.js?v=7.8"></script>
 </body>
 </html>
