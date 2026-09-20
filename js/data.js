@@ -1867,8 +1867,8 @@ const COMPETITION_RULES = {
     ]
   },
   "GB": {
-    "league": "Premier League / Premiership",
-    "cup": "Copa Nacional",
+    "league": "Scottish Premiership",
+    "cup": "Scottish Cup",
     "continental": [
       "UEFA Champions League",
       "UEFA Europa League",
@@ -1940,7 +1940,7 @@ const COMPETITION_RULES = {
   },
   "MX": {
     "league": "Liga MX",
-    "cup": "Copa Nacional",
+    "cup": "Copa MX",
     "continental": [
       "CONCACAF Champions Cup"
     ]
