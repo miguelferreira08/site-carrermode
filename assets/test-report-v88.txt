@@ -1,0 +1,37 @@
+Be The Legend V8.8 — relatório de testes do mercado
+Data: 2026-09-20
+
+VALIDAÇÕES TÉCNICAS
+- app.js: node --check OK
+- data.js: node --check OK
+- Mercado ampliado: 208 entradas adicionais
+- Duplicatas no mercado ampliado: 0
+- Códigos de país inexistentes: 0
+- Clubes duplicados entre 1ª e 2ª divisão nas cinco grandes ligas: 0
+
+TESTE DE 200 JANELAS POR FAIXA DE GER
+- GER 70: 74 clubes diferentes apareceram; 14 países; propostas concentradas em divisões inferiores das 5 grandes ligas e ligas europeias menores.
+- GER 75: 30 clubes diferentes apareceram; 8 países; propostas concentradas em Ásia, América do Norte e mercado internacional intermediário.
+- GER 81: 35 clubes diferentes apareceram; 9 países; propostas exclusivamente de clubes europeus de nível médio/forte.
+- GER 88: 22 clubes diferentes apareceram; 8 países; propostas exclusivamente de clubes europeus de primeiro escalão.
+
+ANTI-REPETIÇÃO
+- 4 janelas consecutivas simuladas em GER 75 sem repetir nenhum clube entre as propostas.
+- O jogo guarda os 14 clubes oferecidos mais recentemente para reduzir repetição nas temporadas seguintes.
+
+TESTES DE LIGA APÓS TRANSFERÊNCIA
+- Blackburn Rovers -> EFL Championship -> 46 jogos -> sem competição continental: OK
+- Hertha Berlin -> 2. Bundesliga -> 34 jogos -> sem competição continental: OK
+- Granada -> LALIGA HYPERMOTION -> 42 jogos -> sem competição continental: OK
+- Palermo -> Serie B -> 38 jogos -> sem competição continental: OK
+- Reims -> Ligue 2 -> 34 jogos -> sem competição continental: OK
+
+TESTES DE PRIMEIRA DIVISÃO
+- Chelsea -> Premier League: OK
+- Schalke 04 -> Bundesliga: OK
+- Real Madrid -> LaLiga: OK
+- Inter de Milão -> Serie A: OK
+- Paris Saint-Germain -> Ligue 1: OK
+
+RESULTADO
+APROVADO nos testes automatizados de mercado, diversidade e liga.
