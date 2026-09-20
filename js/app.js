@@ -725,7 +725,7 @@ function resolveCareerEvent(index){
   if(action==='recover'){p.morale=clamp(p.morale+6,40,100);message='Você se sente mais recuperado para a sequência.';}
   if(action==='ambitious'){p.reputation+=4;p.pressure=(p.pressure||0)+1;message='Sua ambição repercutiu e sua reputação aumentou.';}
   if(action==='humble'){p.morale=clamp(p.morale+3,40,100);message='A resposta tranquila agradou ao vestiário.';}
-  if(action==='leadership'){p.reputation+=3;if(Math.random()<.22&&p.overall<p.potential)p.overall++;message='Você assumiu mais responsabilidade no elenco.';}
+  if(action==='leadership'){p.reputation+=3;const seasonCap=currentSeasonOverallCap();if(Math.random()<.22&&p.overall<p.potential&&p.overall<seasonCap)p.overall++;message='Você assumiu mais responsabilidade no elenco.';}
   if(action==='learn'){if(p.age<=24)p.potential=clamp(p.potential+1,75,96);message='Você priorizou aprendizado e desenvolvimento.';}
   if(action==='market_push'){p.marketBonus=(p.marketBonus||0)+1;message='Seu empresário vai trabalhar por mais opções no mercado.';}
   if(action==='stability'){p.morale=clamp(p.morale+5,40,100);message='A estabilidade melhorou seu ambiente no clube.';}
@@ -919,6 +919,18 @@ function finalizeLeague(){
   l.standings=rows.map((r,i)=>({...r,position:i+1}));l.position=l.standings.find(r=>r.user)?.position||1;
   if(l.position===1)addTrophy(l.name);state.news.push(`${state.season.clubAtStart||p.club} encerrou ${l.name} na ${l.position}ª posição, com ${l.points} pontos.`);
 }
+// Limites de GER para o começo da carreira. O POT pode continuar acima desses
+// valores; o limite controla apenas quanto GER o jogador pode atingir em cada temporada.
+const EARLY_CAREER_OVERALL_CAPS = [73, 78, 82, 87];
+function currentCareerSeasonNumber(){
+  if(state.season?.year && typeof START_YEAR!=='undefined') return Math.max(1,state.season.year-START_YEAR+1);
+  return Math.max(1,(state.history?.length||0)+1);
+}
+function currentSeasonOverallCap(){
+  const seasonNumber=currentCareerSeasonNumber();
+  return EARLY_CAREER_OVERALL_CAPS[seasonNumber-1] ?? 99;
+}
+
 function developmentResult(avg){
   const p=state.player,s=state.season,age=p.age,gk=p.position==='Goleiro',devAge=gk?age-3:age;
   const games=Math.max(1,s?.clubGames||1),contributions=(s?.clubGoals||0)+(s?.clubAssists||0),rate=contributions/games;
@@ -982,8 +994,9 @@ function developmentResult(avg){
   }
 
   const before=p.overall;
-  if(base>0)p.overall=Math.min(99,Math.min(p.potential,p.overall+base));
-  else p.overall=clamp(p.overall+base,45,99);
+  const seasonOverallCap=currentSeasonOverallCap();
+  if(base>0)p.overall=Math.min(seasonOverallCap,99,Math.min(p.potential,p.overall+base));
+  else p.overall=clamp(p.overall+base,45,Math.min(99,seasonOverallCap));
   if(age>=35)p.potential=Math.max(p.overall,p.potential);
   const delta=p.overall-before;evolvePlayerAttributes(delta,avg);return delta;
 }
