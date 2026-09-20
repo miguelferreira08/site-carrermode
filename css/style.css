@@ -404,3 +404,29 @@ body{transition:background .35s ease,color .25s ease}
   .goal-mouth .visual-stage::before,.goal-mouth .visual-stage::after,.goalkeeper-board .visual-stage::before,.goalkeeper-board .visual-stage::after,.defense-board .visual-stage::before,.defense-board .visual-stage::after,.build-board .visual-stage::before,.build-board .visual-stage::after{display:none}
   .goal-mouth .visual-choice,.goalkeeper-board .visual-choice,.defense-board .visual-choice,.build-board .visual-choice{position:static;width:auto;transform:none!important;min-height:unset}
 }
+
+/* ===== V7.6: branding e home mais futebol ===== */
+.logo{font-size:22px;letter-spacing:.01em}
+.hero-football-icons{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 8px}
+.hero-football-icons span{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(5,12,16,.52);color:#dbe6ea;font-size:12px;font-weight:700;box-shadow:0 8px 22px rgba(0,0,0,.16)}
+.hero-football-icons span:first-child{border-color:rgba(241,199,91,.34);color:#f2d87d}
+#home .floating-chip span{display:grid;place-items:center}
+#home .chip-two{right:-18px;bottom:16%}
+#home .chip-two span{font-size:24px}
+
+/* ===== V7.6: cenários variados para decisões ===== */
+.chance-board .visual-stage{height:270px;background:linear-gradient(180deg,#103520 0,#0f4a29 42%,#0d3e22 100%)}
+.chance-board .visual-stage::before{left:18px;right:18px;top:18px;bottom:18px;border:1px solid rgba(255,255,255,.13);border-radius:16px}
+.chance-board .visual-stage::after{left:50%;top:18px;bottom:18px;width:1px;background:rgba(255,255,255,.12)}
+.chance-board .visual-choice{position:absolute;width:30%;min-height:96px}
+.chance-board .chance-left{left:6%;bottom:18px}
+.chance-board .chance-center{left:50%;top:18px;transform:translateX(-50%)}
+.chance-board .chance-right{right:6%;bottom:18px}
+.chance-board .chance-center:hover{transform:translateX(-50%) translateY(-2px)}
+
+@media(max-width:620px){
+  .hero-football-icons{gap:8px}
+  .hero-football-icons span{font-size:11px;padding:8px 10px}
+  .chance-board .visual-stage::before,.chance-board .visual-stage::after{display:none}
+  .chance-board .visual-choice{position:static;width:auto;transform:none!important;min-height:unset}
+}

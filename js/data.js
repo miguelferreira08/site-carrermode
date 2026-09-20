@@ -2345,7 +2345,7 @@ const HISTORICAL_CARD_OVERRIDES = {
   'Ferenc Puskás':{pace:91,finishing:99,dribbling:95,passing:93,defense:45,physical:89,weakFoot:4}
 };
 const HISTORICAL_DRAFT_PLAYERS = HISTORICAL_DRAFT_RAW.map(([name,rating,profile,position])=>({
-  name,rating,profile,position,category:'historical',source:'Auge · valores inspirados em cartas Icon/Hero do EA SPORTS FC',
+  name,rating,profile,position,category:'historical',source:'Auge · valores calibrados com cartas Icon/Hero e versões especiais do EA SPORTS FC',
   attributes:HISTORICAL_CARD_OVERRIDES[name]||historicalCardStats(name,rating,profile)
 }));
 
@@ -2401,8 +2401,37 @@ const CURRENT_DRAFT_RAW = [
   ["Rafael Leão", 86, "PE", 94, 82, 87, 79, 31, 78, 4],
   ["Jules Koundé", 87, "LD", 84, 47, 79, 74, 86, 84, 3]
 ];
-const CURRENT_DRAFT_PLAYERS = CURRENT_DRAFT_RAW.map(([name,rating,position,pace,finishing,dribbling,passing,defense,physical,weakFoot])=>({
-  name,rating,position,category:'current',source:'Melhor fase · valores baseados em cartas FIFA / EA SPORTS FC',attributes:{pace,finishing,dribbling,passing,defense,physical,weakFoot}
+const CURRENT_PEAK_OVERRIDES = {
+  'Lionel Messi':{rating:96,attributes:{pace:89,finishing:96,dribbling:98,passing:97,defense:42,physical:71,weakFoot:4}},
+  'Cristiano Ronaldo':{rating:94,attributes:{pace:93,finishing:97,dribbling:91,passing:87,defense:39,physical:90,weakFoot:4}},
+  'Neymar Jr':{rating:95,attributes:{pace:94,finishing:90,dribbling:97,passing:91,defense:38,physical:68,weakFoot:5}},
+  'Kylian Mbappé':{rating:94,attributes:{pace:99,finishing:94,dribbling:95,passing:84,defense:40,physical:82,weakFoot:4}},
+  'Mohamed Salah':{rating:93,attributes:{pace:94,finishing:92,dribbling:93,passing:88,defense:48,physical:80,weakFoot:4}},
+  'Harry Kane':{rating:93,attributes:{pace:71,finishing:96,dribbling:85,passing:89,defense:52,physical:86,weakFoot:5}},
+  'Kevin De Bruyne':{rating:93,attributes:{pace:74,finishing:90,dribbling:89,passing:96,defense:70,physical:80,weakFoot:5}},
+  'Robert Lewandowski':{rating:93,attributes:{pace:80,finishing:96,dribbling:88,passing:83,defense:46,physical:87,weakFoot:4}},
+  'Virgil van Dijk':{rating:92,attributes:{pace:81,finishing:62,dribbling:75,passing:79,defense:94,physical:92,weakFoot:3}},
+  'Jude Bellingham':{rating:92,attributes:{pace:84,finishing:89,dribbling:92,passing:87,defense:81,physical:88,weakFoot:4}},
+  'Vini Jr.':{rating:92,attributes:{pace:98,finishing:88,dribbling:95,passing:83,defense:31,physical:75,weakFoot:4}},
+  'Erling Haaland':{rating:93,attributes:{pace:90,finishing:97,dribbling:84,passing:76,defense:47,physical:93,weakFoot:4}}
+};
+function currentPeakCard({name,rating,position,attributes}){
+  if(CURRENT_PEAK_OVERRIDES[name]) return {name,rating:CURRENT_PEAK_OVERRIDES[name].rating,position,category:'current',source:'Auge · valores calibrados em cartas especiais e versões de pico do EA SPORTS FC',attributes:CURRENT_PEAK_OVERRIDES[name].attributes};
+  const attrs={...attributes};
+  const isForward=['ATA','PE','PD','MD'].includes(position);
+  const isMid=['MEI','MC','VOL'].includes(position);
+  const isDef=['ZAG','LD','LE'].includes(position);
+  const baseBoost=rating>=89?2:1;
+  const plus=(id,n)=>attrs[id]=Math.min(99,attrs[id]+n);
+  if(isForward){plus('pace',baseBoost);plus('finishing',baseBoost+1);plus('dribbling',baseBoost+1);plus('passing',1);plus('physical',1);}
+  else if(isMid){plus('passing',baseBoost+1);plus('dribbling',baseBoost);plus('finishing',1);plus('defense',position==='VOL'?2:1);plus('physical',1);}
+  else if(isDef){plus('defense',baseBoost+1);plus('physical',baseBoost);plus('pace',1);plus('passing',1);if(position==='LD'||position==='LE')plus('dribbling',1);}
+  attrs.weakFoot=Math.min(5,attrs.weakFoot+(rating>=88?1:0));
+  const peakRating=Math.min(96,rating+(rating>=88?2:1));
+  return {name,rating:peakRating,position,category:'current',source:'Auge · valores calibrados em cartas especiais e versões de pico do EA SPORTS FC',attributes:attrs};
+}
+const CURRENT_DRAFT_PLAYERS = CURRENT_DRAFT_RAW.map(([name,rating,position,pace,finishing,dribbling,passing,defense,physical,weakFoot])=>currentPeakCard({
+  name,rating,position,attributes:{pace,finishing,dribbling,passing,defense,physical,weakFoot}
 }));
 
 const LEGEND_POOL = [...HISTORICAL_DRAFT_PLAYERS,...CURRENT_DRAFT_PLAYERS];

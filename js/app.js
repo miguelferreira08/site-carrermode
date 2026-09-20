@@ -1,14 +1,14 @@
 const $ = selector => document.querySelector(selector);
 const $$ = selector => document.querySelectorAll(selector);
-const STORAGE_KEY = 'careerSimV75';
+const STORAGE_KEY = 'beTheLegendV76';
 const LEGACY_STORAGE_KEY = 'careerSimV7';
-const BADGE_KEY = 'careerSimBadgeCacheV75';
-const DRAFT_KEY = 'careerSimV75AttributeDraft';
+const BADGE_KEY = 'beTheLegendBadgeCacheV76';
+const DRAFT_KEY = 'beTheLegendV76AttributeDraft';
 
-let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
   created:false, player:null, season:null, history:[], offers:[], news:[], pendingEvent:null
 };
-let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
+let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('careerSimBadgeCacheV75') || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
 let creationClubPool = [];
 let creationChoices = [];
 let nextEventCache = null;
@@ -781,7 +781,7 @@ function render(){
     $('#season-year').textContent='—';$('#s-games').textContent='0';$('#s-goals').textContent='0';$('#s-assists').textContent='0';$('#s-rating').textContent='—';$('#league-round-label').textContent='Carreira encerrada';$('#league-points').textContent='';$('#league-progress-bar').style.width='100%';$('#season-progress').textContent='Aposentado';$('#finish-season').disabled=true;$('#finish-season').textContent='Carreira encerrada';$('#competitions-list').innerHTML='<div class="competition-item"><strong>👟 Carreira concluída</strong><small>Veja o histórico completo na aba Estatísticas.</small></div>';$('#match-title').textContent='Carreira encerrada';$('#home-team').textContent='';$('#away-team').textContent='';$('#match-competition').textContent='';$('#match-context').textContent='';$('#favorite-line').textContent='';$('#strength-line').textContent='';$('#simulate-btn').disabled=true;$('#simulate-btn').textContent='Aposentado';
   }
   $('#national-country').textContent=`Seleção de ${p.nationality}`;$('#national-flag').textContent=countryFlag(p.nationalityCode);$('#national-status').textContent=p.calledUp?'Convocado':'Ainda não convocado';$('#national-message').textContent=p.calledUp?'Partidas internacionais entram na simulação da temporada.':'Overall e desempenho aumentam as chances de convocação.';$('#nt-games').textContent=p.nationalTeamGames;$('#nt-goals').textContent=p.nationalTeamGoals;
-  $('#news').innerHTML=(state.news.slice(-6).reverse().map((n,i)=>`<div class="news-item"><span class="news-icon">${i===0?'📰':'•'}</span><div><strong>${n}</strong><small>CareerSim News</small></div></div>`).join('')||'<p class="muted">Nenhuma notícia ainda.</p>');
+  $('#news').innerHTML=(state.news.slice(-6).reverse().map((n,i)=>`<div class="news-item"><span class="news-icon">${i===0?'📰':'•'}</span><div><strong>${n}</strong><small>Be The Legend News</small></div></div>`).join('')||'<p class="muted">Nenhuma notícia ainda.</p>');
   renderHistory();renderOffers();renderHonours();renderMarketTier();if(state.pendingEvent)openPendingEvent();
 }
 function renderHistory(){
@@ -1033,8 +1033,8 @@ function buildDecisionScenario(event){
   const minute=rnd(24,82),quality=clamp((p.overall-67)*.008,0,.20);
   if(p.position==='Goleiro')return {minute,visual:'goalkeeper',title:'Cara a cara',description:`${event.opponent} escapa em velocidade e fica frente a frente com você. O que fazer?`,options:[{label:'Sair do gol',effect:'Agressivo: corta o ângulo, mas há risco.',type:'defense',chance:.58+quality,rating:.55,risk:.18},{label:'Esperar a finalização',effect:'Mais seguro, depende dos reflexos.',type:'defense',chance:.66+quality,rating:.45,risk:.10},{label:'Fechar o canto curto',effect:'Boa leitura, mas abre o outro lado.',type:'defense',chance:.61+quality,rating:.50,risk:.14}]};
   if(def)return {minute,visual:'defense',title:'Ataque perigoso',description:`O adversário avança perto da área. Você precisa decidir rapidamente.`,options:[{label:'Dar o bote',effect:'Pode recuperar a bola ou ser driblado.',type:'defense',chance:.60+quality,rating:.50,risk:.18},{label:'Cercar e atrasar a jogada',effect:'Menos risco, força uma decisão do atacante.',type:'defense',chance:.70+quality,rating:.38,risk:.08},{label:'Antecipar o passe',effect:'Leitura difícil, recompensa alta.',type:'defense',chance:.53+quality,rating:.65,risk:.22}]};
-  if(att&&Math.random()<.5)return {minute,visual:'goal',title:'Pênalti para sua equipe',description:`Aos ${minute}', você pega a bola. Como vai cobrar?`,options:[{label:'Bater forte no canto',effect:'Boa chance de gol.',type:'goal',chance:.68+quality,rating:.62},{label:'Deslocar o goleiro',effect:'Mais técnico e mais arriscado.',type:'goal',chance:.62+quality,rating:.72},{label:'Cavadinha',effect:'Alto risco, grande destaque se entrar.',type:'goal',chance:.48+quality,rating:.90}]};
-  if(att)return {minute,visual:'goal',title:'Chance clara de gol',description:`Você recebe dentro da área com um defensor chegando.`,options:[{label:'Finalizar de primeira',effect:'Rápido e objetivo.',type:'goal',chance:.55+quality,rating:.58},{label:'Driblar o goleiro',effect:'Mais arriscado, mas abre o gol.',type:'goal',chance:.47+quality,rating:.78},{label:'Tocar para o companheiro',effect:'Busca uma assistência em vez da finalização.',type:'assist',chance:.64+quality,rating:.58}]};
+  if(att&&Math.random()<.5)return {minute,visual:'penalty',title:'Pênalti para sua equipe',description:`Aos ${minute}', você pega a bola. Como vai cobrar?`,options:[{label:'Bater forte no canto',effect:'Boa chance de gol.',type:'goal',chance:.68+quality,rating:.62},{label:'Deslocar o goleiro',effect:'Mais técnico e mais arriscado.',type:'goal',chance:.62+quality,rating:.72},{label:'Cavadinha',effect:'Alto risco, grande destaque se entrar.',type:'goal',chance:.48+quality,rating:.90}]};
+  if(att)return {minute,visual:'chance',title:'Chance clara de gol',description:`Você recebe dentro da área com um defensor chegando.`,options:[{label:'Finalizar de primeira',effect:'Rápido e objetivo.',type:'goal',chance:.55+quality,rating:.58},{label:'Driblar o goleiro',effect:'Mais arriscado, mas abre o gol.',type:'goal',chance:.47+quality,rating:.78},{label:'Tocar para o companheiro',effect:'Busca uma assistência em vez da finalização.',type:'assist',chance:.64+quality,rating:.58}]};
   if(mid)return {minute,visual:'build',title:'Contra-ataque',description:`Você conduz pelo meio com opções na frente.`,options:[{label:'Passe em profundidade',effect:'Pode deixar um companheiro na cara do gol.',type:'assist',chance:.62+quality,rating:.62},{label:'Carregar e finalizar',effect:'Você assume a responsabilidade.',type:'goal',chance:.38+quality,rating:.72},{label:'Abrir na ponta',effect:'Opção segura para manter o ataque.',type:'assist',chance:.55+quality,rating:.44}]};
   return {minute,visual:'build',title:'Momento decisivo',description:'A bola sobra para você perto da área.',options:[{label:'Finalizar',effect:'Tentar decidir a partida.',type:'goal',chance:.42+quality,rating:.55},{label:'Passar',effect:'Criar para um companheiro.',type:'assist',chance:.55+quality,rating:.48},{label:'Manter a posse',effect:'Evitar o risco e reorganizar o time.',type:'control',chance:.78+quality,rating:.25}]};
 }
@@ -1047,17 +1047,19 @@ function renderDecisionChoices(scenario){
   choiceBox.innerHTML='';
   choiceBox.classList.remove('hidden');
   const buttons=scenario.options.map((o,i)=>`<button class="event-choice decision-option" data-decision-option="${i}"><strong>${o.label}</strong><small>${o.effect}</small></button>`).join('');
-  if(['goal','goalkeeper','defense','build'].includes(scenario.visual)){
-    const slotClasses=scenario.visual==='goal'?
+  if(['goal','penalty','chance','goalkeeper','defense','build'].includes(scenario.visual)){
+    const slotClasses=(scenario.visual==='goal'||scenario.visual==='penalty')?
       ['slot-left','slot-center','slot-right']:
+      scenario.visual==='chance'?
+      ['chance-left','chance-center','chance-right']:
       scenario.visual==='goalkeeper'?
       ['lane-left','lane-center','lane-right']:
       scenario.visual==='defense'?
       ['lane-left','lane-center','lane-right']:
       ['build-left','build-center','build-right'];
-    const typeClass=scenario.visual==='goal'?'goal-mouth':scenario.visual==='goalkeeper'?'goalkeeper-board':scenario.visual==='defense'?'defense-board':'build-board';
+    const typeClass=scenario.visual==='goal'||scenario.visual==='penalty'?'goal-mouth':scenario.visual==='chance'?'chance-board':scenario.visual==='goalkeeper'?'goalkeeper-board':scenario.visual==='defense'?'defense-board':'build-board';
     visual.className=`decision-visual ${typeClass}`;
-    const label=scenario.visual==='goal'?'Escolha a ação no lance':'Escolha sua leitura no lance';
+    const label=scenario.visual==='penalty'?'Escolha o tipo de cobrança':scenario.visual==='goal'?'Escolha a finalização':scenario.visual==='chance'?'Escolha como atacar o lance':'Escolha sua leitura no lance';
     const inner=scenario.options.map((o,i)=>`<button class="visual-choice ${slotClasses[i]||''}" data-decision-option="${i}"><span>${o.type==='assist'?'🤝':o.type==='defense'?'🛡️':o.type==='control'?'⏱️':'⚽'}</span><strong>${o.label}</strong><small>${o.effect}</small></button>`).join('');
     visual.innerHTML=`<div class="decision-visual-label">${label}</div><div class="visual-stage">${inner}</div>`;
     choiceBox.classList.add('hidden');
