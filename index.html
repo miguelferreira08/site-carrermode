@@ -28,58 +28,72 @@
   <main>
     <section id="home" class="view active hero">
       <div class="hero-glow"></div>
-      <div class="hero-grid"></div>
+      <div class="pitch-lines" aria-hidden="true">
+        <span class="pitch-center"></span>
+        <span class="pitch-circle"></span>
+        <span class="pitch-box pitch-box-left"></span>
+        <span class="pitch-box pitch-box-right"></span>
+      </div>
 
       <div class="hero-shell">
         <div class="hero-content">
-          <div class="hero-kicker"><span></span> SIMULADOR DE CARREIRA NO FUTEBOL</div>
-          <h1>Do primeiro contrato ao <span>topo do mundo.</span></h1>
-          <p class="lead">Crie seu jogador, dispute temporadas completas, evolua seu overall, receba propostas e construa uma carreira que pode terminar entre as maiores do futebol.</p>
+          <div class="hero-kicker"><span></span> SUA CARREIRA. SUAS DECISÕES. SEU LEGADO.</div>
+          <h1>Da primeira chuteira ao <span>estádio lotado.</span></h1>
+          <p class="lead">Monte seu jogador com atributos herdados de 150 lendas, escolha seu primeiro clube e construa uma carreira temporada por temporada — com evolução, mercado, seleção, títulos e decisões dentro de campo.</p>
 
           <div class="hero-actions">
-            <button class="primary big" id="start-btn">Iniciar minha carreira <b>→</b></button>
-            <div class="hero-save-note"><span>●</span> Progresso salvo no navegador</div>
+            <button class="primary big" id="start-btn">Entrar no vestiário <b>→</b></button>
+            <div class="hero-save-note"><span>●</span> Carreira salva no navegador</div>
           </div>
 
           <div class="hero-stats">
-            <div><strong>200+</strong><small>nacionalidades</small></div>
-            <div><strong>38</strong><small>rodadas no Brasileirão</small></div>
-            <div><strong>46</strong><small>idade máxima</small></div>
+            <div><strong>150</strong><small>lendas no sorteio</small></div>
+            <div><strong>7</strong><small>atributos para montar</small></div>
+            <div><strong>99</strong><small>GER máximo</small></div>
           </div>
         </div>
 
         <div class="hero-visual" aria-hidden="true">
-          <div class="visual-orbit orbit-one"></div>
-          <div class="visual-orbit orbit-two"></div>
+          <div class="stadium-lights stadium-lights-left"></div>
+          <div class="stadium-lights stadium-lights-right"></div>
 
-          <div class="career-card">
-            <div class="career-card-top">
-              <span>CAREER<span>SIM</span></span>
-              <small>PLAYER CARD</small>
+          <div class="locker-board">
+            <div class="board-top">
+              <span>CAREERSIM</span>
+              <small>PLANO DE CARREIRA</small>
             </div>
 
-            <div class="jersey">
-              <i></i>
-              <span>10</span>
+            <div class="shirt-display">
+              <div class="shirt">
+                <span class="shirt-name">SEU NOME</span>
+                <strong>10</strong>
+              </div>
+              <div class="shirt-shadow"></div>
             </div>
 
-            <div class="career-card-copy">
-              <small>SEU PRÓXIMO CAPÍTULO</small>
-              <strong>COMEÇA AGORA</strong>
+            <div class="career-route">
+              <div class="route-step active"><i>01</i><span><b>Primeiro contrato</b><small>17–22 anos</small></span></div>
+              <div class="route-line"></div>
+              <div class="route-step"><i>02</i><span><b>Virar protagonista</b><small>evoluir o GER</small></span></div>
+              <div class="route-line"></div>
+              <div class="route-step"><i>03</i><span><b>Conquistar o mundo</b><small>seleção e títulos</small></span></div>
             </div>
 
-            <div class="card-ratings">
-              <div><strong>67</strong><small>GER INICIAL</small></div>
-              <div><strong>95</strong><small>POTENCIAL</small></div>
+            <div class="scout-strip">
+              <span>SCOUT</span>
+              <b>RIT</b><strong>?</strong>
+              <b>FIN</b><strong>?</strong>
+              <b>DRI</b><strong>?</strong>
+              <b>PAS</b><strong>?</strong>
             </div>
           </div>
 
-          <div class="floating-chip chip-one"><span>⚽</span><div><small>Calendário</small><strong>temporadas completas</strong></div></div>
-          <div class="floating-chip chip-two"><span>🏆</span><div><small>Objetivo</small><strong>construir seu legado</strong></div></div>
+          <div class="floating-chip chip-one"><span>⚽</span><div><small>Sorteio de lendas</small><strong>1 atributo por craque</strong></div></div>
+          <div class="floating-chip chip-two"><span>🏆</span><div><small>Carreira</small><strong>do contrato ao legado</strong></div></div>
         </div>
       </div>
 
-      <div class="hero-ticker"><span>CLUBES</span><i></i><span>SELEÇÃO</span><i></i><span>MERCADO</span><i></i><span>TÍTULOS</span><i></i><span>DECISÕES</span></div>
+      <div class="hero-ticker"><span>BRASILEIRÃO</span><i></i><span>CHAMPIONS</span><i></i><span>SELEÇÃO</span><i></i><span>MERCADO</span><i></i><span>BOLA DE OURO</span></div>
     </section>
 
     <section id="create" class="view page create-page">
@@ -126,8 +140,39 @@
           <input id="selected-club" type="hidden" required>
         </div>
 
-        <button class="primary full" id="create-submit" type="submit" disabled>Iniciar carreira →</button>
+        <button class="primary full" id="create-submit" type="submit" disabled>Ir para o sorteio de atributos →</button>
       </form>
+    </section>
+
+
+    <section id="attribute-draft" class="view page attribute-draft-page">
+      <div class="draft-layout">
+        <div class="draft-copy">
+          <p class="eyebrow">DNA DE CRAQUE</p>
+          <h2>Monte seu jogador com 150 lendas</h2>
+          <p>Cada atributo vem de um jogador histórico sorteado. Você pode refazer <strong>uma vez por atributo</strong> antes de confirmar.</p>
+          <div class="draft-progress"><span id="draft-progress-bar"></span></div>
+          <div class="draft-progress-copy"><strong id="draft-progress-text">1 de 7</strong><span id="draft-attribute-label">Ritmo</span></div>
+        </div>
+
+        <article class="legend-draw-card">
+          <div class="legend-card-head"><span id="legend-position">ATA</span><small>SORTEIO ATUAL</small></div>
+          <div class="legend-badge" id="legend-badge">PL</div>
+          <h3 id="legend-name">Pelé</h3>
+          <div class="legend-rating-line"><span>Índice histórico</span><strong id="legend-rating">99</strong></div>
+          <div class="drawn-attribute"><small id="drawn-attribute-name">RITMO</small><strong id="drawn-attribute-value">96</strong></div>
+          <div class="draft-actions">
+            <button id="reroll-legend" class="secondary" type="button">Sortear novamente · 1x</button>
+            <button id="confirm-attribute" class="primary" type="button">Usar este atributo →</button>
+          </div>
+        </article>
+
+        <article class="panel draft-build">
+          <div class="section-title"><h3>Seu jogador até agora</h3><span id="draft-overall-preview">GER —</span></div>
+          <div id="draft-slots" class="draft-slots"></div>
+          <p class="draft-note">Ao confirmar o 7º atributo, a carreira começa automaticamente.</p>
+        </article>
+      </div>
     </section>
 
     <section id="career" class="view page">
@@ -153,6 +198,7 @@
             <div><strong id="p-club"></strong><small id="p-league"></small></div>
           </div>
           <div class="value-line"><span>Valor de mercado</span><strong id="p-value"></strong></div>
+          <button id="retire-career" class="retire-career danger full hidden" type="button">Encerrar carreira e se aposentar</button>
         </article>
 
         <article class="panel next-match">
@@ -166,6 +212,12 @@
             <small id="strength-line"></small>
           </div>
           <button class="primary full" id="simulate-btn">Simular temporada →</button>
+        </article>
+
+        <article class="panel player-attributes-card">
+          <div class="section-title"><h3>Atributos do jogador</h3><span>DNA DE LENDAS</span></div>
+          <div id="player-attributes" class="player-attributes"></div>
+          <small class="muted">Cada atributo nasceu do sorteio de uma lenda e evolui junto com sua carreira.</small>
         </article>
 
         <article class="panel season-card">
