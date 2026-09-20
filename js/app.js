@@ -1,7 +1,7 @@
 const $ = selector => document.querySelector(selector);
 const $$ = selector => document.querySelectorAll(selector);
-const STORAGE_KEY = 'careerSimV5';
-const BADGE_KEY = 'careerSimBadgeCacheV5';
+const STORAGE_KEY = 'careerSimV7';
+const BADGE_KEY = 'careerSimBadgeCacheV7';
 
 let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
   created:false, player:null, season:null, history:[], offers:[], news:[], pendingEvent:null
@@ -99,49 +99,28 @@ const ATTRIBUTE_DRAFT_FIELDS = [
   {id:'weakFoot',label:'Perna ruim',short:'PR'}
 ];
 
-function stableLegendJitter(text){
-  let hash=2166136261;
-  for(const ch of text){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619);}
-  return (Math.abs(hash)%5)-2;
-}
-function legendAttributeSet(legend){
-  const profile=LEGEND_ATTRIBUTE_PROFILES[legend.profile]||LEGEND_ATTRIBUTE_PROFILES.complete;
-  const result={};
-  ATTRIBUTE_DRAFT_FIELDS.forEach(field=>{
-    if(field.id==='weakFoot'){
-      const base=legend.rating>=97?5:legend.rating>=92?4:3;
-      result[field.id]=clamp(base+(profile.weakFoot||0)+(stableLegendJitter(legend.name+field.id)>1?1:0),2,5);
-    }else{
-      const offset=profile[field.id]||0;
-      result[field.id]=clamp(legend.rating+offset+stableLegendJitter(legend.name+field.id),45,99);
-    }
-  });
-  return result;
+function legendAttributeSet(player){
+  if(player?.attributes)return {...player.attributes};
+  return {pace:75,finishing:75,dribbling:75,passing:75,defense:60,physical:70,weakFoot:3};
 }
 function attributeDisplayValue(id,value){return id==='weakFoot'?`${value}★`:value;}
-function overallWeights(position){
-  if(position==='Goleiro')return {pace:.03,finishing:.01,dribbling:.04,passing:.15,defense:.43,physical:.26,weakFoot:.08};
-  if(['Zagueiro'].includes(position))return {pace:.13,finishing:.02,dribbling:.05,passing:.10,defense:.35,physical:.27,weakFoot:.08};
-  if(['Lateral direito','Lateral esquerdo'].includes(position))return {pace:.23,finishing:.04,dribbling:.10,passing:.16,defense:.24,physical:.16,weakFoot:.07};
-  if(position==='Volante')return {pace:.09,finishing:.05,dribbling:.08,passing:.20,defense:.27,physical:.23,weakFoot:.08};
-  if(position==='Meia central')return {pace:.08,finishing:.09,dribbling:.15,passing:.27,defense:.14,physical:.18,weakFoot:.09};
-  if(['Meia ofensivo','Meia direita','Meia esquerda'].includes(position))return {pace:.12,finishing:.14,dribbling:.23,passing:.26,defense:.05,physical:.11,weakFoot:.09};
-  if(['Ponta direita','Ponta esquerda'].includes(position))return {pace:.24,finishing:.20,dribbling:.25,passing:.14,defense:.02,physical:.07,weakFoot:.08};
-  if(position==='Segundo atacante')return {pace:.16,finishing:.27,dribbling:.22,passing:.14,defense:.02,physical:.11,weakFoot:.08};
-  return {pace:.15,finishing:.34,dribbling:.15,passing:.08,defense:.02,physical:.18,weakFoot:.08};
+function weakFootPotentialValue(stars){return ({1:60,2:70,3:80,4:90,5:99})[stars]||80;}
+function calculatePotentialFromAttributes(attributes){
+  const values=ATTRIBUTE_DRAFT_FIELDS.map(f=>f.id==='weakFoot'?weakFootPotentialValue(attributes[f.id]):Number(attributes[f.id]||0));
+  return clamp(Math.round(values.reduce((sum,v)=>sum+v,0)/values.length),68,99);
 }
-function calculateOverallFromAttributes(attributes,position){
-  const weights=overallWeights(position);let total=0;
-  for(const [id,weight] of Object.entries(weights)){
-    const raw=attributes[id]??75;
-    const value=id==='weakFoot'?50+raw*10:raw;
-    total+=value*weight;
-  }
-  return clamp(Math.round(total-1),62,99);
+function buildStartingAttributes(dna,potential){
+  const attrs={};
+  ATTRIBUTE_DRAFT_FIELDS.forEach(f=>{
+    if(f.id==='weakFoot'){attrs[f.id]=dna[f.id];return;}
+    // GER começa em 68, preservando o perfil relativo do DNA escolhido.
+    attrs[f.id]=clamp(Math.round(68+(dna[f.id]-potential)*.45),35,82);
+  });
+  return attrs;
 }
 function normalizePlayerAttributes(player){
   if(player.attributes)return player.attributes;
-  const base=player.overall||67;
+  const base=player.overall||68;
   player.attributes={
     pace:clamp(base+(player.position?.includes('Ponta')?4:0),45,99),
     finishing:clamp(base+(['Centroavante','Segundo atacante'].includes(player.position)?5:-2),45,99),
@@ -151,74 +130,103 @@ function normalizePlayerAttributes(player){
     physical:clamp(base+2,45,99),
     weakFoot:4
   };
-  player.attributeOrigins={};
+  player.dnaAttributes=player.dnaAttributes||{...player.attributes};
+  player.initialPotential=player.initialPotential||player.potential||80;
+  player.attributeOrigins=player.attributeOrigins||{};
   return player.attributes;
 }
 function drawLegendForDraft(excludeName=''){
-  const currentField=ATTRIBUTE_DRAFT_FIELDS[attributeDraft.index];
   const used=new Set(attributeDraft.usedLegends||[]);
-  let pool=LEGEND_POOL.filter(l=>l.name!==excludeName && !used.has(l.name));
+  let pool=LEGEND_POOL.filter(l=>l.name!==excludeName&&!used.has(l.name));
   if(!pool.length)pool=LEGEND_POOL.filter(l=>l.name!==excludeName);
-  const legend=pool[rnd(0,pool.length-1)];
-  const values=legendAttributeSet(legend);
-  attributeDraft.current={legend,value:values[currentField.id]};
+  const player=pool[rnd(0,pool.length-1)];
+  attributeDraft.current={legend:player,values:legendAttributeSet(player)};
 }
+function selectedDraftCount(){return attributeDraft?Object.keys(attributeDraft.selections||{}).length:0;}
 function renderAttributeDraft(){
   if(!attributeDraft)return;
-  const field=ATTRIBUTE_DRAFT_FIELDS[attributeDraft.index],current=attributeDraft.current;
-  $('#draft-progress-bar').style.width=`${Math.round((attributeDraft.index)/ATTRIBUTE_DRAFT_FIELDS.length*100)}%`;
-  $('#draft-progress-text').textContent=`${attributeDraft.index+1} de ${ATTRIBUTE_DRAFT_FIELDS.length}`;
-  $('#draft-attribute-label').textContent=field.label;
+  const current=attributeDraft.current,selected=attributeDraft.selections,count=selectedDraftCount();
+  $('#draft-progress-bar').style.width=`${Math.round(count/ATTRIBUTE_DRAFT_FIELDS.length*100)}%`;
+  $('#draft-progress-text').textContent=`${count} de ${ATTRIBUTE_DRAFT_FIELDS.length}`;
+  $('#draft-attribute-label').textContent=count===ATTRIBUTE_DRAFT_FIELDS.length?'DNA completo':'Escolha qualquer atributo disponível';
   $('#legend-position').textContent=current.legend.position;
   $('#legend-badge').textContent=current.legend.name.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
   $('#legend-name').textContent=current.legend.name;
   $('#legend-rating').textContent=current.legend.rating;
-  $('#drawn-attribute-name').textContent=field.short;
-  $('#drawn-attribute-value').textContent=attributeDisplayValue(field.id,current.value);
+  if($('#legend-era'))$('#legend-era').textContent=current.legend.category==='current'?'ATUAL · MELHOR FASE':'HISTÓRICO · AUGE';
+  if($('#legend-source'))$('#legend-source').textContent=current.legend.source||'Referência EA SPORTS FC';
   $('#reroll-legend').disabled=attributeDraft.rerolled;
   $('#reroll-legend').textContent=attributeDraft.rerolled?'Novo sorteio usado':'Sortear novamente · 1x';
-  const selected=attributeDraft.selections;
-  $('#draft-slots').innerHTML=ATTRIBUTE_DRAFT_FIELDS.map((f,i)=>{
-    const pick=selected[f.id];
-    const status=pick?'done':i===attributeDraft.index?'current':'pending';
-    return `<div class="draft-slot ${status}"><span>${f.short}</span><strong>${pick?attributeDisplayValue(f.id,pick.value):'—'}</strong><small>${pick?pick.legend:'aguardando sorteio'}</small></div>`;
+
+  const values=current.values;
+  $('#legend-attributes').innerHTML=ATTRIBUTE_DRAFT_FIELDS.map(f=>{
+    const already=!!selected[f.id];
+    return `<button type="button" class="draft-attribute-choice ${already?'locked':''}" data-draft-attribute="${f.id}" ${already?'disabled':''}>
+      <span>${f.short}</span><strong>${attributeDisplayValue(f.id,values[f.id])}</strong><small>${already?'já escolhido':'usar este atributo'}</small>
+    </button>`;
   }).join('');
-  const previewAttrs={};ATTRIBUTE_DRAFT_FIELDS.forEach(f=>previewAttrs[f.id]=selected[f.id]?.value??(f.id==='weakFoot'?3:78));
-  $('#draft-overall-preview').textContent=`GER ${calculateOverallFromAttributes(previewAttrs,pendingPlayerProfile.position)}`;
+  $$('[data-draft-attribute]').forEach(btn=>btn.addEventListener('click',()=>selectDraftAttribute(btn.dataset.draftAttribute)));
+
+  $('#draft-slots').innerHTML=ATTRIBUTE_DRAFT_FIELDS.map(f=>{
+    const pick=selected[f.id];
+    return `<div class="draft-slot ${pick?'done':'pending'}"><span>${f.short}</span><strong>${pick?attributeDisplayValue(f.id,pick.value):'—'}</strong><small>${pick?pick.legend:'a escolher'}</small></div>`;
+  }).join('');
+
+  if(count===ATTRIBUTE_DRAFT_FIELDS.length){
+    const attrs={};ATTRIBUTE_DRAFT_FIELDS.forEach(f=>attrs[f.id]=selected[f.id].value);
+    $('#draft-overall-preview').textContent=`POT ${calculatePotentialFromAttributes(attrs)}`;
+  }else if(count){
+    const partial=Object.entries(selected).map(([id,p])=>id==='weakFoot'?weakFootPotentialValue(p.value):p.value);
+    $('#draft-overall-preview').textContent=`POT parcial ${Math.round(partial.reduce((a,b)=>a+b,0)/partial.length)}`;
+  }else $('#draft-overall-preview').textContent='GER inicial 68';
 }
 function startAttributeDraft(profile){
   pendingPlayerProfile=profile;
-  attributeDraft={index:0,selections:{},current:null,rerolled:false,usedLegends:[]};
+  attributeDraft={selections:{},current:null,rerolled:false,usedLegends:[]};
   drawLegendForDraft();
   showView('attribute-draft');
   renderAttributeDraft();
 }
+function selectDraftAttribute(attributeId){
+  if(!attributeDraft||attributeDraft.selections[attributeId])return;
+  const field=ATTRIBUTE_DRAFT_FIELDS.find(f=>f.id===attributeId);if(!field)return;
+  const current=attributeDraft.current;
+  attributeDraft.selections[attributeId]={
+    value:current.values[attributeId],legend:current.legend.name,legendRating:current.legend.rating,
+    category:current.legend.category||'historical',source:current.legend.source||''
+  };
+  attributeDraft.usedLegends.push(current.legend.name);
+  if(selectedDraftCount()>=ATTRIBUTE_DRAFT_FIELDS.length){renderAttributeDraft();setTimeout(finalizeCareerFromDraft,260);return;}
+  attributeDraft.rerolled=false;drawLegendForDraft();renderAttributeDraft();
+}
 function finalizeCareerFromDraft(){
-  const attributes={},attributeOrigins={};
+  const dnaAttributes={},attributeOrigins={};
   ATTRIBUTE_DRAFT_FIELDS.forEach(f=>{
     const pick=attributeDraft.selections[f.id];
-    attributes[f.id]=pick.value;
-    attributeOrigins[f.id]={legend:pick.legend,legendRating:pick.legendRating};
+    dnaAttributes[f.id]=pick.value;
+    attributeOrigins[f.id]={legend:pick.legend,legendRating:pick.legendRating,category:pick.category,source:pick.source};
   });
   const profile=pendingPlayerProfile;
-  const overall=calculateOverallFromAttributes(attributes,profile.position);
-  const potential=Math.min(99,Math.max(overall,overall+rnd(4,8)+(22-profile.age)));
-  const value=Math.round(900000*Math.pow(1.17,Math.max(0,overall-67)));
-  const player={...profile,overall,potential,value,titles:0,trophies:[],awards:[],calledUp:false,nationalTeamGames:0,nationalTeamGoals:0,morale:70,reputation:10,developmentBoost:0,marketBonus:0,retired:false,attributes,attributeOrigins};
-  state={created:true,player,season:null,history:[],offers:[],news:[`${player.name}, ${player.age} anos, assina seu primeiro contrato profissional com o ${player.club}. Seu GER inicial é ${overall}.`],pendingEvent:null};
+  const overall=68;
+  const potential=calculatePotentialFromAttributes(dnaAttributes);
+  const attributes=buildStartingAttributes(dnaAttributes,potential);
+  const value=1100000;
+  const player={...profile,overall,potential,initialPotential:potential,value,titles:0,trophies:[],awards:[],calledUp:false,nationalTeamGames:0,nationalTeamGoals:0,morale:70,reputation:10,developmentBoost:0,marketBonus:0,retired:false,attributes,dnaAttributes,attributeOrigins};
+  state={created:true,player,season:null,history:[],offers:[],news:[`${player.name}, ${player.age} anos, inicia a carreira com GER 68. O DNA escolhido definiu POT ${potential}.`],pendingEvent:null};
   state.season=createSeason(player,START_YEAR,undefined);
-  pendingPlayerProfile=null;attributeDraft=null;save();showView('career');toast(`Carreira iniciada! GER ${overall} · POT ${potential}`);
+  pendingPlayerProfile=null;attributeDraft=null;save();showView('career');toast(`Carreira iniciada! GER 68 · POT ${potential}`);
 }
 function evolvePlayerAttributes(delta,avg){
-  const p=state.player,a=normalizePlayerAttributes(p);
+  const p=state.player,a=normalizePlayerAttributes(p),dna=p.dnaAttributes||a;
   if(!delta)return;
+  const bonusCeiling=Math.max(0,(p.potential||p.initialPotential||80)-(p.initialPotential||p.potential||80));
   if(delta>0){
-    const gain=Math.max(1,Math.round(delta*.75));
     ['pace','finishing','dribbling','passing','defense','physical'].forEach(id=>{
-      const performanceBonus=avg>=8.2&&Math.random()<.45?1:0;
-      a[id]=clamp(a[id]+gain+performanceBonus,35,99);
+      const target=clamp((dna[id]||75)+Math.round(bonusCeiling*.45),35,99);
+      const gap=Math.max(0,target-a[id]);
+      const gain=Math.max(1,Math.round(delta*(.55+Math.min(.65,gap/55))+(avg>=8.4?1:0)));
+      a[id]=clamp(Math.min(target,a[id]+gain),35,99);
     });
-    if(avg>=8.0&&a.weakFoot<5&&Math.random()<.28)a.weakFoot++;
   }else{
     ['pace','physical'].forEach(id=>a[id]=clamp(a[id]+delta,35,99));
     if(avg<6.4)a.dribbling=clamp(a.dribbling-1,35,99);
@@ -685,7 +693,7 @@ function render(){
   const p=state.player,s=state.season;applyClubTheme(p.club);$('#mini-profile').classList.remove('hidden');$('#reset-career').classList.remove('hidden');$('#mini-profile').textContent=`${p.name} · ${p.overall}`;
   $('#p-name').textContent=p.name;$('#p-pos').textContent=p.position;$('#p-age').textContent=p.age;$('#p-country').textContent=p.nationality;$('#p-birthdate').textContent=formatDateBR(p.birthdate);$('#p-overall').textContent=p.overall;$('#p-potential').textContent=p.potential;$('#p-club').textContent=p.club;$('#p-league').textContent=s?.league?.name||getCompetitionRule(p.clubCountry,p.clubCountryName).league;$('#p-value').textContent=money(p.value);$('#avatar').textContent=p.number;
   const attrs=normalizePlayerAttributes(p),origins=p.attributeOrigins||{};
-  $('#player-attributes').innerHTML=ATTRIBUTE_DRAFT_FIELDS.map(f=>`<div class="player-attribute"><span>${f.short}</span><strong>${attributeDisplayValue(f.id,attrs[f.id])}</strong><small>${origins[f.id]?.legend?`de ${origins[f.id].legend}`:f.label}</small></div>`).join('');
+  const dna=p.dnaAttributes||attrs;$('#player-attributes').innerHTML=ATTRIBUTE_DRAFT_FIELDS.map(f=>`<div class="player-attribute"><span>${f.short}</span><strong>${attributeDisplayValue(f.id,attrs[f.id])}</strong><small>${origins[f.id]?.legend?`DNA ${attributeDisplayValue(f.id,dna[f.id])} · ${origins[f.id].legend}`:f.label}</small></div>`).join('');
   $('#retire-career').classList.toggle('hidden',p.retired||p.age<=30);
   hydrateBadge($('#p-club-badge'),p.club,$('#p-club-fallback'));
   $('#retired-banner').classList.toggle('hidden',!p.retired);if(p.retired)$('#retired-text').textContent=` ${p.name} se aposentou aos ${p.age} anos.`;
@@ -740,14 +748,6 @@ $('#reroll-legend').addEventListener('click',()=>{
   if(!attributeDraft||attributeDraft.rerolled)return;
   const previous=attributeDraft.current.legend.name;
   attributeDraft.rerolled=true;drawLegendForDraft(previous);renderAttributeDraft();
-});
-$('#confirm-attribute').addEventListener('click',()=>{
-  if(!attributeDraft)return;
-  const field=ATTRIBUTE_DRAFT_FIELDS[attributeDraft.index],current=attributeDraft.current;
-  attributeDraft.selections[field.id]={value:current.value,legend:current.legend.name,legendRating:current.legend.rating};
-  attributeDraft.usedLegends.push(current.legend.name);
-  if(attributeDraft.index>=ATTRIBUTE_DRAFT_FIELDS.length-1){finalizeCareerFromDraft();return;}
-  attributeDraft.index++;attributeDraft.rerolled=false;drawLegendForDraft();renderAttributeDraft();
 });
 
 $('#player-form').addEventListener('submit',e=>{
@@ -860,35 +860,39 @@ function finalizeLeague(){
 function developmentResult(avg){
   const p=state.player,s=state.season,age=p.age,gk=p.position==='Goleiro',devAge=gk?age-3:age;
   const games=Math.max(1,s?.clubGames||1),contributions=(s?.clubGoals||0)+(s?.clubAssists||0),rate=contributions/games;
-  let base=avg>=8.8?6:avg>=8.4?5:avg>=8.0?4:avg>=7.6?3:avg>=7.2?2:avg>=6.8?1:avg<6.2?-2:avg<6.5?-1:0;
   const attacking=!['Goleiro','Zagueiro','Lateral direito','Lateral esquerdo','Volante'].includes(p.position);
-  const contributionTarget=attacking?.62:.24;
-  if(avg>=7.4&&rate>=contributionTarget)base++;
-  if(avg>=8.2&&rate>=contributionTarget*1.35)base++;
+  const contributionTarget=attacking?.58:.22;
+
+  // Evolução: quanto melhor a temporada, maior o ganho de GER.
+  let base=avg>=8.8?7:avg>=8.4?6:avg>=8.0?5:avg>=7.6?4:avg>=7.2?3:avg>=6.8?1:avg<6.15?-2:avg<6.45?-1:0;
+  if(avg>=7.35&&rate>=contributionTarget)base++;
+  if(avg>=8.15&&rate>=contributionTarget*1.35)base++;
   if(base>0){
-    if(devAge<=20)base=Math.min(7,base+1);
-    else if(devAge<=23)base=Math.min(6,base);
-    else if(devAge<=27)base=Math.min(5,base);
-    else if(devAge<=30)base=Math.min(4,base);
-    else if(devAge<=33)base=Math.min(3,base);
-    else if(devAge<=35)base=avg>=8.2?Math.min(1,base):0;
+    if(devAge<=20)base=Math.min(8,base+1);
+    else if(devAge<=23)base=Math.min(8,base);
+    else if(devAge<=27)base=Math.min(7,base);
+    else if(devAge<=30)base=Math.min(6,base);
+    else if(devAge<=33)base=Math.min(4,base);
+    else if(devAge<=35)base=avg>=8.2?Math.min(2,base):0;
     else base=0;
   }
-  if(devAge>=36)base=avg>=8.3?0:-rnd(1,2);
+  if(devAge>=36)base=avg>=8.4?0:-rnd(1,2);
   if(devAge>=39)base=-rnd(1,3);
   if(devAge>=42)base=-rnd(2,4);
-  base=clamp(base+(p.developmentBoost||0),-5,7);p.developmentBoost=0;
+  base=clamp(base+(p.developmentBoost||0),-5,8);p.developmentBoost=0;
 
-  if(avg>=8.4)p.potential=clamp(p.potential+3,p.overall,99);
-  else if(avg>=7.8)p.potential=clamp(p.potential+2,p.overall,99);
-  else if(avg>=7.3)p.potential=clamp(p.potential+1,p.overall,99);
-  else if(avg<6.3&&age<=25)p.potential=Math.max(p.overall,p.potential-1);
+  // Potencial dinâmico: nasce da média do DNA e muda conforme o rendimento.
+  let potentialDelta=avg>=8.65?2:avg>=7.9?1:avg<6.15&&age<=29?-1:0;
+  if(avg>=8.15&&rate>=contributionTarget*1.4)potentialDelta++;
+  if(avg<5.9&&age<=25)potentialDelta--;
+  p.potential=clamp(p.potential+potentialDelta,Math.max(68,p.overall),99);
 
-  if(base>0&&p.overall+base>p.potential&&avg>=7.6)p.potential=clamp(p.overall+base,p.overall,99);
+  // Temporadas extraordinárias podem elevar o teto antes do ganho de GER.
+  if(base>0&&p.overall+base>p.potential&&avg>=8.0)p.potential=clamp(p.overall+Math.min(base,3),p.overall,99);
   const before=p.overall;
   if(base>0)p.overall=Math.min(99,Math.min(p.potential,p.overall+base));
   else p.overall=clamp(p.overall+base,45,99);
-  if(age>=35)p.potential=Math.max(p.overall,Math.min(99,p.potential));
+  if(age>=35)p.potential=Math.max(p.overall,p.potential);
   const delta=p.overall-before;
   evolvePlayerAttributes(delta,avg);
   return delta;

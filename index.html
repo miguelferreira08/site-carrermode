@@ -149,28 +149,29 @@
       <div class="draft-layout">
         <div class="draft-copy">
           <p class="eyebrow">DNA DE CRAQUE</p>
-          <h2>Monte seu jogador com 150 lendas</h2>
-          <p>Cada atributo vem de um jogador histórico sorteado. Você pode refazer <strong>uma vez por atributo</strong> antes de confirmar.</p>
+          <h2>Monte seu jogador com 200 estrelas</h2>
+          <p>São <strong>150 nomes históricos</strong> em versões de auge e <strong>50 craques da atualidade</strong>. A cada sorteio, você escolhe <strong>qualquer um dos 7 atributos</strong> do jogador. Se não gostar do nome sorteado, pode refazer o sorteio uma vez antes de escolher.</p>
+          <div class="draft-rules"><span>GER inicial fixo: <strong>68</strong></span><span>POT: <strong>média do DNA escolhido</strong></span><span>POT continua dinâmico na carreira</span></div>
           <div class="draft-progress"><span id="draft-progress-bar"></span></div>
-          <div class="draft-progress-copy"><strong id="draft-progress-text">1 de 7</strong><span id="draft-attribute-label">Ritmo</span></div>
+          <div class="draft-progress-copy"><strong id="draft-progress-text">0 de 7</strong><span id="draft-attribute-label">Escolha qualquer atributo disponível</span></div>
         </div>
 
         <article class="legend-draw-card">
-          <div class="legend-card-head"><span id="legend-position">ATA</span><small>SORTEIO ATUAL</small></div>
+          <div class="legend-card-head"><span id="legend-position">ATA</span><small id="legend-era">HISTÓRICO · AUGE</small></div>
           <div class="legend-badge" id="legend-badge">PL</div>
           <h3 id="legend-name">Pelé</h3>
-          <div class="legend-rating-line"><span>Índice histórico</span><strong id="legend-rating">99</strong></div>
-          <div class="drawn-attribute"><small id="drawn-attribute-name">RITMO</small><strong id="drawn-attribute-value">96</strong></div>
-          <div class="draft-actions">
+          <div class="legend-rating-line"><span>GER da carta de referência</span><strong id="legend-rating">99</strong></div>
+          <small class="legend-source" id="legend-source">Referência EA SPORTS FC</small>
+          <div id="legend-attributes" class="legend-attributes"></div>
+          <div class="draft-actions single">
             <button id="reroll-legend" class="secondary" type="button">Sortear novamente · 1x</button>
-            <button id="confirm-attribute" class="primary" type="button">Usar este atributo →</button>
           </div>
         </article>
 
         <article class="panel draft-build">
-          <div class="section-title"><h3>Seu jogador até agora</h3><span id="draft-overall-preview">GER —</span></div>
+          <div class="section-title"><h3>Seu DNA até agora</h3><span id="draft-overall-preview">GER inicial 68</span></div>
           <div id="draft-slots" class="draft-slots"></div>
-          <p class="draft-note">Ao confirmar o 7º atributo, a carreira começa automaticamente.</p>
+          <p class="draft-note">Escolha um atributo por jogador sorteado. Ao fechar os 7 atributos, a carreira começa automaticamente com GER 68 e o potencial calculado pela média das escolhas.</p>
         </article>
       </div>
     </section>
@@ -190,7 +191,7 @@
             <small class="muted">Nascimento: <span id="p-birthdate"></span></small>
           </div>
           <div class="rating-stack">
-            <div class="overall"><strong id="p-overall">67</strong><small>GER</small></div>
+            <div class="overall"><strong id="p-overall">68</strong><small>GER</small></div>
             <div class="potential"><strong id="p-potential">85</strong><small>POT</small></div>
           </div>
           <div class="club-line">
@@ -217,7 +218,7 @@
         <article class="panel player-attributes-card">
           <div class="section-title"><h3>Atributos do jogador</h3><span>DNA DE LENDAS</span></div>
           <div id="player-attributes" class="player-attributes"></div>
-          <small class="muted">Cada atributo nasceu do sorteio de uma lenda e evolui junto com sua carreira.</small>
+          <small class="muted">O valor grande é o atributo atual; abaixo aparece o DNA de auge escolhido no sorteio.</small>
         </article>
 
         <article class="panel season-card">
