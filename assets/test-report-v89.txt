@@ -1,0 +1,94 @@
+Be The Legend v8.9 — relatório de validação
+Data: 2026-09-20
+
+1. Sintaxe
+- js/app.js: node --check OK
+- js/data.js: node --check OK
+- css/style.css: tinycss2, 0 erros de parsing
+
+2. HTML / ligações
+- 193 IDs HTML verificados
+- 0 IDs duplicados
+- 0 referências $('#id') ausentes no HTML
+- 0 referências locais de assets ausentes
+
+3. Editor facial — teste em Chromium/Playwright
+- Menu visual carregado com 23 opções clicáveis
+- Seleção testada: Barba=Com barba, Estilo=Cheia, Cabelo=Cacheado
+- Valores internos resultantes: yes / full / curly
+- Classe final da prévia: hair-curly + beard-full
+- Sem page errors no teste
+- Thumbnails visuais de cabelo/barba renderizados e textos sem corte após ajuste de espaçamento
+
+4. Face durante e após carreira
+- Facial presente e centralizada no card de carreira
+- Facial presente no card final de carreira
+- Última aparência salva junto da carreira arquivada
+
+5. Hall da Fama / múltiplas carreiras — teste em Chromium/Playwright
+- Salvar carreira encerrada: OK
+- Card salvo criado no Hall da Fama: OK
+- Iniciar nova carreira/resetar carreira atual preservando Hall da Fama: OK
+- Nova criação preserva savedCareers no state
+
+6. Divisões inferiores
+Todos os pools, formatos e mapeamentos de mercado foram validados sem sobreposição com a primeira divisão do mesmo país:
+- Brasil Série B: 20 clubes / 38 jogos / divisão 2
+- EFL Championship: 24 clubes / 46 jogos / divisão 2
+- EFL League One: 24 clubes / 46 jogos / divisão 3
+- Ligue 2: 18 clubes / 34 jogos / divisão 2
+- 2. Bundesliga: 18 clubes / 34 jogos / divisão 2
+- LALIGA HYPERMOTION: 22 clubes / 42 jogos / divisão 2
+- Liga Portugal 2: 18 clubes / 34 jogos / divisão 2
+- Serie B: 20 clubes / 38 jogos / divisão 2
+
+Teste funcional createSeason em um clube de cada divisão:
+- São Bernardo -> Série B / 38 / sem continental: OK
+- Blackburn Rovers -> EFL Championship / 46 / sem continental: OK
+- Leicester City -> EFL League One / 46 / sem continental: OK
+- Metz -> Ligue 2 / 34 / sem continental: OK
+- Wolfsburg -> 2. Bundesliga / 34 / sem continental: OK
+- Almería -> LALIGA HYPERMOTION / 42 / sem continental: OK
+- Penafiel -> Liga Portugal 2 / 34 / sem continental: OK
+- Palermo -> Serie B / 38 / sem continental: OK
+
+7. Pênaltis em mata-mata — teste em Chromium/Playwright
+- Evento de disputa por pênaltis abre após empate de mata-mata: implementado
+- Opções testadas:
+  * Forte no ângulo esquerdo
+  * Cavadinha no centro
+  * Rasteiro no canto direito
+- Clique em opção gera resultado e limpa o estado pendente: OK
+- Fluxo para goleiro usa defesa/físico; jogador de linha usa finalização/drible/passe
+
+8. Status de ídolo — teste funcional
+- Ídolo de clube é registrado por clube (pode ser ídolo de mais de um clube): OK
+- Ídolo de seleção: OK
+- Eventos visuais enfileirados com celebração própria: OK
+- Teste produziu 2 eventos (clube + seleção)
+
+9. Interações de seleção
+- Limite normal: 2 conversas por temporada
+- Ano de Copa do Mundo: 4 conversas por temporada
+- Sistema de decisões em partidas da seleção mantido
+
+10. Animações de partida
+- 6 trajetórias cinematográficas diferentes para a bola
+- Variantes por cenário (curva esquerda/direita, foguete, cobertura, rasteira, hesitação)
+- Linhas de velocidade, flash de torcida, burst de sucesso e sweep de erro
+- Bug de classList com classe vazia durante animação de introdução encontrado no teste e corrigido
+
+11. Menu inicial
+- Menu principal refeito com entradas Jogar/Nova carreira, Estatísticas e Mercado
+- Estatísticas/Mercado ficam bloqueados sem carreira ativa
+- Hall da Fama visível no menu principal
+- Screenshot de validação visual gerado durante o teste
+
+Fontes usadas para revisar participantes/estrutura 2026/27:
+- EFL (Championship / League One)
+- Bundesliga (2. Bundesliga)
+- LALIGA (LALIGA HYPERMOTION)
+- Ligue 1/LFP (Ligue 2)
+- CBF (Brasileirão Série B)
+- Liga Portugal (estrutura da Liga Portugal 2)
+- Lega B (Serie BKT)

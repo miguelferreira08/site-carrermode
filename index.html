@@ -11,10 +11,10 @@
   <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=8.8">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=8.8">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=8.8">
-  <link rel="stylesheet" href="css/style.css?v=8.8">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=8.9">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=8.9">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=8.9">
+  <link rel="stylesheet" href="css/style.css?v=8.9">
 </head>
 <body>
   <header class="topbar">
@@ -51,10 +51,12 @@
             <span>🏆 UCL</span><span>⚽ Bola de Ouro</span><span>🇧🇷 Seleção</span><span>🧤 Luva de Ouro</span><span>📋 Mercado</span>
           </div>
 
-          <div class="hero-actions">
-            <button class="primary big" id="start-btn">Entrar no vestiário <b>→</b></button>
-            <div class="hero-save-note"><span>●</span> Carreira salva no navegador</div>
+          <div class="game-menu-actions" aria-label="Menu principal do jogo">
+            <button class="game-menu-entry active" id="start-btn" type="button"><span class="game-menu-icon">▶</span><span><b>Jogar carreira</b><small>Continuar ou criar um novo jogador</small></span><em>ENTER</em></button>
+            <button class="game-menu-entry" data-view="stats" type="button"><span class="game-menu-icon">▥</span><span><b>Estatísticas</b><small>Histórico, títulos e desempenho</small></span><em>→</em></button>
+            <button class="game-menu-entry" data-view="market" type="button"><span class="game-menu-icon">⇄</span><span><b>Mercado</b><small>Propostas e próximos destinos</small></span><em>→</em></button>
           </div>
+          <div class="hero-save-note"><span>●</span> Salvamento local ativo · Hall da Fama preservado</div>
 
           <div class="hero-stats">
             <div><strong>200</strong><small>150 históricos + 50 atuais</small></div>
@@ -104,6 +106,10 @@
       </div>
 
       <div class="hero-ticker"><span>BRASILEIRÃO</span><i></i><span>CHAMPIONS</span><i></i><span>SELEÇÃO</span><i></i><span>MERCADO</span><i></i><span>BOLA DE OURO</span></div>
+      <section class="home-hall panel">
+        <div class="section-title"><h3>Hall da fama</h3><span id="home-save-count">0 carreira(s) salva(s)</span></div>
+        <div id="saved-careers-list" class="saved-careers-list"></div>
+      </section>
     </section>
 
     <section id="create" class="view page create-page">
@@ -122,6 +128,7 @@
             <small>Essa aparência acompanha o jogador durante a carreira.</small>
           </div>
           <div class="appearance-controls">
+            <div id="appearance-studio" class="appearance-studio full"></div>
             <label>Cabelo
               <select id="appearance-hair-enabled">
                 <option value="yes">Com cabelo</option>
@@ -464,6 +471,7 @@
         <div class="legacy-rank-badge"><small>RANKING HISTÓRICO*</small><strong id="legacy-rank">#—</strong></div>
       </div>
       <div class="legacy-card-hero">
+        <div id="legacy-face" class="legacy-face"></div>
         <div class="legacy-shirt"><span id="legacy-shirt-name">JOGADOR</span><strong id="legacy-shirt-number">10</strong></div>
         <div class="legacy-card-mainstats">
           <div><small>GER final</small><strong id="legacy-final-overall">—</strong></div>
@@ -490,7 +498,7 @@
       </div>
       <div id="legacy-honours-preview" class="legacy-honours-preview"></div>
       <div class="legacy-rank-explain"><strong id="legacy-rank-tier">Critérios do ranking</strong><p id="legacy-rank-detail">A posição é estimada pelo auge, títulos de peso, prêmios, produção, seleção e longevidade.</p></div>
-      <div class="summary-actions"><button id="legacy-view-stats" class="secondary" type="button">Ver estatísticas</button><button id="legacy-close" class="primary" type="button">Encerrar</button></div>
+      <div class="summary-actions legacy-actions"><button id="legacy-save" class="secondary" type="button">Salvar carreira</button><button id="legacy-view-stats" class="secondary" type="button">Ver estatísticas</button><button id="legacy-close" class="primary" type="button">Encerrar</button></div>
     </div>
   </div>
 
@@ -530,7 +538,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=8.8"></script>
-  <script src="js/app.js?v=8.8"></script>
+  <script src="js/data.js?v=8.9"></script>
+  <script src="js/app.js?v=8.9"></script>
 </body>
 </html>

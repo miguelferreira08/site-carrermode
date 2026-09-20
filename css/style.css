@@ -6696,3 +6696,401 @@ img {
     display:none;
   }
 }
+
+/* ===== V8.9 — interface game-like, facial studio, archive, spacing fixes ===== */
+.topbar{
+  backdrop-filter:blur(16px);
+  background:linear-gradient(180deg,rgba(7,11,22,.92),rgba(10,16,29,.78));
+}
+.topbar nav button{
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+  border-radius:14px;
+  box-shadow:0 10px 24px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.05);
+}
+#home.hero{
+  min-height:calc(100vh - 112px);
+  padding-bottom:38px;
+}
+#home .hero-shell{
+  border-radius:28px;
+  border:1px solid rgba(110,140,255,.16);
+  box-shadow:0 28px 80px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.04);
+}
+#home .hero-content{
+  gap:20px;
+}
+#home .hero-actions .primary,
+#home .hero-actions .secondary{
+  min-width:200px;
+  border-radius:16px;
+}
+.home-hall{
+  margin-top:24px;
+  padding:18px 20px;
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(12,18,32,.94),rgba(15,24,42,.92));
+}
+.saved-careers-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+.saved-career-card{
+  display:grid;
+  grid-template-columns:74px 1fr;
+  gap:14px;
+  align-items:center;
+  padding:14px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+}
+.saved-career-card strong{display:block;margin-bottom:4px}
+.saved-career-card small{display:block;color:var(--muted);line-height:1.35}
+.saved-career-meta{grid-column:2;display:flex;flex-wrap:wrap;gap:8px}
+.saved-career-meta span{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.06);font-size:12px}
+.saved-career-face{display:grid;place-items:center;min-height:84px}
+.saved-career-face .player-face.compact{transform:scale(.58);transform-origin:center 26%;margin-top:10px}
+
+.appearance-builder{
+  grid-template-columns:300px 1fr;
+  gap:28px;
+  align-items:start;
+}
+.appearance-controls{
+  grid-template-columns:1fr;
+  gap:18px;
+}
+.appearance-controls>label{
+  position:absolute;
+  left:-9999px;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+.appearance-studio{
+  display:grid;
+  gap:16px;
+}
+.appearance-group{
+  padding:14px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+}
+.appearance-group.disabled{opacity:.48}
+.appearance-group-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.appearance-group-head strong{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.appearance-group-options{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+  gap:10px;
+}
+.appearance-group-options.toggle{grid-template-columns:repeat(2,minmax(0,1fr))}
+.appearance-group-options.swatches{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.appearance-chip{
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  color:var(--text);
+  font:inherit;
+  cursor:pointer;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease;
+}
+.appearance-chip:hover{transform:translateY(-1px);border-color:rgba(90,255,171,.35)}
+.appearance-chip.active{
+  border-color:rgba(90,255,171,.52);
+  background:linear-gradient(180deg,rgba(66,232,141,.18),rgba(66,232,141,.08));
+  box-shadow:0 10px 20px rgba(4,19,13,.18),0 0 0 1px rgba(66,232,141,.12) inset;
+}
+.appearance-chip.swatch{justify-content:flex-start}
+.swatch-color{
+  width:20px;height:20px;border-radius:50%;background:var(--swatch);border:2px solid rgba(255,255,255,.2);box-shadow:0 0 0 2px rgba(0,0,0,.18);
+}
+.appearance-preview{
+  width:188px;
+  height:214px;
+}
+.appearance-preview .player-face{transform:scale(1.08);transform-origin:center top}
+
+.profile-card{
+  grid-template-columns:92px 1fr auto;
+  gap:20px;
+}
+.avatar{
+  width:86px;
+  height:98px;
+  overflow:hidden;
+}
+.face-avatar{
+  display:grid!important;
+  place-items:center!important;
+}
+.face-avatar .player-face.compact{
+  transform:scale(.66);
+  transform-origin:center 22%;
+  margin-top:12px;
+}
+.legacy-face{
+  width:104px;
+  height:124px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(160deg,#122231,#08111a);
+  overflow:hidden;
+}
+.legacy-face-avatar .player-face.compact{transform:scale(.82);transform-origin:center 20%;margin-top:12px}
+.legacy-actions{flex-wrap:wrap}
+
+.dashboard-grid .panel,
+.news-card,
+.competitions-card,
+.national-card,
+.profile-card,
+.next-match,
+.player-attributes-card,
+.season-card{
+  border-radius:20px;
+}
+.competitions-card .section-title,
+.news-card .section-title{margin-bottom:14px}
+.competitions-card .competition-item,
+.competition-item{
+  gap:16px;
+  padding:14px 16px;
+  align-items:center;
+  min-height:88px;
+}
+.competition-item>div{
+  display:grid;
+  gap:5px;
+}
+.competition-item strong{line-height:1.3}
+.competition-item small{line-height:1.4;font-size:13px}
+.competition-item .honour-art,
+.summary-status.with-art .honour-art,
+.season-honour-tile .honour-art{
+  width:66px;
+  min-width:66px;
+  height:66px;
+  padding:8px;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.04),rgba(255,255,255,.01));
+}
+.competition-item .honour-art img,
+.summary-status.with-art .honour-art img,
+.season-honour-tile .honour-art img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  background:transparent!important;
+  mix-blend-mode:normal;
+}
+.news-card #news{display:grid;gap:12px}
+.news-item.compact{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  gap:12px;
+  align-items:flex-start;
+  padding:12px 2px 14px;
+}
+.news-item.compact strong{
+  line-height:1.5;
+  font-size:14px;
+}
+.news-item .news-icon{
+  margin-top:2px;
+}
+
+img{background:transparent}
+.honour-art img,.award-ceremony-trophy img,#celebration-icon img{background:transparent!important}
+
+@media (max-width: 980px){
+  .appearance-builder{grid-template-columns:1fr}
+  .saved-careers-list{grid-template-columns:1fr}
+}
+
+.game-menu-actions{
+  display:grid;
+  gap:10px;
+  width:min(520px,100%);
+  margin:4px 0 0;
+}
+.game-menu-entry{
+  display:grid;
+  grid-template-columns:42px 1fr auto;
+  align-items:center;
+  gap:13px;
+  min-height:64px;
+  padding:10px 14px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  background:linear-gradient(100deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
+  color:var(--text);
+  text-align:left;
+  font:inherit;
+  cursor:pointer;
+  transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.game-menu-entry:hover,.game-menu-entry.active{
+  transform:translateX(5px);
+  border-color:rgba(66,232,141,.44);
+  background:linear-gradient(100deg,rgba(66,232,141,.17),rgba(66,232,141,.045));
+  box-shadow:0 12px 30px rgba(0,0,0,.18),inset 3px 0 0 var(--green);
+}
+.game-menu-entry .game-menu-icon{
+  width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);color:var(--green);font-size:17px;font-weight:800;
+}
+.game-menu-entry>span:nth-child(2){display:grid;gap:2px}
+.game-menu-entry b{font-size:15px}
+.game-menu-entry small{color:var(--muted);font-size:11px}
+.game-menu-entry em{font-style:normal;font-size:10px;letter-spacing:.1em;color:var(--muted)}
+
+/* Mais variação cinematográfica nas decisões de partida */
+.match-cinematic{
+  overflow:hidden;
+  border-radius:inherit;
+}
+.match-cinematic::before,
+.match-cinematic::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+}
+.match-cinematic::before{
+  inset:0;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.09),transparent 42%);
+  opacity:0;
+  animation:matchPulse 1.3s ease;
+}
+.match-cinematic.variant-0 .match-ball{animation:ballCurveLeft 1.15s cubic-bezier(.2,.8,.25,1) both}
+.match-cinematic.variant-1 .match-ball{animation:ballCurveRight 1.15s cubic-bezier(.2,.8,.25,1) both}
+.match-cinematic.variant-2 .match-ball{animation:ballRocket 1.05s cubic-bezier(.2,.8,.25,1) both}
+.match-cinematic.variant-3 .match-ball{animation:ballChip 1.2s ease-out both}
+.match-cinematic.variant-4 .match-ball{animation:ballLow 1.1s ease-out both}
+.match-cinematic.variant-5 .match-ball{animation:ballStutter 1.15s ease-in-out both}
+.match-cinematic .speed-line{
+  position:absolute;
+  width:80px;height:2px;border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.8));
+  opacity:.6;
+  animation:speedLine 1s ease-out forwards;
+}
+.match-cinematic .speed-line.l1{top:26%;left:8%;--rot:-8deg}
+.match-cinematic .speed-line.l2{top:42%;left:14%;--rot:3deg;animation-delay:.08s}
+.match-cinematic .speed-line.l3{top:58%;left:5%;--rot:-3deg;animation-delay:.14s}
+.match-cinematic .crowd-flash{
+  position:absolute;inset:auto 0 0;height:18%;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 2px,transparent 2px 10px);
+  opacity:.25;
+  animation:crowdWave 1.2s ease both;
+}
+.match-fx-success .match-cinematic::after{
+  inset:0;
+  background:radial-gradient(circle at 50% 48%,rgba(66,232,141,.28),transparent 50%);
+  animation:successBurst 1s ease-out both;
+}
+.match-fx-miss .match-cinematic::after{
+  inset:0;
+  background:linear-gradient(115deg,transparent 42%,rgba(239,83,80,.18) 50%,transparent 58%);
+  animation:missSweep 1s ease both;
+}
+@keyframes matchPulse{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
+@keyframes ballCurveLeft{0%{transform:translate(-130px,70px) scale(.72) rotate(0)}55%{transform:translate(-20px,-28px) scale(.9) rotate(240deg)}100%{transform:translate(65px,-60px) scale(.65) rotate(520deg)}}
+@keyframes ballCurveRight{0%{transform:translate(130px,70px) scale(.72) rotate(0)}55%{transform:translate(22px,-28px) scale(.9) rotate(-240deg)}100%{transform:translate(-65px,-60px) scale(.65) rotate(-520deg)}}
+@keyframes ballRocket{0%{transform:translate(0,100px) scale(.7)}100%{transform:translate(0,-100px) scale(.52) rotate(620deg)}}
+@keyframes ballChip{0%{transform:translate(-55px,72px) scale(.72)}48%{transform:translate(0,-90px) scale(.62)}100%{transform:translate(60px,-38px) scale(.5) rotate(400deg)}}
+@keyframes ballLow{0%{transform:translate(-105px,74px) scale(.75)}100%{transform:translate(105px,60px) scale(.56) rotate(480deg)}}
+@keyframes ballStutter{0%{transform:translate(-85px,68px)}22%{transform:translate(-40px,48px)}36%{transform:translate(-44px,48px)}100%{transform:translate(100px,-45px) rotate(450deg)}}
+@keyframes speedLine{0%{transform:translateX(-80px) rotate(var(--rot));opacity:0}35%{opacity:.65}100%{transform:translateX(320px) rotate(var(--rot));opacity:0}}
+@keyframes crowdWave{0%{transform:translateY(18px);opacity:0}45%{opacity:.35}100%{transform:none;opacity:.12}}
+@keyframes successBurst{0%{opacity:0;transform:scale(.7)}45%{opacity:1}100%{opacity:0;transform:scale(1.2)}}
+@keyframes missSweep{0%{opacity:0;transform:translateX(-30%)}45%{opacity:1}100%{opacity:0;transform:translateX(30%)}}
+
+.idol-celebration .celebration-card{border-color:rgba(242,201,76,.5);box-shadow:0 0 80px rgba(242,201,76,.13),0 30px 80px rgba(0,0,0,.45)}
+.idol-celebration .celebration-icon{animation:idolCrown 1.6s ease-in-out infinite}
+@keyframes idolCrown{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.09) rotate(2deg);filter:drop-shadow(0 0 16px rgba(242,201,76,.48))}}
+
+.appearance-group.disabled .appearance-group-options{pointer-events:none}
+.appearance-chip.with-thumb{
+  min-height:84px;
+  display:grid;
+  grid-template-columns:54px 1fr;
+  justify-content:start;
+  text-align:left;
+  overflow:hidden;
+}
+.appearance-option-thumb{
+  width:50px;height:62px;display:grid;place-items:center;overflow:hidden;border-radius:11px;
+  background:linear-gradient(160deg,rgba(66,232,141,.08),rgba(255,255,255,.025));
+}
+.appearance-option-thumb .player-face.compact{
+  transform:scale(.38);
+  transform-origin:center 17%;
+  margin-top:16px;
+}
+.appearance-option-thumb .face-jersey{display:none}
+.legacy-card-hero{
+  grid-template-columns:112px 180px 1fr;
+  gap:22px;
+}
+.legacy-face-avatar{
+  width:112px!important;
+  height:132px!important;
+  justify-self:center;
+}
+@media(max-width:760px){
+  .legacy-card-hero{grid-template-columns:1fr}
+  .legacy-face-avatar,.legacy-shirt{justify-self:center}
+}
+
+/* Centralização final da facial durante a carreira e no legado */
+.face-avatar .player-face.compact{
+  transform:scale(.58)!important;
+  transform-origin:center center!important;
+  margin:0!important;
+}
+.legacy-face-avatar .player-face.compact{
+  transform:scale(.72)!important;
+  transform-origin:center center!important;
+  margin:0!important;
+}
+
+.appearance-group-options.grid{
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+}
+.appearance-chip.with-thumb{
+  grid-template-columns:50px minmax(0,1fr);
+  gap:10px;
+  padding:9px 10px;
+}
+.appearance-chip.with-thumb b{
+  min-width:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  line-height:1.2;
+  font-size:12px;
+}
+@media(max-width:620px){
+  .appearance-group-options.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .appearance-chip.with-thumb{grid-template-columns:42px minmax(0,1fr)}
+  .appearance-option-thumb{width:42px;height:56px}
+}
+.game-menu-entry:disabled{
+  opacity:.42;
+  cursor:not-allowed;
+  transform:none!important;
+  border-color:rgba(255,255,255,.06)!important;
+  box-shadow:none!important;
+}

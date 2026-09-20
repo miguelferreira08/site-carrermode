@@ -2000,7 +2000,7 @@ const LEAGUE_CLUB_POOLS = {
   DE:['Bayern de Munique','Borussia Dortmund','RB Leipzig','Stuttgart','Hoffenheim','Bayer Leverkusen','Freiburg','Eintracht Frankfurt','Augsburg','Mainz','Union Berlin','Borussia Mönchengladbach','Hamburgo','Köln','Werder Bremen','Schalke 04','Elversberg','Paderborn'],
   IT:['Milan','Atalanta','Bologna','Cagliari','Como','Fiorentina','Frosinone','Genoa','Inter de Milão','Juventus','Lazio','Lecce','Monza','Napoli','Parma','Roma','Sassuolo','Torino','Udinese','Venezia'],
   FR:['Angers','Auxerre','Brest','Le Havre','Le Mans','Lens','Lorient','Lille','Lyon','Marseille','Monaco','Nice','Paris FC','Paris Saint-Germain','Rennes','Strasbourg','Toulouse','Troyes'],
-  PT:['Benfica','Porto','Sporting CP','Braga','Vitória de Guimarães','Boavista','Famalicão','Rio Ave','Moreirense','Casa Pia','Estoril','Arouca','Gil Vicente','Santa Clara','Nacional da Madeira','AVS','Alverca','Tondela'],
+  PT:['Benfica','Porto','Sporting CP','Braga','Vitória de Guimarães','Famalicão','Rio Ave','Moreirense','Casa Pia','Estoril','Arouca','Gil Vicente','Santa Clara','Nacional da Madeira','Alverca','Académico de Viseu','Marítimo','Estrela da Amadora'],
   NL:['Ajax','PSV','Feyenoord','AZ Alkmaar','Twente','Utrecht','Heerenveen','Sparta Rotterdam','Groningen','NEC','Go Ahead Eagles','Heracles','Fortuna Sittard','PEC Zwolle','NAC Breda','Excelsior','Volendam','Telstar'],
   SA:['Al-Hilal','Al-Nassr','Al-Ittihad','Al-Ahli','Al-Ettifaq','Al-Shabab','Al-Taawoun','Al-Fateh','Damac','Al-Fayha','Al-Khaleej','Al-Raed','Al-Riyadh','Al-Wehda','Al-Okhdood','Al-Qadsiah','Al-Kholood','Neom SC']
 };
@@ -2040,8 +2040,11 @@ const TRANSFER_TARGETS = [
 /* ===== Be The Legend V8.8: mercado ampliado por faixa de GER ===== */
 const MARKET_LEAGUE_FORMATS = {
   'EFL Championship':{teams:24,matches:46,mode:'double_round_robin',championPoints:88,label:'24 clubes · 46 rodadas · turno e returno'},
+  'EFL League One':{teams:24,matches:46,mode:'double_round_robin',championPoints:90,label:'24 clubes · 46 rodadas · turno e returno'},
   '2. Bundesliga':{teams:18,matches:34,mode:'double_round_robin',championPoints:68,label:'18 clubes · 34 rodadas · turno e returno'},
   'LALIGA HYPERMOTION':{teams:22,matches:42,mode:'double_round_robin',championPoints:78,label:'22 clubes · 42 rodadas · turno e returno'},
+  'Liga Portugal 2':{teams:18,matches:34,mode:'double_round_robin',championPoints:67,label:'18 clubes · 34 rodadas · turno e returno'},
+  'Série B':{teams:20,matches:38,mode:'double_round_robin',championPoints:70,label:'20 clubes · 38 rodadas · turno e returno'},
   'Serie B':{teams:20,matches:38,mode:'double_round_robin',championPoints:72,label:'20 clubes · 38 rodadas · turno e returno'},
   'Ligue 2':{teams:18,matches:34,mode:'double_round_robin',championPoints:67,label:'18 clubes · 34 rodadas · turno e returno'},
   'Austrian Bundesliga':{teams:12,matches:32,mode:'regional',championPoints:60,label:'12 clubes · temporada regular + fase final simplificada'},
@@ -2063,8 +2066,11 @@ const MARKET_LEAGUE_FORMATS = {
 
 const MARKET_LEAGUE_POOLS = {
   'EFL Championship':['Birmingham City','Blackburn Rovers','Bolton Wanderers','Bristol City','Burnley','Cardiff City','Charlton Athletic','Derby County','Lincoln City','Middlesbrough','Millwall','Norwich City','Portsmouth','Preston North End','Queens Park Rangers','Sheffield United','Stoke City','Swansea City','Watford','West Bromwich Albion','West Ham United','Wolverhampton Wanderers','Wrexham','Southampton'],
+  'EFL League One':['AFC Wimbledon','Barnsley','Blackpool','Bradford City','Bromley','Burton Albion','Cambridge United','Doncaster Rovers','Huddersfield Town','Leicester City','Leyton Orient','Luton Town','Mansfield Town','Milton Keynes Dons','Notts County','Oxford United','Peterborough United','Plymouth Argyle','Reading','Sheffield Wednesday','Stevenage','Stockport County','Wigan Athletic','Wycombe Wanderers'],
   '2. Bundesliga':['Wolfsburg','Heidenheim','St. Pauli','Hannover 96','Darmstadt 98','Kaiserslautern','Hertha Berlin','Nürnberg','Bochum','Karlsruhe','Dynamo Dresden','Holstein Kiel','Arminia Bielefeld','Magdeburg','Eintracht Braunschweig','Greuther Fürth','Energie Cottbus','VfL Osnabrück'],
   'LALIGA HYPERMOTION':['AD Ceuta','Albacete','Burgos','Cádiz','Castellón','Eldense','Leganés','Tenerife','Sabadell','Celta Fortuna','Córdoba','FC Andorra','Girona','Granada','Real Sociedad B','Mallorca','Real Oviedo','Sporting Gijón','Real Valladolid','Eibar','Almería','Las Palmas'],
+  'Liga Portugal 2':['Académica','AVS','Amarante','Chaves','Farense','Feirense','Felgueiras 1932','Leixões','Lusitânia de Lourosa','Penafiel','Portimonense','Tondela','Torreense','União de Leiria','Vizela','Benfica B','Sporting B','Porto B'],
+  'Série B':['São Bernardo','Ceará','Criciúma','Náutico','América Mineiro','Goiás','Londrina','Novorizontino','Sport','Cuiabá','Atlético Goianiense','Operário-PR','Vila Nova','CRB','Ponte Preta','Athletic Club','Juventude','Avaí','Fortaleza','Botafogo-SP'],
   'Serie B':['Arezzo','Ascoli','Avellino','Benevento','Carrarese','Catanzaro','Cesena','Cremonese','Empoli','Hellas Verona','Juve Stabia','L.R. Vicenza','Mantova','Modena','Padova','Palermo','Pisa','Sampdoria','Südtirol','Virtus Entella'],
   'Ligue 2':['Annecy','Boulogne','Clermont Foot','Dijon','Dunkerque','Guingamp','Grenoble','Laval','Metz','Montpellier','Nancy','Nantes','Pau','Saint-Étienne','Red Star','Reims','Rodez','Sochaux']
 };
@@ -2072,8 +2078,11 @@ const MARKET_LEAGUE_POOLS = {
 const TRANSFER_MARKET_CLUBS = [
   // GER 68–72: divisões inferiores das cinco grandes ligas.
   ...MARKET_LEAGUE_POOLS['EFL Championship'].map((name,i)=>({name,countryCode:'ENG',league:'EFL Championship',cup:'FA Cup',divisionLevel:2,marketTier:'development',minOverall:68,maxOverall:i<8?73:75,strength:69+(i%6)})),
+  ...MARKET_LEAGUE_POOLS['EFL League One'].map((name,i)=>({name,countryCode:'ENG',league:'EFL League One',cup:'FA Cup',divisionLevel:3,marketTier:'development',minOverall:68,maxOverall:i<8?72:74,strength:66+(i%5)})),
   ...MARKET_LEAGUE_POOLS['2. Bundesliga'].map((name,i)=>({name,countryCode:'DE',league:'2. Bundesliga',cup:'DFB-Pokal',divisionLevel:2,marketTier:'development',minOverall:68,maxOverall:i<7?74:76,strength:69+(i%6)})),
   ...MARKET_LEAGUE_POOLS['LALIGA HYPERMOTION'].map((name,i)=>({name,countryCode:'ES',league:'LALIGA HYPERMOTION',cup:'Copa do Rei',divisionLevel:2,marketTier:'development',minOverall:68,maxOverall:i<8?74:76,strength:68+(i%7)})),
+  ...MARKET_LEAGUE_POOLS['Liga Portugal 2'].map((name,i)=>({name,countryCode:'PT',league:'Liga Portugal 2',cup:'Taça de Portugal',divisionLevel:2,marketTier:'development',minOverall:68,maxOverall:i<8?73:75,strength:67+(i%6)})),
+  ...MARKET_LEAGUE_POOLS['Série B'].map((name,i)=>({name,countryCode:'BR',league:'Série B',cup:'Copa do Brasil',divisionLevel:2,marketTier:'development',minOverall:68,maxOverall:i<8?74:76,strength:68+(i%6)})),
   ...MARKET_LEAGUE_POOLS['Serie B'].map((name,i)=>({name,countryCode:'IT',league:'Serie B',cup:'Coppa Italia',divisionLevel:2,marketTier:'development',minOverall:68,maxOverall:i<8?74:76,strength:68+(i%7)})),
   ...MARKET_LEAGUE_POOLS['Ligue 2'].map((name,i)=>({name,countryCode:'FR',league:'Ligue 2',cup:'Coupe de France',divisionLevel:2,marketTier:'development',minOverall:68,maxOverall:i<8?74:76,strength:68+(i%7)})),
 
