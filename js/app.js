@@ -155,8 +155,8 @@ function renderAttributeDraft(){
   $('#legend-rating').textContent=current.legend.rating;
   if($('#legend-era'))$('#legend-era').textContent=current.legend.category==='current'?'ATUAL · MELHOR FASE':'HISTÓRICO · AUGE';
   if($('#legend-source'))$('#legend-source').textContent=current.legend.source||'Referência EA SPORTS FC';
-  $('#reroll-legend').disabled=attributeDraft.rerolled;
-  $('#reroll-legend').textContent=attributeDraft.rerolled?'Novo sorteio usado':'Sortear novamente · 1x';
+  $('#reroll-legend').disabled=attributeDraft.rerollUsed;
+  $('#reroll-legend').textContent=attributeDraft.rerollUsed?'Pulo já utilizado':'Pular este jogador · 1x no total';
 
   const values=current.values;
   $('#legend-attributes').innerHTML=ATTRIBUTE_DRAFT_FIELDS.map(f=>{
@@ -182,7 +182,7 @@ function renderAttributeDraft(){
 }
 function startAttributeDraft(profile){
   pendingPlayerProfile=profile;
-  attributeDraft={selections:{},current:null,rerolled:false,usedLegends:[]};
+  attributeDraft={selections:{},current:null,rerollUsed:false,usedLegends:[]};
   drawLegendForDraft();
   showView('attribute-draft');
   renderAttributeDraft();
@@ -197,7 +197,7 @@ function selectDraftAttribute(attributeId){
   };
   attributeDraft.usedLegends.push(current.legend.name);
   if(selectedDraftCount()>=ATTRIBUTE_DRAFT_FIELDS.length){renderAttributeDraft();setTimeout(finalizeCareerFromDraft,260);return;}
-  attributeDraft.rerolled=false;drawLegendForDraft();renderAttributeDraft();
+  drawLegendForDraft();renderAttributeDraft();
 }
 function finalizeCareerFromDraft(){
   const dnaAttributes={},attributeOrigins={};
@@ -628,7 +628,11 @@ function legacyV4_developmentResult(avg){
   return p.overall-before;
 }
 function evaluateAwards(avg){
-  const p=state.player,s=state.season;const awards=[];const attacking=!['Goleiro','Zagueiro','Lateral direito','Lateral esquerdo','Volante'].includes(p.position);
+  const p=state.player,s=state.season;const awards=[];
+  // Prêmios individuais só podem ser conquistados atuando em um clube europeu.
+  const seasonCountry=s?.countryAtStart||p.clubCountry;
+  if(!CONFEDERATIONS.europe.includes(seasonCountry))return awards;
+  const attacking=!['Goleiro','Zagueiro','Lateral direito','Lateral esquerdo','Volante'].includes(p.position);
   if(p.age<=21&&avg>=7.4&&s.clubGames>=18)awards.push('Melhor Jogador Jovem');
   if(avg>=7.45&&s.clubGames>=18)awards.push('Time da Temporada');
   const bootTarget=attacking?18:p.position==='Volante'?10:7;if(s.clubGoals>=bootTarget)awards.push('Chuteira de Ouro');
@@ -745,9 +749,9 @@ $('#close-result').addEventListener('click',()=>$('#match-result').classList.add
 $('#close-celebration').addEventListener('click',()=>$('#celebration').classList.add('hidden'));
 
 $('#reroll-legend').addEventListener('click',()=>{
-  if(!attributeDraft||attributeDraft.rerolled)return;
+  if(!attributeDraft||attributeDraft.rerollUsed)return;
   const previous=attributeDraft.current.legend.name;
-  attributeDraft.rerolled=true;drawLegendForDraft(previous);renderAttributeDraft();
+  attributeDraft.rerollUsed=true;drawLegendForDraft(previous);renderAttributeDraft();
 });
 
 $('#player-form').addEventListener('submit',e=>{
@@ -863,32 +867,39 @@ function developmentResult(avg){
   const attacking=!['Goleiro','Zagueiro','Lateral direito','Lateral esquerdo','Volante'].includes(p.position);
   const contributionTarget=attacking?.58:.22;
 
-  // Evolução: quanto melhor a temporada, maior o ganho de GER.
-  let base=avg>=8.8?7:avg>=8.4?6:avg>=8.0?5:avg>=7.6?4:avg>=7.2?3:avg>=6.8?1:avg<6.15?-2:avg<6.45?-1:0;
-  if(avg>=7.35&&rate>=contributionTarget)base++;
-  if(avg>=8.15&&rate>=contributionTarget*1.35)base++;
-  if(base>0){
-    if(devAge<=20)base=Math.min(8,base+1);
-    else if(devAge<=23)base=Math.min(8,base);
-    else if(devAge<=27)base=Math.min(7,base);
-    else if(devAge<=30)base=Math.min(6,base);
-    else if(devAge<=33)base=Math.min(4,base);
-    else if(devAge<=35)base=avg>=8.2?Math.min(2,base):0;
-    else base=0;
-  }
-  if(devAge>=36)base=avg>=8.4?0:-rnd(1,2);
-  if(devAge>=39)base=-rnd(1,3);
-  if(devAge>=42)base=-rnd(2,4);
-  base=clamp(base+(p.developmentBoost||0),-5,8);p.developmentBoost=0;
+  // Evolução acelerada: rendimento alto gera saltos perceptíveis de GER.
+  let base=avg>=8.8?9:avg>=8.4?8:avg>=8.0?7:avg>=7.6?6:avg>=7.2?5:avg>=6.8?3:avg>=6.5?1:avg<6.05?-2:avg<6.3?-1:0;
+  if(avg>=7.25&&rate>=contributionTarget)base++;
+  if(avg>=7.85&&rate>=contributionTarget*1.30)base++;
+  if(avg>=8.45&&rate>=contributionTarget*1.55)base++;
 
-  // Potencial dinâmico: nasce da média do DNA e muda conforme o rendimento.
-  let potentialDelta=avg>=8.65?2:avg>=7.9?1:avg<6.15&&age<=29?-1:0;
-  if(avg>=8.15&&rate>=contributionTarget*1.4)potentialDelta++;
-  if(avg<5.9&&age<=25)potentialDelta--;
+  // Jogadores jovens aproveitam ainda mais uma grande temporada; depois dos 30 a curva desacelera.
+  if(base>0){
+    if(devAge<=20)base=Math.min(11,base+2);
+    else if(devAge<=23)base=Math.min(10,base+1);
+    else if(devAge<=27)base=Math.min(9,base);
+    else if(devAge<=30)base=Math.min(8,base);
+    else if(devAge<=33)base=Math.min(6,base);
+    else if(devAge<=35)base=avg>=8.0?Math.min(4,base):Math.min(2,base);
+    else base=avg>=8.5?Math.min(2,base):0;
+  }
+  if(devAge>=37)base=avg>=8.5?0:-rnd(1,2);
+  if(devAge>=40)base=-rnd(1,3);
+  if(devAge>=43)base=-rnd(2,4);
+  base=clamp(base+(p.developmentBoost||0),-5,11);p.developmentBoost=0;
+
+  // Potencial dinâmico também reage mais rápido ao desempenho para não travar a evolução.
+  let potentialDelta=avg>=8.7?4:avg>=8.2?3:avg>=7.7?2:avg>=7.25?1:avg<6.05&&age<=29?-1:0;
+  if(avg>=7.8&&rate>=contributionTarget*1.25)potentialDelta++;
+  if(avg>=8.4&&rate>=contributionTarget*1.5)potentialDelta++;
+  if(avg<5.8&&age<=25)potentialDelta--;
   p.potential=clamp(p.potential+potentialDelta,Math.max(68,p.overall),99);
 
-  // Temporadas extraordinárias podem elevar o teto antes do ganho de GER.
-  if(base>0&&p.overall+base>p.potential&&avg>=8.0)p.potential=clamp(p.overall+Math.min(base,3),p.overall,99);
+  // Se o jogador estiver rendendo acima do próprio teto, uma grande temporada expande o POT antes do ganho de GER.
+  if(base>0&&p.overall+base>p.potential&&avg>=7.55){
+    const ceilingBoost=avg>=8.5?Math.min(base,7):avg>=8.0?Math.min(base,5):Math.min(base,3);
+    p.potential=clamp(Math.max(p.potential,p.overall+ceilingBoost),p.overall,99);
+  }
   const before=p.overall;
   if(base>0)p.overall=Math.min(99,Math.min(p.potential,p.overall+base));
   else p.overall=clamp(p.overall+base,45,99);
