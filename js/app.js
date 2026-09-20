@@ -927,41 +927,60 @@ function developmentResult(avg){
   const attrs=normalizePlayerAttributes(p),roleSkill=positionWeightedAttributeScore(p,attrs);
   const primaryId=primaryAttributeForPosition(p.position),primaryValue=normalizedAttributeValue(primaryId,attrs[primaryId]);
 
-  // Curva rápida: um jovem com temporada apenas boa já sobe vários pontos;
-  // desempenho de elite pode acelerar muito a chegada ao potencial.
-  let base=avg>=8.8?10:avg>=8.4?9:avg>=8.0?8:avg>=7.6?7:avg>=7.2?6:avg>=6.8?5:avg>=6.5?3:avg>=6.2?1:avg<5.8?-2:0;
-  if(rate>=contributionTarget)base++;
-  if(avg>=7.6&&rate>=contributionTarget*1.30)base++;
-  if(avg>=8.2&&rate>=contributionTarget*1.55)base++;
-  if(primaryValue>=75&&avg>=7.0)base++;
-  if(roleSkill>=78&&avg>=7.5)base++;
+  // Curva moderada de evolução. A intenção é que um jovem de bom rendimento siga
+  // algo próximo de 68 -> 72 -> 75 -> 78 -> 81, sem transformar toda temporada
+  // positiva em um salto enorme de overall.
+  let base=avg>=8.8?5:avg>=8.3?4:avg>=7.2?3:avg>=6.8?2:avg>=6.5?1:avg<5.8?-2:avg<6.1?-1:0;
+  if(devAge<=22&&p.overall<=69&&avg>=7.2)base=Math.max(base,4);
 
+  // Produção acima do esperado ajuda, mas o bônus de performance é limitado a 1.
+  let performanceBonus=0;
+  if(avg>=7.3&&rate>=contributionTarget*1.25)performanceBonus=1;
+  if(avg>=8.2&&(primaryValue>=82||roleSkill>=84))performanceBonus=1;
+  base+=performanceBonus;
+
+  // A idade e o GER atual criam um teto de ganho por temporada. No começo da
+  // carreira o primeiro salto pode chegar a +4; depois a progressão típica fica
+  // em +3. Temporadas realmente excepcionais podem ultrapassar isso em 1 ponto.
   if(base>0){
-    if(devAge<=20)base+=3;
-    else if(devAge<=23)base+=2;
-    else if(devAge<=26)base+=1;
-    else if(devAge<=29)base+=0;
-    else if(devAge<=32)base=Math.min(base,8);
-    else if(devAge<=35)base=Math.min(base,5);
-    else base=avg>=8.3?Math.min(base,3):0;
+    let cap;
+    if(devAge<=22)cap=p.overall<72?4:3;
+    else if(devAge<=25)cap=3;
+    else if(devAge<=29)cap=2;
+    else if(devAge<=32)cap=1;
+    else if(devAge<=35)cap=avg>=8.5?1:0;
+    else cap=0;
+    if(avg>=8.8&&devAge<=29)cap+=1;
+    base=Math.min(base,cap);
   }
-  if(devAge>=38)base=avg>=8.6?0:-1;
+
+  if(devAge>=36&&avg<8.4)base=Math.min(base,0);
+  if(devAge>=38)base=avg>=8.7?0:-1;
   if(devAge>=40)base=-rnd(1,2);
   if(devAge>=43)base=-rnd(2,4);
-  base=clamp(base+(p.developmentBoost||0),-5,13);p.developmentBoost=0;
 
-  // O potencial continua dinâmico e abre espaço quando o desempenho supera o teto atual.
-  let potentialDelta=avg>=8.7?5:avg>=8.2?4:avg>=7.7?3:avg>=7.2?2:avg>=6.8?1:avg<5.9&&age<=29?-1:0;
-  if(rate>=contributionTarget*1.25&&avg>=7.4)potentialDelta++;
-  if(primaryValue>=80&&avg>=7.6)potentialDelta++;
-  if(roleSkill>=82&&avg>=8.0)potentialDelta++;
+  // Bônus de treino pode ajudar, mas não deve romper a curva de evolução.
+  const trainingBoost=clamp(p.developmentBoost||0,0,1);p.developmentBoost=0;
+  if(base>0&&trainingBoost){
+    const trainingCap=devAge<=22?(p.overall<72?4:3):devAge<=25?3:devAge<=29?2:1;
+    base=Math.min(base+trainingBoost,trainingCap+(avg>=8.8&&devAge<=29?1:0));
+  }
+  base=clamp(base,-5,5);
+
+  // O potencial segue dinâmico, porém agora se move de forma mais gradual.
+  let potentialDelta=avg>=8.8?3:avg>=8.2?2:avg>=7.2?1:avg<5.9&&age<=29?-1:0;
+  if(avg>=8.3&&rate>=contributionTarget*1.40)potentialDelta=Math.min(3,potentialDelta+1);
+  if(avg>=8.6&&primaryValue>=85&&roleSkill>=84)potentialDelta=Math.min(3,potentialDelta+1);
   p.potential=clamp(p.potential+potentialDelta,Math.max(68,p.overall),99);
 
-  if(base>0&&p.overall+base>p.potential&&avg>=6.9){
+  // Se o desempenho justificaria evolução mas o POT estiver apenas um pouco
+  // abaixo, ele pode se ajustar suavemente em vez de bloquear a carreira de vez.
+  if(base>0&&p.overall+base>p.potential&&avg>=7.4){
     const needed=p.overall+base-p.potential;
-    const ceilingBoost=clamp(needed+(avg>=8.2?3:avg>=7.5?2:1),1,8);
+    const ceilingBoost=clamp(needed,1,2);
     p.potential=clamp(p.potential+ceilingBoost,p.overall,99);
   }
+
   const before=p.overall;
   if(base>0)p.overall=Math.min(99,Math.min(p.potential,p.overall+base));
   else p.overall=clamp(p.overall+base,45,99);
