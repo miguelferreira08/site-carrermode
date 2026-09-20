@@ -571,3 +571,361 @@ body{transition:background .35s ease,color .25s ease}
 @keyframes awardTrophyRise{from{opacity:0;transform:translateY(36px) scale(.72)}to{opacity:1;transform:none}}@keyframes awardWinnerReveal{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:none}}@keyframes awardTextPulse{0%{opacity:0;letter-spacing:.04em}100%{opacity:1;letter-spacing:.15em}}@keyframes presenterEnter{from{opacity:0;transform:translateX(-34px)}to{opacity:.76;transform:none}}@keyframes awardSpotlight{0%,100%{transform:rotate(12deg)}50%{transform:rotate(-12deg)}}@keyframes cameraFlash{0%,86%,100%{opacity:0}87%{opacity:1}88%{opacity:0}}
 @media(max-width:680px){.award-ceremony-stage{min-height:520px}.award-presenter{display:none}.award-announcement{padding:42px 18px 26px}.award-ceremony-trophy .honour-art{width:110px!important;height:110px!important}.season-honours-showcase{grid-template-columns:1fr 1fr}.summary-honours-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:460px){.season-honours-showcase,.summary-honours-grid{grid-template-columns:1fr}.award-and-the-winner{letter-spacing:.08em}}
+
+
+/* ===== V8.5.1 — ajustes finos de espaçamento e centralização de troféus ===== */
+.celebration-card{
+  width:min(760px,96vw);
+  padding:40px 34px 32px;
+  display:grid;
+  gap:16px;
+  justify-items:center;
+}
+.celebration-card h2{
+  margin:0;
+  line-height:1.06;
+  max-width:640px;
+}
+.celebration-card .eyebrow{margin:0}
+.celebration-card p:not(.eyebrow){margin:0;max-width:620px;line-height:1.45}
+.celebration-icon{min-height:auto;padding:2px 0 2px}
+
+.season-honours-showcase{
+  width:min(660px,100%)!important;
+  display:flex!important;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:stretch;
+  gap:14px;
+  margin:10px auto 20px;
+}
+.season-honour-tile{
+  flex:1 1 240px;
+  max-width:290px;
+  min-width:min(240px,100%);
+  min-height:92px;
+  padding:14px 16px;
+  gap:14px;
+  align-items:center;
+}
+.season-honour-tile span{min-width:0;align-content:center}
+.season-honour-tile strong{font-size:12px;line-height:1.25}
+.season-honour-tile small{font-size:10px}
+
+.summary-honours-grid{gap:14px;margin:12px 0 22px}
+.summary-honour{
+  min-height:86px;
+  padding:14px 16px;
+  gap:14px;
+}
+.summary-honour strong{font-size:12px;line-height:1.25}
+.summary-honour small{font-size:10px}
+
+.competitions-card .competition-item,
+.summary-status.with-art,
+.summary-honour,
+.season-honour-tile,
+.honour-row,
+.legacy-major-item,
+.legacy-honours-preview>div{
+  column-gap:14px;
+}
+.competition-item{
+  padding:14px 16px;
+  gap:14px;
+}
+.competition-item>div{display:grid;gap:4px;min-width:0}
+.competition-item strong{font-size:12px;line-height:1.2}
+.competition-item small{line-height:1.45}
+
+.honour-art,
+.summary-honour .honour-art,
+.season-honour-tile .honour-art,
+.summary-status.with-art .honour-art,
+.competition-item .honour-art,
+.award-ceremony-trophy .honour-art,
+.celebration-icon img{
+  display:grid;
+  place-items:center;
+}
+.honour-art{
+  overflow:hidden;
+  padding:6px;
+}
+.honour-art img,
+.summary-honour .honour-art img,
+.season-honour-tile .honour-art img,
+.summary-status.with-art .honour-art img,
+.competition-item .honour-art img,
+.award-ceremony-trophy .honour-art img,
+.celebration-icon img{
+  width:100%;
+  height:100%;
+  object-fit:contain!important;
+  object-position:center center!important;
+  display:block;
+  margin:auto;
+  padding:0!important;
+  background:transparent!important;
+}
+.competition-item .honour-art{width:52px!important;height:52px!important;padding:6px}
+.summary-status.with-art .honour-art{width:50px!important;height:50px!important;padding:6px}
+.summary-honour .honour-art{width:60px!important;height:60px!important;padding:6px}
+.season-honour-tile .honour-art{width:64px!important;height:64px!important;padding:6px}
+.legacy-honours-preview .honour-art{width:54px!important;height:54px!important;padding:6px}
+.legacy-major-item .honour-art{width:54px!important;height:54px!important;padding:6px}
+.award-ceremony-trophy{
+  min-height:154px;
+  margin:6px 0 2px;
+}
+.award-ceremony-trophy .honour-art{width:150px!important;height:150px!important;padding:8px}
+.award-announcement{
+  width:min(650px,92%);
+  gap:14px;
+  padding:60px 38px 36px;
+}
+.award-ceremony-stage h2{
+  max-width:620px;
+  margin:0 auto 4px;
+  line-height:1.08;
+  font-size:clamp(24px,4.2vw,40px);
+}
+.award-ceremony-stage #award-ceremony-copy{
+  max-width:560px;
+  margin:2px auto 18px;
+  line-height:1.5;
+}
+.award-ceremony-stage #award-ceremony-continue{margin-top:4px}
+
+.news-item.compact{
+  display:grid;
+  grid-template-columns:30px 1fr;
+  gap:12px;
+  align-items:start;
+  min-height:58px;
+  padding:14px 0;
+}
+.news-item.compact .news-icon{margin-top:1px}
+.news-item.compact strong{font-size:11px;line-height:1.45}
+
+@media(max-width:680px){
+  .celebration-card{padding:30px 20px 24px;gap:14px}
+  .season-honours-showcase{width:min(100%,560px)!important;gap:12px}
+  .season-honour-tile{flex:1 1 100%;max-width:none;min-width:0}
+  .summary-honours-grid{grid-template-columns:1fr!important}
+  .summary-honour{min-height:82px}
+  .award-announcement{padding:46px 22px 28px;gap:12px}
+  .award-ceremony-trophy .honour-art{width:122px!important;height:122px!important}
+}
+
+/* ===== V8.6 — alinhamento, respiro e imagens sem fundo ===== */
+img{background:transparent!important}
+.club-badge-img,.honour-art img,.celebration-icon img,.award-ceremony-trophy img{
+  object-fit:contain!important;
+  object-position:center center!important;
+  background:transparent!important;
+}
+
+/* A imagem nunca preenche o quadro por corte: há margem interna para a taça inteira. */
+.honour-art{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  background:transparent!important;
+  border:0!important;
+  padding:7px!important;
+  border-radius:12px!important;
+}
+.honour-art img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  margin:auto!important;
+  padding:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 7px 10px rgba(0,0,0,.28));
+}
+
+/* Cards de conquistas: centralizados como um bloco, sem ficarem nas extremidades. */
+.season-honours-showcase{
+  width:min(650px,100%)!important;
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(215px,270px))!important;
+  justify-content:center!important;
+  align-items:stretch!important;
+  gap:18px!important;
+  margin:14px auto 22px!important;
+}
+.season-honour-tile{
+  width:100%!important;
+  min-width:0!important;
+  max-width:270px!important;
+  min-height:104px!important;
+  display:grid!important;
+  grid-template-columns:72px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:16px!important;
+  padding:16px 18px!important;
+  margin:0!important;
+}
+.season-honour-tile .honour-art{width:68px!important;height:68px!important}
+.season-honour-tile span{display:grid!important;align-content:center!important;gap:4px!important;min-width:0!important}
+.season-honour-tile strong{font-size:12px!important;line-height:1.25!important;overflow-wrap:anywhere}
+.season-honour-tile small{font-size:9px!important;letter-spacing:.09em!important}
+
+.celebration-card{
+  width:min(720px,96vw)!important;
+  padding:42px 38px 34px!important;
+  gap:18px!important;
+}
+.celebration-card>.eyebrow{margin:0!important}
+.celebration-card h2{margin:0!important;line-height:1.08!important}
+.celebration-card>p:not(.eyebrow){margin:0!important;line-height:1.5!important}
+.celebration-card .primary{margin-top:2px!important}
+
+/* Resumo da temporada: mesmos eixos e espaçamentos em todos os cards. */
+.summary-honours-grid{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(215px,270px))!important;
+  justify-content:start!important;
+  gap:16px!important;
+  margin:14px 0 28px!important;
+}
+.summary-honour{
+  display:grid!important;
+  grid-template-columns:66px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:15px!important;
+  min-height:96px!important;
+  padding:15px 17px!important;
+}
+.summary-honour .honour-art{width:62px!important;height:62px!important}
+.summary-honour span{gap:4px!important}
+.summary-honour strong{font-size:12px!important;line-height:1.3!important}
+.summary-honour small{font-size:9px!important}
+
+.competition-list{gap:14px!important}
+.competitions-card .competition-item{
+  grid-template-columns:64px minmax(0,1fr)!important;
+  gap:15px!important;
+  align-items:center!important;
+  min-height:90px!important;
+  padding:14px 16px!important;
+}
+.competitions-card .competition-item .honour-art{width:60px!important;height:60px!important}
+.competition-item>div{display:grid!important;gap:5px!important;min-width:0!important}
+.competition-item strong{line-height:1.25!important}
+.competition-item small{margin:0!important;line-height:1.45!important}
+
+.summary-status.with-art{
+  grid-template-columns:58px minmax(0,1fr) auto!important;
+  gap:14px!important;
+  align-items:center!important;
+  padding:14px 16px!important;
+}
+.summary-status.with-art .honour-art{width:54px!important;height:54px!important}
+
+/* Cerimônia: elementos separados e centrados; resultado pode ser do usuário ou rival. */
+.award-announcement{
+  width:min(650px,92%)!important;
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  justify-items:center!important;
+  align-content:center!important;
+  gap:14px!important;
+  padding:56px 34px 38px!important;
+}
+.award-and-the-winner{margin:4px 0 4px!important}
+.award-envelope{margin:4px 0 8px!important}
+.award-ceremony-trophy{
+  width:176px!important;
+  min-height:166px!important;
+  display:grid!important;
+  place-items:center!important;
+  margin:4px auto 2px!important;
+}
+.award-ceremony-trophy .honour-art{width:160px!important;height:160px!important;padding:10px!important}
+.award-ceremony-stage h2{
+  width:100%!important;
+  max-width:610px!important;
+  text-align:center!important;
+  margin:4px auto 0!important;
+  font-size:clamp(26px,4.6vw,42px)!important;
+  line-height:1.08!important;
+}
+.award-ceremony-stats{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:4px auto 2px;
+  max-width:590px;
+}
+.award-ceremony-stats span{
+  padding:7px 10px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;
+  background:rgba(255,255,255,.045);
+  color:#edf2f4;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.award-ceremony-stage #award-ceremony-copy{
+  max-width:570px!important;
+  margin:4px auto 12px!important;
+  line-height:1.5!important;
+  text-align:center!important;
+}
+.award-ceremony-stage.award-lost #award-ceremony-continue{background:#27343c;color:#fff}
+
+/* Notícias: mais ar entre linhas e ícones alinhados ao topo do texto. */
+.news-item.compact{
+  grid-template-columns:32px minmax(0,1fr)!important;
+  gap:14px!important;
+  min-height:62px!important;
+  padding:15px 0!important;
+  align-items:start!important;
+}
+.news-item.compact .news-icon{margin-top:0!important}
+.news-item.compact strong{font-size:11px!important;line-height:1.5!important}
+
+/* Escudos e demais imagens visuais: sem placas de fundo adicionadas pela UI. */
+.crest-shell,.club-badge,.club-badge-img,.legacy-club-chip .crest-shell{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.club-badge-img{object-fit:contain!important;object-position:center!important}
+
+@media(max-width:700px){
+  .season-honours-showcase,.summary-honours-grid{grid-template-columns:minmax(0,1fr)!important;width:100%!important}
+  .season-honour-tile,.summary-honour{max-width:none!important}
+  .celebration-card{padding:30px 20px 26px!important;gap:15px!important}
+  .award-announcement{padding:44px 20px 28px!important;gap:12px!important}
+  .award-ceremony-trophy{width:142px!important;min-height:136px!important}
+  .award-ceremony-trophy .honour-art{width:132px!important;height:132px!important}
+  .award-ceremony-stats{gap:6px}
+  .summary-status.with-art{grid-template-columns:52px minmax(0,1fr)!important}
+  .summary-status.with-art>span:last-child{grid-column:2}
+}
+
+/* V8.6 final polish — centralização consistente e imagens visualmente leves */
+.summary-honours-grid{justify-content:center!important}
+.honour-art img,.celebration-icon img,.award-ceremony-trophy img,.club-badge-img{
+  object-fit:contain!important;
+  object-position:50% 50%!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+}
+.honour-art img,.award-ceremony-trophy img{filter:drop-shadow(0 10px 14px rgba(0,0,0,.28))!important}
+.season-honour-tile,.summary-honour,.competition-item,.summary-status.with-art{overflow:visible!important}
+.season-honours-showcase{place-content:center!important}
+.award-ceremony-stage{padding-block:18px!important}
+.award-announcement>*{justify-self:center}
+.award-ceremony-stats{min-height:30px}
+@media(max-width:700px){.award-ceremony-stage{padding-block:10px!important}}

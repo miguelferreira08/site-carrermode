@@ -1,7 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#071016"/><stop offset="1" stop-color="#13232c"/></linearGradient><linearGradient id="m" x1="0" x2="1"><stop offset="0" stop-color="#e74c3c"/><stop offset="1" stop-color="#4fc57b"/></linearGradient></defs>
-<rect x="5" y="5" width="246" height="246" rx="30" fill="url(#bg)" stroke="#e74c3c" stroke-opacity=".38" stroke-width="4"/>
 <path d="M93 55h70v31c0 34-15 61-35 75-20-14-35-41-35-75z" fill="url(#m)"/><path d="M91 69H74c-16 0-22 17-12 31 9 13 21 19 36 19M165 69h17c16 0 22 17 12 31-9 13-21 19-36 19" fill="none" stroke="#e74c3c" stroke-width="9"/><path d="M111 164h34v20h28v18H83v-18h28z" fill="url(#m)"/>
-<rect x="42" y="216" width="172" height="24" rx="12" fill="#071016" stroke="#e74c3c" stroke-opacity=".45"/>
 <text x="128" y="232" text-anchor="middle" fill="#edf5f7" font-size="11" font-family="Arial,Helvetica,sans-serif" font-weight="700">TAÇA PORTUGAL</text>
 </svg>

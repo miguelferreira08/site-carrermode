@@ -1,0 +1,22 @@
+Be The Legend v8.6 — regras de premiação usadas no simulador
+
+Chuteira de Ouro Europeia:
+- somente gols de liga nacional de primeira divisão;
+- top 5 associações UEFA: 2 pontos por gol;
+- posições 6 a 22: 1,5 ponto por gol;
+- demais ligas europeias: 1 ponto por gol;
+- empate: menos minutos; depois mais assistências (o simulador ainda não rastreia gols de pênalti individualmente para o desempate posterior).
+
+Bola de Ouro:
+Ordem oficial de critérios desde 2022:
+1. desempenho individual e caráter decisivo/impressionante;
+2. desempenho coletivo e títulos;
+3. classe e fair play.
+
+O simulador transforma essa ordem em 52% / 40% / 8% para produzir uma corrida competitiva. Esses percentuais são uma regra interna do jogo, não percentuais oficiais da premiação.
+
+Referências consultadas:
+- https://ballondor.com/fr/news/posts/que-faut-il-vraiment-faire-pour-remporter-le-ballon-dor
+- https://www.uefa.com/uefachampionsleague/news/029d-1ec2c3cf6f25-45f93870ea1c-1000--2025-ballon-d-or-ceremony-when-and-where-all-the-nominees/
+- https://www.bbc.co.uk/sport/football/articles/c2k42j72ld1o
+- https://mail.kassiesa.net/uefa/data/method5/crank2026.html

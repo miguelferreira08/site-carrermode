@@ -1,0 +1,45 @@
+Be The Legend v8.6 — relatório de validação
+Data: 2026-09-20
+
+AJUSTES VISUAIS
+- Cards de títulos/prêmios centralizados em grade responsiva.
+- Imagens de taças/escudos usam object-fit: contain e object-position: center.
+- Espaçamento entre imagem/texto/cards ampliado.
+- Modal de cerimônia recebeu espaçamento e alinhamento central consistentes.
+- Todos os 56 SVGs locais de troféus parsearam sem erro.
+- Nenhum dos 56 SVGs locais de troféus mantém retângulo opaco cobrindo todo o canvas.
+- Processamento de fundo de raster agora remove apenas o fundo conectado às bordas (quando CORS permite), evitando apagar partes internas da taça.
+- Observador de imagens aplica o polimento também a imagens inseridas dinamicamente.
+
+CHUTEIRA DE OURO — IMPLEMENTAÇÃO
+- Conta somente gols de liga nacional de primeira divisão.
+- Associações UEFA 1–5 no ranking 2026: x2.0.
+- Associações UEFA 6–22 no ranking 2026: x1.5.
+- Outras ligas europeias: x1.0.
+- Desempate implementado: menos minutos; depois mais assistências de liga.
+- Exemplo validado: jogador com 34 gols em liga x2 = 68 pontos; Mbappé com 40 gols em liga x2 = 80 pontos; Mbappé vence.
+- A cerimônia pode acontecer com o usuário entre os principais candidatos e revelar um rival como vencedor.
+- O prêmio só é adicionado ao histórico do usuário quando ele termina em 1º.
+
+BOLA DE OURO — IMPLEMENTAÇÃO
+- Critério do simulador segue a ordem oficial: desempenho individual/decisivo > desempenho coletivo e títulos > classe/fair play.
+- Conversão interna de jogo: 52% individual, 40% títulos/coletivo, 8% fair play. Esses percentuais são uma aproximação do simulador, não pesos oficiais publicados.
+- Desempenho individual usa nota média, gols, assistências e qualidade do jogador.
+- Títulos têm pesos por importância (Copa do Mundo/Champions/Libertadores/etc.).
+- Rivais têm temporadas simuladas com estatísticas de liga, todas as competições e títulos.
+- A cerimônia pode revelar um rival; o usuário só recebe a Bola de Ouro se ficar em 1º.
+
+TESTES AUTOMATIZADOS
+- app.js: node --check OK
+- data.js: node --check OK
+- CSS: chaves balanceadas OK
+- HTML/JS: 0 IDs obrigatórios ausentes
+- Assets locais referenciados: 0 ausentes
+- SVGs de troféus: 56, 0 erros de parse, 0 fundos opacos full-canvas
+- Coeficientes testados: ENG/IT/ES/DE/FR=2.0; PT/CZ/HU/IL=1.5; IS=1.0; BR=0
+- Exemplo 34 vs 40 gols: 68 vs 80 pontos, vencedor Mbappé
+- 300 corridas simuladas: caminho de derrota do usuário confirmado para Chuteira e Bola de Ouro
+- 120 chamadas de evaluateAwards: prêmio adicionado somente quando userRank==1; cerimônia com rival vencedor confirmada
+- Temporada elite (40 gols de liga; 50 gols + 24 assistências totais; Premier League + Champions; nota 8.55): usuário foi competitivo na Bola de Ouro em teste Monte Carlo
+
+Observação: o teste de interface foi estrutural/estático e por unidade de lógica; o ambiente de execução não oferece um navegador headless estável para uma validação visual pixel-a-pixel.
