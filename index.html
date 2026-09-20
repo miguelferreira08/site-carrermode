@@ -11,10 +11,10 @@
   <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=8.4">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=8.4">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=8.4">
-  <link rel="stylesheet" href="css/style.css?v=8.4">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=8.5">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=8.5">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=8.5">
+  <link rel="stylesheet" href="css/style.css?v=8.5">
 </head>
 <body>
   <header class="topbar">
@@ -364,6 +364,8 @@
       <p class="eyebrow" id="summary-year">TEMPORADA</p>
       <h2 id="summary-title">Resumo da temporada</h2>
       <p id="summary-subtitle"></p>
+      <h3>Conquistas da temporada</h3>
+      <div id="summary-honours" class="summary-honours-grid"></div>
       <h3>Classificação da liga</h3>
       <div class="summary-table-wrap"><table class="summary-table"><thead><tr><th>#</th><th>Clube</th><th>J</th><th>V</th><th>E</th><th>D</th><th>SG</th><th>PTS</th></tr></thead><tbody id="summary-standings"></tbody></table></div>
       <h3>Copas</h3><div id="summary-cups" class="summary-statuses"></div>
@@ -433,6 +435,29 @@
     </div>
   </div>
 
+
+  <div id="award-ceremony-modal" class="award-ceremony hidden" role="dialog" aria-modal="true">
+    <div class="award-ceremony-stage" id="award-ceremony-stage">
+      <div class="award-curtain award-curtain-left"></div>
+      <div class="award-curtain award-curtain-right"></div>
+      <div class="award-spotlight award-spotlight-a"></div>
+      <div class="award-spotlight award-spotlight-b"></div>
+      <div class="award-presenter" aria-hidden="true">
+        <span class="presenter-head"></span><span class="presenter-body"></span><span class="presenter-mic"></span>
+      </div>
+      <div class="award-announcement">
+        <p class="eyebrow" id="award-ceremony-kicker">PRÊMIO INDIVIDUAL</p>
+        <p class="award-and-the-winner">E O VENCEDOR É...</p>
+        <div class="award-envelope"><span></span></div>
+        <div id="award-ceremony-trophy" class="award-ceremony-trophy"></div>
+        <h2 id="award-ceremony-title"></h2>
+        <p id="award-ceremony-copy"></p>
+        <button id="award-ceremony-continue" class="primary" type="button">Receber prêmio</button>
+      </div>
+      <div class="award-flashes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+
   <div id="celebration" class="celebration hidden">
     <div id="confetti" class="confetti"></div>
     <div class="celebration-card">
@@ -445,7 +470,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=8.4"></script>
-  <script src="js/app.js?v=8.4"></script>
+  <script src="js/data.js?v=8.5"></script>
+  <script src="js/app.js?v=8.5"></script>
 </body>
 </html>

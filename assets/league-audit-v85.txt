@@ -1,0 +1,49 @@
+Be The Legend v8.5 — auditoria de clubes e ligas
+
+BR | Brasileirão Série A | 12 clubes locais
+  Atlético Mineiro, Bahia, Botafogo, Corinthians, Cruzeiro, Flamengo, Fluminense, Grêmio, Internacional, Palmeiras, Santos, São Paulo
+AR | Liga Profesional Argentina | 10 clubes locais
+  Argentinos Juniors, Boca Juniors, Estudiantes, Independiente, Racing Club, River Plate, Rosario Central, San Lorenzo, Talleres, Vélez Sarsfield
+ES | LaLiga | 10 clubes locais
+  Athletic Club, Atlético de Madrid, Barcelona, Betis, Girona, Real Madrid, Real Sociedad, Sevilla, Valencia, Villarreal
+ENG | Premier League | 10 clubes locais
+  Arsenal, Aston Villa, Chelsea, Liverpool, Manchester City, Manchester United, Newcastle United, Nottingham Forest, Tottenham, West Ham
+SCO | Scottish Premiership | 2 clubes locais
+  Celtic, Rangers
+DE | Bundesliga | 7 clubes locais
+  Bayern de Munique, Bayer Leverkusen, Borussia Dortmund, Eintracht Frankfurt, RB Leipzig, Stuttgart, Werder Bremen
+IT | Serie A | 8 clubes locais
+  Atalanta, Fiorentina, Inter de Milão, Juventus, Lazio, Milan, Napoli, Roma
+FR | Ligue 1 | 7 clubes locais
+  Lille, Lyon, Marseille, Monaco, Nice, Paris Saint-Germain, Rennes
+PT | Primeira Liga | 5 clubes locais
+  Benfica, Braga, Porto, Sporting CP, Vitória de Guimarães
+NL | Eredivisie | 5 clubes locais
+  Ajax, AZ Alkmaar, Feyenoord, PSV, Twente
+BE | Belgian Pro League | 5 clubes locais
+  Anderlecht, Club Brugge, Genk, Gent, Union Saint-Gilloise
+TR | Süper Lig | 5 clubes locais
+  Beşiktaş, Fenerbahçe, Galatasaray, İstanbul Başakşehir, Trabzonspor
+MX | Liga MX | 5 clubes locais
+  América, Cruz Azul, Guadalajara, Monterrey, Tigres UANL
+US | Major League Soccer | 5 clubes locais
+  Atlanta United, Inter Miami, LA Galaxy, Los Angeles FC, Seattle Sounders
+JP | J1 League | 5 clubes locais
+  Kashima Antlers, Kawasaki Frontale, Urawa Red Diamonds, Vissel Kobe, Yokohama F. Marinos
+SA | Saudi Pro League | 5 clubes locais
+  Al-Ahli, Al-Hilal, Al-Ittihad, Al-Nassr, Al-Shabab
+UY | Primera División Uruguaia | 5 clubes locais
+  Danubio, Defensor Sporting, Nacional, Peñarol, Liverpool Montevideo
+CO | Categoría Primera A | 5 clubes locais
+  Atlético Nacional, Junior, Millonarios, América de Cali, Independiente Medellín
+CL | Primera División do Chile | 5 clubes locais
+  Colo-Colo, Universidad Católica, Universidad de Chile, Huachipato, Palestino
+
+Total de clubes locais auditados: 121
+Total de nomes em pools de liga: 182
+Transfer targets auditados: 17
+Chelsea -> ENG -> Premier League
+Celtic -> SCO -> Scottish Premiership
+Rangers -> SCO -> Scottish Premiership
+Duplicidades entre países: 0
+Erros estruturais encontrados após correção: 0

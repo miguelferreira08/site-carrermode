@@ -1,0 +1,55 @@
+Be The Legend v8.3 — trophy remote/local map
+
+Eliminat[oó]rias da Copa do Mundo -> https://commons.wikimedia.org/wiki/Special:FilePath/FIFA_World_Cup_qualification_logo.svg | assets/trophies/world-cup-qualifiers.svg
+FIFA World Cup|Copa do Mundo -> https://commons.wikimedia.org/wiki/Special:FilePath/2014%20FIFA%20World%20Cup%20Trophy.jpg | assets/trophies/fifa-world-cup.svg
+FIFA Club World Cup|Mundial -> https://commons.wikimedia.org/wiki/Special:FilePath/FIFA%20Club%20World%20Cup%20trophy.svg | assets/trophies/club-world-cup.svg
+UEFA Champions League -> https://commons.wikimedia.org/wiki/Special:FilePath/Champions%20league%20trophy.jpg | assets/trophies/champions-league.svg
+UEFA Europa League -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/europe/UEFA_Europa_League.svg | assets/trophies/europa-league.svg
+UEFA Conference League -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/europe/UEFA_Conference_League.svg | assets/trophies/conference-league.svg
+CONMEBOL Libertadores -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/south-america/CONMEBOL_Libertadores.svg | assets/trophies/libertadores.svg
+CONMEBOL Sul-Americana -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/south-america/CONMEBOL_Sudamericana.svg | assets/trophies/sudamericana.svg
+CONCACAF Champions Cup -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/north-america/CONCACAF_Champions_Cup.svg | assets/trophies/concacaf-champions-cup.svg
+AFC Champions League Elite -> https://commons.wikimedia.org/wiki/Special:FilePath/AFC%20Champions%20League%20Elite%20logo.svg | assets/trophies/afc-champions-elite.svg
+AFC Champions League Two -> https://commons.wikimedia.org/wiki/Special:FilePath/AFC%20Champions%20League%20Two%20logo.svg | assets/trophies/afc-champions-two.svg
+CAF Champions League -> https://commons.wikimedia.org/wiki/Special:FilePath/CAF_Champions_League_logo.svg | assets/trophies/caf-champions-league.svg
+OFC Champions League -> https://commons.wikimedia.org/wiki/Special:FilePath/OFC_Champions_League_logo.png | assets/trophies/ofc-champions-league.svg
+Premier League -> https://commons.wikimedia.org/wiki/Special:FilePath/Premier_League_Trophy.jpg | https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/england/Premier_League.svg | assets/trophies/premier-league.svg
+Brasileir[aã]o -> https://commons.wikimedia.org/wiki/Special:FilePath/Campeonato_Brasileiro_S%C3%A9rie_A_logo.png | assets/trophies/brasileirao.svg
+Liga Profesional Argentina -> https://commons.wikimedia.org/wiki/Special:FilePath/Liga_Profesional_de_F%C3%BAtbol_logo.svg | assets/trophies/liga-profesional-argentina.svg
+Primera Divisi[oó]n Uruguaia -> https://commons.wikimedia.org/wiki/Special:FilePath/Campeonato_Uruguayo_logo.png | assets/trophies/campeonato-uruguayo.svg
+Categor[ií]a Primera A -> https://commons.wikimedia.org/wiki/Special:FilePath/Liga_BetPlay_Dimayor_logo.svg | assets/trophies/liga-betplay.svg
+Primera Divisi[oó]n do Chile -> https://commons.wikimedia.org/wiki/Special:FilePath/Campeonato_Nacional_Petrobras_logo.svg | assets/trophies/campeonato-chileno.svg
+LaLiga -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/spain/LaLiga.svg | assets/trophies/laliga.svg
+Bundesliga -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/germany/Bundesliga.svg | assets/trophies/bundesliga.svg
+Serie A -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/italy/Serie_A.svg | assets/trophies/serie-a.svg
+Ligue 1 -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/france/Ligue_1.svg | assets/trophies/ligue-1.svg
+Primeira Liga -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/portugal/Primeira_Liga.svg | assets/trophies/primeira-liga.svg
+Eredivisie -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/netherlands/Eredivisie.svg | assets/trophies/eredivisie.svg
+Belgian Pro League -> https://commons.wikimedia.org/wiki/Special:FilePath/Belgian_Pro_League_logo.svg | assets/trophies/belgian-pro-league.svg
+Süper Lig|Super Lig -> https://commons.wikimedia.org/wiki/Special:FilePath/S%C3%BCper_Lig_logo.svg | assets/trophies/super-lig.svg
+Liga MX -> https://commons.wikimedia.org/wiki/Special:FilePath/Liga_MX_logo.svg | assets/trophies/liga-mx.svg
+Major League Soccer -> https://commons.wikimedia.org/wiki/Special:FilePath/Major_League_Soccer_logo.svg | assets/trophies/mls.svg
+J1 League -> https://commons.wikimedia.org/wiki/Special:FilePath/J1_League_logo.svg | assets/trophies/j1-league.svg
+Saudi Pro League -> https://commons.wikimedia.org/wiki/Special:FilePath/Saudi_Pro_League_logo.svg | assets/trophies/saudi-pro-league.svg
+Copa do Brasil -> https://commons.wikimedia.org/wiki/Special:FilePath/Copa_do_Brasil_logo.svg | assets/trophies/copa-do-brasil.svg
+Copa Argentina -> https://commons.wikimedia.org/wiki/Special:FilePath/Copa_Argentina_logo.svg | assets/trophies/copa-argentina.svg
+Copa AUF Uruguay -> https://commons.wikimedia.org/wiki/Special:FilePath/Copa_AUF_Uruguay_logo.png | assets/trophies/copa-auf-uruguay.svg
+Copa Colombia -> https://commons.wikimedia.org/wiki/Special:FilePath/Copa_Colombia_logo.svg | assets/trophies/copa-colombia.svg
+Copa Chile -> https://commons.wikimedia.org/wiki/Special:FilePath/Copa_Chile_logo.svg | assets/trophies/copa-chile.svg
+Copa do Rei -> https://commons.wikimedia.org/wiki/Special:FilePath/Copa_del_Rey_logo.svg | assets/trophies/copa-del-rey.svg
+FA Cup -> https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/england/Emirates_FA_Cup.svg | assets/trophies/fa-cup.svg
+Copa Nacional -> https://commons.wikimedia.org/wiki/Special:FilePath/National_Cup_logo.svg | assets/trophies/national-cup.svg
+DFB-Pokal -> https://commons.wikimedia.org/wiki/Special:FilePath/DFB-Pokal_logo.svg | assets/trophies/dfb-pokal.svg
+Coppa Italia -> https://commons.wikimedia.org/wiki/Special:FilePath/Coppa_Italia_logo.svg | assets/trophies/coppa-italia.svg
+Coupe de France -> https://commons.wikimedia.org/wiki/Special:FilePath/Coupe_de_France_logo.svg | assets/trophies/coupe-de-france.svg
+Taça de Portugal -> https://commons.wikimedia.org/wiki/Special:FilePath/Ta%C3%A7a_de_Portugal_logo.png | assets/trophies/taca-de-portugal.svg
+KNVB Beker -> https://commons.wikimedia.org/wiki/Special:FilePath/KNVB_Beker_logo.svg | assets/trophies/knvb-beker.svg
+Copa da B[eé]lgica -> https://commons.wikimedia.org/wiki/Special:FilePath/Belgian_Cup_logo.svg | assets/trophies/belgian-cup.svg
+Copa da Turquia -> https://commons.wikimedia.org/wiki/Special:FilePath/Turkish_Cup_logo.svg | assets/trophies/turkish-cup.svg
+U\.S\. Open Cup -> https://commons.wikimedia.org/wiki/Special:FilePath/U.S._Open_Cup_logo.svg | assets/trophies/us-open-cup.svg
+Copa do Imperador -> https://commons.wikimedia.org/wiki/Special:FilePath/Emperor%27s_Cup_logo.svg | assets/trophies/emperors-cup.svg
+King Cup -> https://commons.wikimedia.org/wiki/Special:FilePath/King_Cup_logo.png | assets/trophies/king-cup.svg
+Bola de Ouro -> https://commons.wikimedia.org/wiki/Special:FilePath/Ballon_d%27Or_logo.svg | assets/trophies/ballon-dor.svg
+Chuteira de Ouro -> https://commons.wikimedia.org/wiki/Special:FilePath/European_Golden_Shoe_logo.svg | assets/trophies/golden-shoe.svg
+Melhor Jogador Jovem -> https://commons.wikimedia.org/wiki/Special:FilePath/Golden_Boy_logo.svg | assets/trophies/golden-boy.svg
+Time da Temporada -> https://commons.wikimedia.org/wiki/Special:FilePath/Team_of_the_Season_logo.svg | assets/trophies/tots.svg

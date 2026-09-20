@@ -1,14 +1,14 @@
 const $ = selector => document.querySelector(selector);
 const $$ = selector => document.querySelectorAll(selector);
-const STORAGE_KEY = 'beTheLegendV84';
+const STORAGE_KEY = 'beTheLegendV85';
 const LEGACY_STORAGE_KEY = 'careerSimV7';
-const BADGE_KEY = 'beTheLegendBadgeCacheV84';
-const DRAFT_KEY = 'beTheLegendV84AttributeDraft';
+const BADGE_KEY = 'beTheLegendBadgeCacheV85';
+const DRAFT_KEY = 'beTheLegendV85AttributeDraft';
 
-let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('beTheLegendV83') || localStorage.getItem('beTheLegendV82') || localStorage.getItem('beTheLegendV81') || localStorage.getItem('beTheLegendV80') || localStorage.getItem('beTheLegendV79') || localStorage.getItem('beTheLegendV781') || localStorage.getItem('beTheLegendV78') || localStorage.getItem('beTheLegendV77') || localStorage.getItem('beTheLegendV76') || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('beTheLegendV84') || localStorage.getItem('beTheLegendV83') || localStorage.getItem('beTheLegendV82') || localStorage.getItem('beTheLegendV81') || localStorage.getItem('beTheLegendV80') || localStorage.getItem('beTheLegendV79') || localStorage.getItem('beTheLegendV781') || localStorage.getItem('beTheLegendV78') || localStorage.getItem('beTheLegendV77') || localStorage.getItem('beTheLegendV76') || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
   created:false, player:null, season:null, history:[], offers:[], news:[], pendingEvent:null
 };
-let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('beTheLegendBadgeCacheV83') || localStorage.getItem('beTheLegendBadgeCacheV82') || localStorage.getItem('beTheLegendBadgeCacheV81') || localStorage.getItem('beTheLegendBadgeCacheV80') || localStorage.getItem('beTheLegendBadgeCacheV79') || localStorage.getItem('beTheLegendBadgeCacheV781') || localStorage.getItem('beTheLegendBadgeCacheV78') || localStorage.getItem('beTheLegendBadgeCacheV77') || localStorage.getItem('beTheLegendBadgeCacheV76') || localStorage.getItem('careerSimBadgeCacheV75') || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
+let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('beTheLegendBadgeCacheV84') || localStorage.getItem('beTheLegendBadgeCacheV83') || localStorage.getItem('beTheLegendBadgeCacheV82') || localStorage.getItem('beTheLegendBadgeCacheV81') || localStorage.getItem('beTheLegendBadgeCacheV80') || localStorage.getItem('beTheLegendBadgeCacheV79') || localStorage.getItem('beTheLegendBadgeCacheV781') || localStorage.getItem('beTheLegendBadgeCacheV78') || localStorage.getItem('beTheLegendBadgeCacheV77') || localStorage.getItem('beTheLegendBadgeCacheV76') || localStorage.getItem('careerSimBadgeCacheV75') || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
 let creationClubPool = [];
 let creationChoices = [];
 let nextEventCache = null;
@@ -16,6 +16,8 @@ let pendingSeasonCelebration = null;
 let pendingPlayerProfile = null;
 let attributeDraft = null;
 let pendingCareerCard = false;
+let awardCeremonyQueue = [];
+let awardCeremonyAfter = null;
 const MAX_MARKET_VALUE = 300000000;
 try{
   const savedDraft=JSON.parse(sessionStorage.getItem(DRAFT_KEY)||'null');
@@ -89,7 +91,7 @@ const CLUB_BADGE_ALIASES = {
   'Kashima Antlers':['Kashima Antlers'],
   'Athletic Club':['Athletic Club','Athletic Bilbao']
 };
-const CLUB_COUNTRY_SLUG={BR:'brazil',AR:'argentina',UY:'uruguay',CO:'colombia',CL:'chile',ES:'spain',ENG:'england',GB:'england',DE:'germany',IT:'italy',FR:'france',PT:'portugal',NL:'netherlands',BE:'belgium',TR:'turkey',MX:'mexico',US:'usa',JP:'japan',SA:'saudi-arabia'};
+const CLUB_COUNTRY_SLUG={BR:'brazil',AR:'argentina',UY:'uruguay',CO:'colombia',CL:'chile',ES:'spain',ENG:'england',SCO:'scotland',GB:'united-kingdom',DE:'germany',IT:'italy',FR:'france',PT:'portugal',NL:'netherlands',BE:'belgium',TR:'turkey',MX:'mexico',US:'usa',JP:'japan',SA:'saudi-arabia'};
 const CLUB_LOGO_CATALOG_URL='https://raw.githubusercontent.com/hixcoder/football-teams-flags/refs/heads/main/football_teams.json';
 let clubLogoCatalogPromise=null;
 function stripDiacritics(str=''){ return str.normalize('NFD').replace(/[̀-ͯ]/g,''); }
@@ -255,6 +257,21 @@ function allTransferClubs(){
   const fromLocal=Object.entries(LOCAL_CLUBS).flatMap(([countryCode,clubs])=>clubs.map(c=>({...c,countryCode})));
   const all=[...fromLocal,...TRANSFER_TARGETS];
   return [...new Map(all.map(c=>[`${c.countryCode}:${c.name}`,c])).values()];
+}
+
+function canonicalClubCountryCode(name,fallback=''){
+  if(!name)return fallback||'';
+  const localHits=Object.entries(LOCAL_CLUBS).filter(([,clubs])=>clubs.some(c=>c.name===name)).map(([code])=>code);
+  const poolHits=Object.entries(LEAGUE_CLUB_POOLS||{}).filter(([,clubs])=>clubs.includes(name)).map(([code])=>code);
+  const transferHits=(TRANSFER_TARGETS||[]).filter(c=>c.name===name).map(c=>c.countryCode);
+  const hits=[...new Set([...localHits,...poolHits,...transferHits])];
+  if(hits.length===1)return hits[0];
+  if(fallback&&hits.includes(fallback))return fallback;
+  return hits[0]||fallback||'';
+}
+function leagueForClub(name,fallbackCode=''){
+  const code=canonicalClubCountryCode(name,fallbackCode);
+  return getCompetitionRule(code,countryByCode(code)?.name||'').league;
 }
 
 function formatDateBR(iso){ if(!iso) return '-'; const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
@@ -872,7 +889,7 @@ function evaluateAwards(avg){
   const bootTarget=attacking?18:p.position==='Volante'?10:7;if(s.clubGoals>=bootTarget)awards.push('Chuteira de Ouro');
   const contributions=s.clubGoals+s.clubAssists;if(p.overall>=89&&avg>=7.9&&contributions>=24&&Math.random()<.68)awards.push('Bola de Ouro');
   p.awards=p.awards||[];awards.forEach(name=>{if(!p.awards.some(a=>a.year===s.year&&a.name===name))p.awards.push({year:s.year,name,countryCode:seasonCountry,club:s.clubAtStart||p.club});});
-  if(awards.length){state.news.push(`${p.name} recebeu: ${awards.join(', ')}.`);if(!state.simulatingSeason)showCelebrationForHonour(awards[0],'Prêmios da temporada',awards.join(' · '));}
+  if(awards.length){state.news.push(`${p.name} recebeu: ${awards.join(', ')}.`);if(!state.simulatingSeason)queueSpecialAwardCeremonies(awards,()=>showSeasonHonoursGallery([],awards));}
   return awards;
 }
 function sanitizeAwardsEligibility(){
@@ -896,16 +913,25 @@ function legacyV4_generateOffers(avg){
   if(state.offers.length)state.news.push(`${p.name} recebeu ${state.offers.length} proposta(s) ao fim da temporada.`);
 }
 
+function pickFreshCareerEvent(pool){
+  if(!pool?.length)return null;
+  const p=state.player;const recent=p?.recentCareerEventIds||[];
+  let available=pool.filter(e=>!recent.includes(e.id));
+  if(!available.length)available=pool;
+  const event=available[rnd(0,available.length-1)];
+  if(p&&event){p.recentCareerEventIds=[...recent,event.id].slice(-6);}
+  return event;
+}
 function maybeTriggerCareerEvent(){
   const s=state.season;
-  if(!s||state.pendingEvent||s.totalGames-(s.lastCareerEventAt||0)<6||Math.random()>.14)return false;
+  if(!s||state.pendingEvent||s.totalGames-(s.lastCareerEventAt||0)<5||Math.random()>.19)return false;
   const incidentPool=typeof INCIDENT_EVENTS!=='undefined'?INCIDENT_EVENTS:[];
-  const useIncident=incidentPool.length&&Math.random()<.48;
+  const useIncident=incidentPool.length&&Math.random()<.52;
   const pool=useIncident?incidentPool:CAREER_EVENTS;
-  const event=pool[rnd(0,pool.length-1)];
+  const event=pickFreshCareerEvent(pool);if(!event)return false;
   state.pendingEvent={...event};s.lastCareerEventAt=s.totalGames;state.resumeSeasonAfterEvent=true;save();openPendingEvent();return true;
 }
-function eventChoiceIcon(action=''){if(/train|learn/i.test(action))return '↗';if(/recover|rest|rehab/i.test(action))return '✚';if(/market|agent/i.test(action))return '€';if(/lead|ambitious/i.test(action))return '★';if(/controversy|public/i.test(action))return '!';if(/peace|humble|stability|stay/i.test(action))return '●';return '◆';}
+function eventChoiceIcon(action=''){if(/train|learn|video|specialist|adapt/i.test(action))return '↗';if(/recover|rest|rehab|illness|travel/i.test(action))return '✚';if(/market|agent|contract|sponsor/i.test(action))return '€';if(/lead|ambitious|captain|derby|mentor|charity/i.test(action))return '★';if(/controversy|public|confront|fire|leak/i.test(action))return '!';if(/peace|humble|stability|stay|safe|share/i.test(action))return '●';return '◆';}
 function openPendingEvent(){
   const e=state.pendingEvent;if(!e)return;$('#event-title').textContent=e.title;$('#event-description').textContent=e.description;
   $('#event-choices').innerHTML=e.choices.map((c,i)=>`<button class="event-choice visual-event-choice" data-choice="${i}"><span>${eventChoiceIcon(c.action)}</span><strong>${c.label}</strong><small>${c.effect}</small></button>`).join('');
@@ -933,11 +959,47 @@ function resolveCareerEvent(index){
   if(action==='rumor_ignore'){p.morale=clamp(p.morale-rnd(2,5),40,100);p.pressure=(p.pressure||0)+1;message='O assunto continua rendendo e aumenta o desgaste fora de campo.';}
   if(action==='agent_open'){p.marketBonus=(p.marketBonus||0)+1;p.morale=clamp(p.morale-2,40,100);message='Seu nome passa a circular mais no mercado, mas o ambiente fica menos estável.';}
   if(action==='agent_stay'){p.morale=clamp(p.morale+4,40,100);p.pressure=Math.max(0,(p.pressure||0)-1);message='Você encerra as especulações e reforça o compromisso com o clube.';}
+  if(action==='illness_rest'){p.injuryGames=Math.max(p.injuryGames||0,1);p.morale=clamp(p.morale+2,40,100);message='Você reduz a carga e recupera o corpo com segurança.';}
+  if(action==='illness_push'){p.reputation=clamp((p.reputation||0)+1,0,100);if(Math.random()<.30){p.injuryGames=Math.max(p.injuryGames||0,2);message='A insistência piora o quadro e você perde alguns jogos.';}else{p.morale=clamp(p.morale-1,40,100);message='Você consegue treinar, mas sente o desgaste.';}}
+  if(action==='leak_deny'){p.morale=clamp(p.morale+3,40,100);p.pressure=Math.max(0,(p.pressure||0)-1);message='O clube compra sua versão e o ambiente se acalma.';}
+  if(action==='leak_feed'){p.marketBonus=(p.marketBonus||0)+1;p.reputation=clamp((p.reputation||0)+2,0,100);p.pressure=(p.pressure||0)+2;message='A especulação cresce e aumenta seu valor de mercado, junto da pressão.';}
+  if(action==='derby_focus'){p.morale=clamp(p.morale+4,40,100);p.reputation=clamp((p.reputation||0)+2,0,100);message='Sua postura agrada à torcida e eleva a confiança para o clássico.';}
+  if(action==='derby_fire'){p.reputation=clamp((p.reputation||0)+3,0,100);p.pressure=(p.pressure||0)+2;message='A rivalidade esquenta e todos esperam uma resposta em campo.';}
+  if(action==='training_peace'){p.morale=clamp(p.morale+4,40,100);message='O clima melhora e o treino termina sem novo atrito.';}
+  if(action==='training_confront'){p.reputation=clamp((p.reputation||0)+1,0,100);p.morale=clamp(p.morale-4,40,100);message='Sua cobrança mostra personalidade, mas pesa no ambiente.';}
+  if(action==='travel_rest'){p.morale=clamp(p.morale+3,40,100);message='Você prioriza sono e recuperação após a viagem difícil.';}
+  if(action==='travel_activate'){p.developmentBoost=(p.developmentBoost||0)+1;p.morale=clamp(p.morale-2,40,100);message='A ativação extra melhora a preparação, mas cobra energia.';}
+  if(action==='sponsor_accept'){p.reputation=clamp((p.reputation||0)+3,0,100);p.pressure=(p.pressure||0)+1;message='Sua exposição cresce, junto da cobrança externa.';}
+  if(action==='sponsor_focus'){p.developmentBoost=(p.developmentBoost||0)+1;p.morale=clamp(p.morale+1,40,100);message='Você reduz a agenda e ganha tempo para preparação esportiva.';}
+  if(action==='fans_talk'){p.reputation=clamp((p.reputation||0)+3,0,100);p.morale=clamp(p.morale+2,40,100);message='A conversa aproxima você da torcida.';}
+  if(action==='fans_train'){p.developmentBoost=(p.developmentBoost||0)+1;message='Você se blinda da pressão e transforma a semana em trabalho.';}
+  if(action==='boots_safe'){p.morale=clamp(p.morale+2,40,100);message='Você volta ao equipamento conhecido e recupera conforto.';}
+  if(action==='boots_risk'){if(Math.random()<.55){p.developmentBoost=(p.developmentBoost||0)+1;message='A adaptação funciona e você se sente mais solto tecnicamente.';}else{p.morale=clamp(p.morale-2,40,100);message='O material ainda incomoda e a adaptação demora.';}}
+  if(action==='setpiece_take'){p.reputation=clamp((p.reputation||0)+2,0,100);p.developmentBoost=(p.developmentBoost||0)+1;message='Você assume mais bolas paradas e ganha protagonismo.';}
+  if(action==='setpiece_share'){p.morale=clamp(p.morale+3,40,100);message='A divisão das cobranças fortalece o ambiente do grupo.';}
+  if(action==='mentor_help'){p.reputation=clamp((p.reputation||0)+3,0,100);p.morale=clamp(p.morale+2,40,100);message='Você passa a ser visto como referência dentro do elenco.';}
+  if(action==='mentor_focus'){p.developmentBoost=(p.developmentBoost||0)+1;message='Você preserva tempo para o próprio desenvolvimento.';}
+  if(action==='documentary_yes'){p.reputation=clamp((p.reputation||0)+4,0,100);p.pressure=(p.pressure||0)+2;message='Sua imagem cresce, mas a rotina fica mais exposta.';}
+  if(action==='documentary_no'){p.morale=clamp(p.morale+4,40,100);p.pressure=Math.max(0,(p.pressure||0)-1);message='Você protege a rotina e reduz distrações.';}
+  if(action==='tactical_adapt'){p.developmentBoost=(p.developmentBoost||0)+1;p.morale=clamp(p.morale+2,40,100);message='A adaptação aumenta sua confiança e repertório.';}
+  if(action==='tactical_stay'){p.morale=clamp(p.morale+2,40,100);message='Você mantém sua função mais confortável e preserva estabilidade.';}
+  if(action==='captain_speech'){p.reputation=clamp((p.reputation||0)+3,0,100);p.morale=clamp(p.morale+2,40,100);message='Sua voz ganha peso dentro do grupo.';}
+  if(action==='captain_example'){p.morale=clamp(p.morale+4,40,100);p.pressure=Math.max(0,(p.pressure||0)-1);message='Sua liderança silenciosa transmite confiança.';}
+  if(action==='specialist_primary'){p.developmentBoost=(p.developmentBoost||0)+1;message='A sessão especializada reforça sua principal arma.';}
+  if(action==='specialist_weak'){p.potential=clamp((p.potential||p.overall)+1,p.overall,99);message='Você melhora o equilíbrio do jogo e ganha margem de evolução.';}
+  if(action==='charity_join'){p.reputation=clamp((p.reputation||0)+3,0,100);p.morale=clamp(p.morale+3,40,100);message='A ação aproxima você da comunidade e melhora seu moral.';}
+  if(action==='charity_rest'){p.morale=clamp(p.morale+4,40,100);message='O descanso ajuda a recuperar energia para a sequência.';}
+  if(action==='video_learn'){p.developmentBoost=(p.developmentBoost||0)+1;message='A análise de vídeo revela detalhes que podem melhorar seu jogo.';}
+  if(action==='video_confidence'){p.morale=clamp(p.morale+4,40,100);message='Rever seus melhores lances aumenta sua confiança.';}
+  if(action==='contract_stay'){p.morale=clamp(p.morale+4,40,100);p.pressure=Math.max(0,(p.pressure||0)-1);message='Sua sinalização de permanência reduz os ruídos.';}
+  if(action==='contract_market'){p.marketBonus=(p.marketBonus||0)+1;p.reputation=clamp((p.reputation||0)+1,0,100);message='Seu estafe passa a ouvir novas possibilidades.';}
+  if(action==='recovery_tech'){p.morale=clamp(p.morale+4,40,100);p.injuryGames=Math.max(0,(p.injuryGames||0)-1);message='O protocolo ajuda sua recuperação física.';}
+  if(action==='recovery_normal'){p.morale=clamp(p.morale+2,40,100);message='Você mantém a rotina conhecida e evita mudanças desnecessárias.';}
   state.news.push(`${e.title}: ${message}`);const resume=!!state.resumeSeasonAfterEvent;state.resumeSeasonAfterEvent=false;state.pendingEvent=null;$('#event-modal').classList.add('hidden');save();render();toast(message);if(resume&&!state.player?.retired&&state.season&&!state.season.closed)setTimeout(continueSeasonSimulation,120);
 }
 
 function showCelebration(icon,title,subtitle){
-  const iconBox=$('#celebration-icon');
+  const iconBox=$('#celebration-icon');iconBox.className='celebration-icon';
   if(/^https?:/i.test(icon||'')){
     const sources=[icon,fallbackTrophyDataUri(title),'assets/fallback-trophy.svg'],encoded=sources.map(encodeURIComponent).join('|');
     iconBox.innerHTML=`<img src="${sources[0]}" data-sources="${encoded}" data-index="0" alt="${title}" loading="eager" fetchpriority="high" decoding="async" referrerpolicy="no-referrer" onerror="cycleHonourImage(this)">`;
@@ -947,12 +1009,49 @@ function showCelebration(icon,title,subtitle){
   $('#celebration').classList.remove('hidden');
 }
 function showCelebrationForHonour(name,title,subtitle){
-  const iconBox=$('#celebration-icon');
+  const iconBox=$('#celebration-icon');iconBox.className='celebration-icon';
   const sources=trophySourcesFor(name),encoded=sources.map(encodeURIComponent).join('|');
   iconBox.innerHTML=`<img src="${sources[0]}" data-sources="${encoded}" data-index="0" alt="${title}" loading="eager" fetchpriority="high" decoding="async" referrerpolicy="no-referrer" onerror="cycleHonourImage(this)">`;
   $('#celebration-title').textContent=title;$('#celebration-subtitle').textContent=subtitle;
   $('#confetti').innerHTML=Array.from({length:38},(_,i)=>`<i style="--x:${rnd(-46,46)}vw;--r:${rnd(90,720)}deg;--d:${(Math.random()*1.4+.8).toFixed(2)}s;--delay:${(Math.random()*.5).toFixed(2)}s"></i>`).join('');
   $('#celebration').classList.remove('hidden');
+}
+
+function showSeasonHonoursGallery(titles=[],awards=[]){
+  const iconBox=$('#celebration-icon');
+  const items=[...titles.map(name=>({name,type:'Título'})),...awards.map(name=>({name,type:'Prêmio'}))];
+  iconBox.className='celebration-icon season-honours-showcase';
+  iconBox.innerHTML=items.map(item=>`<div class="season-honour-tile">${honourVisual(item.name)}<span><strong>${item.name}</strong><small>${item.type}</small></span></div>`).join('');
+  $('#celebration-title').textContent=titles.length?'Temporada de conquistas':'Prêmios da temporada';
+  $('#celebration-subtitle').textContent=`${titles.length} título(s) · ${awards.length} prêmio(s)`;
+  $('#confetti').innerHTML=Array.from({length:52},(_,i)=>`<i style="--x:${rnd(-48,48)}vw;--r:${rnd(90,900)}deg;--d:${(Math.random()*1.6+.8).toFixed(2)}s;--delay:${(Math.random()*.6).toFixed(2)}s"></i>`).join('');
+  $('#celebration').classList.remove('hidden');
+}
+function specialAwardTheme(name){
+  if(/Bola de Ouro/i.test(name))return {className:'ballon-dor',kicker:'NOITE DE GALA · BOLA DE OURO',copy:'O envelope foi aberto. O melhor jogador da temporada é você.'};
+  if(/Chuteira de Ouro/i.test(name))return {className:'golden-shoe',kicker:'CERIMÔNIA · CHUTEIRA DE OURO',copy:'Os números falaram mais alto. Você termina a temporada como artilheiro premiado.'};
+  return {className:'standard-award',kicker:'PRÊMIO INDIVIDUAL',copy:'Seu nome foi anunciado entre os grandes destaques da temporada.'};
+}
+function showAwardCeremony(name){
+  const p=state.player,theme=specialAwardTheme(name),stage=$('#award-ceremony-stage');
+  stage.className=`award-ceremony-stage ${theme.className}`;
+  $('#award-ceremony-kicker').textContent=theme.kicker;
+  $('#award-ceremony-title').textContent=`${p?.name||'Você'} — ${name}`;
+  $('#award-ceremony-copy').textContent=theme.copy;
+  $('#award-ceremony-trophy').innerHTML=honourVisual(name);
+  $('#award-ceremony-modal').classList.remove('hidden');
+}
+function playNextAwardCeremony(){
+  if(!awardCeremonyQueue.length){
+    $('#award-ceremony-modal').classList.add('hidden');
+    const after=awardCeremonyAfter;awardCeremonyAfter=null;if(after)after();return;
+  }
+  showAwardCeremony(awardCeremonyQueue.shift());
+}
+function queueSpecialAwardCeremonies(awards,after){
+  awardCeremonyQueue=(awards||[]).filter(a=>/Bola de Ouro|Chuteira de Ouro/i.test(a));
+  awardCeremonyAfter=after;
+  if(awardCeremonyQueue.length)playNextAwardCeremony();else if(after)after();
 }
 
 function showView(id){
@@ -1034,7 +1133,8 @@ $('#reroll-clubs').addEventListener('click',()=>{$('#selected-club').value='';$(
 $('#number').addEventListener('input',sanitizeShirtNumber);
 $('#number').addEventListener('blur',()=>{sanitizeShirtNumber();if(!$('#number').value)$('#number').value='10';});
 $('#close-result').addEventListener('click',()=>$('#match-result').classList.add('hidden'));
-$('#close-celebration').addEventListener('click',()=>{$('#celebration').classList.add('hidden');if(pendingCareerCard){pendingCareerCard=false;showCareerLegacyCard();}});
+$('#close-celebration').addEventListener('click',()=>{$('#celebration').classList.add('hidden');$('#celebration-icon').className='celebration-icon';if(pendingCareerCard){pendingCareerCard=false;showCareerLegacyCard();}});
+$('#award-ceremony-continue').addEventListener('click',()=>{$('#award-ceremony-modal').classList.add('hidden');setTimeout(playNextAwardCeremony,180);});
 
 $('#reroll-legend').addEventListener('click',()=>{
   if(!attributeDraft||(attributeDraft.skipsRemaining||0)<=0)return;
@@ -1157,8 +1257,8 @@ function legacyV4_simulateWholeSeason(){
 }
 function showPendingSeasonCelebration(){
   const c=pendingSeasonCelebration;pendingSeasonCelebration=null;if(!c)return;
-  const parts=[];if(c.titles.length)parts.push(`Títulos: ${c.titles.join(', ')}`);if(c.awards.length)parts.push(`Prêmios: ${c.awards.join(', ')}`);
-  if(parts.length){const first=c.titles[0]||c.awards[0];showCelebrationForHonour(first,c.titles.length?'Temporada de conquistas':'Prêmios da temporada',parts.join(' · '));}
+  if(!c.titles.length&&!c.awards.length)return;
+  queueSpecialAwardCeremonies(c.awards,()=>showSeasonHonoursGallery(c.titles,c.awards));
 }
 
 $('#simulate-btn').addEventListener('click',simulateWholeSeason);
@@ -1170,7 +1270,7 @@ $('#finish-season').addEventListener('click',()=>{
   const earned=stayed?continentalFromLeagueResult(s.countryAtStart||p.clubCountry,s.league.position):qualificationForClub(p.clubCountry,p.clubStrength);
   const nextYear=s.year+1;state.offers=[];state.season=createSeason(p,nextYear,earned);nextEventCache=null;
   if(p.age>=30&&oldDelta<0)state.news.push(`A idade começa a pesar: ${p.name} perdeu ${Math.abs(oldDelta)} ponto(s) de overall na última temporada.`);
-  if(Math.random()<.55){const event=CAREER_EVENTS[rnd(0,CAREER_EVENTS.length-1)];state.pendingEvent={...event};}
+  if(Math.random()<.60){const event=pickFreshCareerEvent(CAREER_EVENTS);if(event)state.pendingEvent={...event};}
   save();render();toast(`Temporada ${nextYear} iniciada. GER ${p.overall} · POT ${p.potential}`);
 });
 
@@ -1331,14 +1431,116 @@ function continentalFinalStatus(c){
   if(!c)return 'Não disputou';if(c.won)return 'Campeão';if(c.eliminated)return c.phase==='phase'?`Eliminado — ${c.format.phase}`:`Eliminado — ${c.knockout.stages[c.knockout.stageIndex]?.name||'mata-mata'}`;return c.phase==='phase'?`${c.format.phase} — ${c.points} pts`:`${c.knockout.stages[c.knockout.stageIndex]?.name||'Mata-mata'}`;
 }
 function buildDecisionScenario(event){
-  const p=state.player,att=['Centroavante','Segundo atacante','Ponta direita','Ponta esquerda','Meia ofensivo'].includes(p.position),mid=['Meia central','Meia direita','Meia esquerda','Volante'].includes(p.position),def=['Zagueiro','Lateral direito','Lateral esquerdo'].includes(p.position);
-  const minute=rnd(24,82),quality=clamp((p.overall-67)*.008,0,.20);
-  if(p.position==='Goleiro')return {minute,visual:'goalkeeper',title:'Cara a cara',description:`${event.opponent} escapa em velocidade e fica frente a frente com você. O que fazer?`,options:[{label:'Sair do gol',effect:'Agressivo: corta o ângulo, mas há risco.',type:'defense',chance:.58+quality,rating:.55,risk:.18},{label:'Esperar a finalização',effect:'Mais seguro, depende dos reflexos.',type:'defense',chance:.66+quality,rating:.45,risk:.10},{label:'Fechar o canto curto',effect:'Boa leitura, mas abre o outro lado.',type:'defense',chance:.61+quality,rating:.50,risk:.14}]};
-  if(def)return {minute,visual:'defense',title:'Ataque perigoso',description:`O adversário avança perto da área. Você precisa decidir rapidamente.`,options:[{label:'Dar o bote',effect:'Pode recuperar a bola ou ser driblado.',type:'defense',chance:.60+quality,rating:.50,risk:.18},{label:'Cercar e atrasar a jogada',effect:'Menos risco, força uma decisão do atacante.',type:'defense',chance:.70+quality,rating:.38,risk:.08},{label:'Antecipar o passe',effect:'Leitura difícil, recompensa alta.',type:'defense',chance:.53+quality,rating:.65,risk:.22}]};
-  if(att&&Math.random()<.5)return {minute,visual:'penalty',title:'Pênalti para sua equipe',description:`Aos ${minute}', você pega a bola. Como vai cobrar?`,options:[{label:'Bater forte no canto',effect:'Boa chance de gol.',type:'goal',chance:.68+quality,rating:.62},{label:'Deslocar o goleiro',effect:'Mais técnico e mais arriscado.',type:'goal',chance:.62+quality,rating:.72},{label:'Cavadinha',effect:'Alto risco, grande destaque se entrar.',type:'goal',chance:.48+quality,rating:.90}]};
-  if(att)return {minute,visual:'chance',title:'Chance clara de gol',description:`Você recebe dentro da área com um defensor chegando.`,options:[{label:'Finalizar de primeira',effect:'Rápido e objetivo.',type:'goal',chance:.55+quality,rating:.58},{label:'Driblar o goleiro',effect:'Mais arriscado, mas abre o gol.',type:'goal',chance:.47+quality,rating:.78},{label:'Tocar para o companheiro',effect:'Busca uma assistência em vez da finalização.',type:'assist',chance:.64+quality,rating:.58}]};
-  if(mid)return {minute,visual:'build',title:'Contra-ataque',description:`Você conduz pelo meio com opções na frente.`,options:[{label:'Passe em profundidade',effect:'Pode deixar um companheiro na cara do gol.',type:'assist',chance:.62+quality,rating:.62},{label:'Carregar e finalizar',effect:'Você assume a responsabilidade.',type:'goal',chance:.38+quality,rating:.72},{label:'Abrir na ponta',effect:'Opção segura para manter o ataque.',type:'assist',chance:.55+quality,rating:.44}]};
-  return {minute,visual:'build',title:'Momento decisivo',description:'A bola sobra para você perto da área.',options:[{label:'Finalizar',effect:'Tentar decidir a partida.',type:'goal',chance:.42+quality,rating:.55},{label:'Passar',effect:'Criar para um companheiro.',type:'assist',chance:.55+quality,rating:.48},{label:'Manter a posse',effect:'Evitar o risco e reorganizar o time.',type:'control',chance:.78+quality,rating:.25}]};
+  const p=state.player,s=state.season;
+  const minute=rnd(18,88),quality=clamp((p.overall-67)*.008,0,.20);
+  const boost=opts=>opts.map(o=>({...o,chance:clamp(o.chance+quality,.12,.94)}));
+  const make=(id,visual,title,description,options,prompt='')=>({id,minute,visual,title,description,options:boost(options),prompt});
+  const goalkeeper=[
+    make('gk_one_on_one','goalkeeper','Cara a cara',`${event.opponent} escapa em velocidade e fica frente a frente com você.`,[
+      {label:'Sair do gol',effect:'Fecha o ângulo, mas aumenta o risco.',type:'defense',chance:.58,rating:.58,risk:.18},
+      {label:'Esperar a finalização',effect:'Confia nos reflexos e mantém a posição.',type:'defense',chance:.66,rating:.46,risk:.09},
+      {label:'Fechar o canto curto',effect:'Protege o lado mais próximo.',type:'defense',chance:.61,rating:.52,risk:.13}], 'Escolha como defender o 1 contra 1'),
+    make('gk_cross','goalkeeper','Cruzamento venenoso','A bola vem fechada na pequena área com vários jogadores disputando.',[
+      {label:'Sair de soco',effect:'Agressivo e eficaz se o tempo for perfeito.',type:'defense',chance:.61,rating:.55,risk:.16},
+      {label:'Tentar segurar',effect:'Mais controle, mas exige segurança.',type:'defense',chance:.57,rating:.65,risk:.18},
+      {label:'Ficar na linha',effect:'Evita o erro na saída e reage à cabeçada.',type:'defense',chance:.68,rating:.42,risk:.09}], 'Decida como atacar o cruzamento'),
+    make('gk_penalty','goalkeeper','Pênalti contra','O árbitro aponta a marca da cal. O cobrador espera sua reação.',[
+      {label:'Canto esquerdo',effect:'Aposte na leitura corporal do batedor.',type:'defense',chance:.40,rating:.82,risk:.12},
+      {label:'Esperar no centro',effect:'Chance menor de se comprometer cedo.',type:'defense',chance:.36,rating:.88,risk:.10},
+      {label:'Canto direito',effect:'Tente antecipar a direção da cobrança.',type:'defense',chance:.40,rating:.82,risk:.12}], 'Escolha sua leitura do pênalti'),
+    make('gk_long_shot','goalkeeper','Chute de longa distância','O meia rival encontra espaço e arma uma finalização forte de fora da área.',[
+      {label:'Dar um passo à frente',effect:'Melhora o ângulo, mas exige reação rápida.',type:'defense',chance:.66,rating:.52,risk:.10},
+      {label:'Manter-se na linha',effect:'Prioriza tempo de reação.',type:'defense',chance:.70,rating:.44,risk:.08},
+      {label:'Antecipar o canto',effect:'Leitura ousada para buscar uma grande defesa.',type:'defense',chance:.54,rating:.74,risk:.18}], 'Escolha seu posicionamento'),
+    make('gk_sweeper','goalkeeper','Bola nas costas da defesa','Um lançamento longo quebra a linha e você precisa decidir se sai da área.',[
+      {label:'Sair como líbero',effect:'Pode matar a jogada antes do atacante.',type:'defense',chance:.60,rating:.66,risk:.20},
+      {label:'Esperar na área',effect:'Menos risco, mas concede avanço.',type:'defense',chance:.68,rating:.42,risk:.10},
+      {label:'Atacar a bola de cabeça',effect:'Muito arriscado, grande impacto se funcionar.',type:'defense',chance:.48,rating:.88,risk:.26}], 'Decida até onde sair do gol')
+  ];
+  const defenders=[
+    make('def_tackle','defense','Ataque perigoso','O adversário acelera perto da área e você é o último defensor por dentro.',[
+      {label:'Dar o bote',effect:'Pode roubar a bola ou ser driblado.',type:'defense',chance:.60,rating:.52,risk:.18},
+      {label:'Cercar e atrasar',effect:'Força o atacante a pensar.',type:'defense',chance:.70,rating:.38,risk:.08},
+      {label:'Antecipar o passe',effect:'Leitura difícil, recompensa alta.',type:'defense',chance:.53,rating:.67,risk:.22}], 'Escolha sua abordagem defensiva'),
+    make('def_cross','defense','Cruzamento na segunda trave','O ponta levanta a bola e seu adversário aparece atacando o espaço.',[
+      {label:'Atacar a bola',effect:'Prioriza o corte antes do cabeceio.',type:'defense',chance:.66,rating:.52,risk:.11},
+      {label:'Marcar o corpo',effect:'Tira o equilíbrio do atacante.',type:'defense',chance:.63,rating:.49,risk:.12},
+      {label:'Recuar para a linha',effect:'Protege o gol, mas concede a disputa.',type:'defense',chance:.69,rating:.38,risk:.08}], 'Como defender o cruzamento?'),
+    make('def_counter','defense','Contra-ataque 3 contra 2','Seu time perde a bola e você precisa controlar uma transição em inferioridade.',[
+      {label:'Fechar o passe central',effect:'Protege o corredor mais perigoso.',type:'defense',chance:.68,rating:.48,risk:.09},
+      {label:'Pressionar o portador',effect:'Tenta matar a jogada cedo.',type:'defense',chance:.56,rating:.66,risk:.20},
+      {label:'Recuar até a área',effect:'Ganha tempo para os companheiros voltarem.',type:'defense',chance:.72,rating:.36,risk:.07}], 'Escolha como frear o contra-ataque'),
+    make('def_build','build','Saída sob pressão','Você recebe a bola na defesa com a linha rival pressionando alto.',[
+      {label:'Passe vertical',effect:'Quebra linhas se encontrar o volante.',type:'assist',chance:.55,rating:.56},
+      {label:'Conduzir para o espaço',effect:'Atrai a pressão e cria superioridade.',type:'control',chance:.64,rating:.46},
+      {label:'Bola longa',effect:'Alivia a pressão rapidamente.',type:'control',chance:.74,rating:.28}], 'Escolha a saída de bola'),
+    make('def_setpiece','defense','Escanteio nos acréscimos','O rival lota a área em busca do empate.',[
+      {label:'Marcar a primeira trave',effect:'Corta a trajetória mais curta.',type:'defense',chance:.68,rating:.50,risk:.09},
+      {label:'Seguir o melhor cabeceador',effect:'Duelo direto contra a maior ameaça.',type:'defense',chance:.61,rating:.62,risk:.14},
+      {label:'Ficar na sobra',effect:'Protege a segunda bola.',type:'defense',chance:.66,rating:.47,risk:.11}], 'Defina sua função no escanteio')
+  ];
+  const midfield=[
+    make('mid_counter','build','Contra-ataque','Você conduz pelo meio com três opções se abrindo à frente.',[
+      {label:'Passe em profundidade',effect:'Pode deixar um companheiro na cara do gol.',type:'assist',chance:.62,rating:.64},
+      {label:'Carregar e finalizar',effect:'Você assume a responsabilidade.',type:'goal',chance:.38,rating:.74},
+      {label:'Abrir na ponta',effect:'Amplia o campo e mantém o ataque.',type:'assist',chance:.56,rating:.46}], 'Escolha a rota do contra-ataque'),
+    make('mid_press','build','Pressão no meio-campo','Dois rivais fecham seus lados e você recebe de costas.',[
+      {label:'Girar e acelerar',effect:'Quebra a pressão se conseguir o drible.',type:'control',chance:.54,rating:.64},
+      {label:'Tabela curta',effect:'Usa um companheiro para escapar.',type:'assist',chance:.67,rating:.48},
+      {label:'Recuar a jogada',effect:'Mantém a posse e reorganiza.',type:'control',chance:.80,rating:.26}], 'Como escapar da pressão?'),
+    make('mid_edge','chance','Sobra na entrada da área','A defesa corta mal e a bola sobra limpa para você na meia-lua.',[
+      {label:'Bater colocado',effect:'Busca o canto com precisão.',type:'goal',chance:.45,rating:.72},
+      {label:'Chutar forte',effect:'Mais potência, menos controle.',type:'goal',chance:.40,rating:.68},
+      {label:'Enfiar para o atacante',effect:'Tenta encontrar o passe final.',type:'assist',chance:.61,rating:.58}], 'Decida em um toque'),
+    make('mid_switch','build','Defesa fechada','O rival se compacta por dentro e você tem a bola no corredor central.',[
+      {label:'Inverter o lado',effect:'Muda o ponto de ataque.',type:'assist',chance:.67,rating:.46},
+      {label:'Passe entrelinhas',effect:'Mais difícil, mas pode quebrar a defesa.',type:'assist',chance:.53,rating:.68},
+      {label:'Atrair e carregar',effect:'Tenta abrir espaço com condução.',type:'control',chance:.60,rating:.50}], 'Escolha como desmontar o bloco'),
+    make('mid_late','build','Últimos minutos','Seu time protege uma vantagem mínima e você recebe no meio.',[
+      {label:'Prender no canto',effect:'Gasta tempo e reduz o risco.',type:'control',chance:.82,rating:.28},
+      {label:'Buscar o segundo gol',effect:'Acelera a transição para matar o jogo.',type:'assist',chance:.52,rating:.62},
+      {label:'Chutar de longe',effect:'Tenta surpreender o goleiro.',type:'goal',chance:.30,rating:.78}], 'Gerencie os minutos finais')
+  ];
+  const attackers=[
+    make('att_penalty','penalty','Pênalti para sua equipe',`Aos ${minute}', você pega a bola e encara o goleiro.`,[
+      {label:'Bater forte no canto',effect:'Boa chance de gol.',type:'goal',chance:.68,rating:.62},
+      {label:'Deslocar o goleiro',effect:'Mais técnico e mais arriscado.',type:'goal',chance:.62,rating:.72},
+      {label:'Cavadinha',effect:'Alto risco, grande destaque se entrar.',type:'goal',chance:.48,rating:.90}], 'Escolha o tipo de cobrança'),
+    make('att_one_on_one','chance','Cara a cara com o goleiro','Você rompe a última linha e entra sozinho na área.',[
+      {label:'Finalizar cruzado',effect:'Escolha objetiva para o canto oposto.',type:'goal',chance:.58,rating:.60},
+      {label:'Driblar o goleiro',effect:'Mais arriscado, mas abre o gol.',type:'goal',chance:.47,rating:.80},
+      {label:'Tocar por cobertura',effect:'Técnica e frieza em uma execução difícil.',type:'goal',chance:.43,rating:.88}], 'Como concluir o 1 contra 1?'),
+    make('att_cutback','chance','Passe para trás na área','O ponta chega à linha de fundo e rola a bola para você.',[
+      {label:'Finalizar de primeira',effect:'Rápido e direto.',type:'goal',chance:.62,rating:.58},
+      {label:'Dominar antes',effect:'Mais controle, mas a defesa se aproxima.',type:'goal',chance:.55,rating:.66},
+      {label:'Deixar passar',effect:'Tenta criar uma assistência inesperada.',type:'assist',chance:.60,rating:.64}], 'Escolha o toque dentro da área'),
+    make('att_header','goal','Cruzamento perfeito','A bola vem alta entre você e o zagueiro dentro da área.',[
+      {label:'Cabecear no chão',effect:'Busca dificultar a defesa do goleiro.',type:'goal',chance:.58,rating:.64},
+      {label:'Testar no contrapé',effect:'Exige direção precisa.',type:'goal',chance:.53,rating:.72},
+      {label:'Escorar para trás',effect:'Tenta servir um companheiro melhor posicionado.',type:'assist',chance:.62,rating:.56}], 'Escolha a ação no alto'),
+    make('att_counter','chance','Contra-ataque em velocidade','Você dispara com um defensor recuando e um companheiro ao lado.',[
+      {label:'Cortar para dentro e chutar',effect:'Você busca o gol.',type:'goal',chance:.48,rating:.72},
+      {label:'Passar no momento certo',effect:'Cria uma chance limpa para o companheiro.',type:'assist',chance:.65,rating:.60},
+      {label:'Acelerar até a área',effect:'Tenta ganhar no corpo e na velocidade.',type:'goal',chance:.52,rating:.66}], 'Decida antes da defesa se recompor'),
+    make('att_free_kick','goal','Falta frontal','Uma falta é marcada perto da meia-lua e você assume a bola.',[
+      {label:'Por cima da barreira',effect:'Curva e precisão para buscar o ângulo.',type:'goal',chance:.38,rating:.84},
+      {label:'Chute forte no canto',effect:'Potência para surpreender o goleiro.',type:'goal',chance:.42,rating:.76},
+      {label:'Jogada ensaiada',effect:'Tenta criar uma assistência em vez do chute.',type:'assist',chance:.57,rating:.62}], 'Escolha a cobrança da falta'),
+    make('att_backpost','goal','Bola na segunda trave','Um cruzamento atravessa a área e chega quase sem ângulo para você.',[
+      {label:'Bater de primeira',effect:'Difícil, mas pode surpreender.',type:'goal',chance:.42,rating:.78},
+      {label:'Dominar e ajeitar',effect:'Ganha controle, perde tempo.',type:'goal',chance:.50,rating:.66},
+      {label:'Tocar para o meio',effect:'Procura alguém de frente para o gol.',type:'assist',chance:.63,rating:.58}], 'Escolha entre finalizar ou servir')
+  ];
+  let pool;
+  if(p.position==='Goleiro')pool=goalkeeper;
+  else if(['Zagueiro','Lateral direito','Lateral esquerdo'].includes(p.position))pool=defenders;
+  else if(['Meia central','Meia direita','Meia esquerda','Volante'].includes(p.position))pool=midfield;
+  else pool=attackers;
+  const recent=s?.recentDecisionScenarioIds||[];
+  let available=pool.filter(x=>!recent.includes(x.id));if(!available.length)available=pool;
+  const scenario=available[rnd(0,available.length-1)];
+  if(s&&scenario)s.recentDecisionScenarioIds=[...recent,scenario.id].slice(-4);
+  return scenario;
 }
 
 function renderDecisionChoices(scenario){
@@ -1361,7 +1563,7 @@ function renderDecisionChoices(scenario){
       ['build-left','build-center','build-right'];
     const typeClass=scenario.visual==='goal'||scenario.visual==='penalty'?'goal-mouth':scenario.visual==='chance'?'chance-board':scenario.visual==='goalkeeper'?'goalkeeper-board':scenario.visual==='defense'?'defense-board':'build-board';
     visual.className=`decision-visual ${typeClass}`;
-    const label=scenario.visual==='penalty'?'Escolha o tipo de cobrança':scenario.visual==='goal'?'Escolha a finalização':scenario.visual==='chance'?'Escolha como atacar o lance':'Escolha sua leitura no lance';
+    const label=scenario.prompt|| (scenario.visual==='penalty'?'Escolha o tipo de cobrança':scenario.visual==='goal'?'Escolha a finalização':scenario.visual==='chance'?'Escolha como atacar o lance':'Escolha sua leitura no lance');
     const inner=scenario.options.map((o,i)=>`<button class="visual-choice ${slotClasses[i]||''}" data-decision-option="${i}"><span>${o.type==='assist'?'🤝':o.type==='defense'?'🛡️':o.type==='control'?'⏱️':'⚽'}</span><strong>${o.label}</strong><small>${o.effect}</small></button>`).join('');
     visual.innerHTML=`<div class="decision-visual-label">${label}</div><div class="visual-stage">${inner}</div>`;
     choiceBox.classList.add('hidden');
@@ -1423,6 +1625,9 @@ function simulateWholeSeason(){
 }
 function showSeasonSummary(){
   const s=state.season,p=state.player;if(!s||!s.closed)return;$('#summary-year').textContent=`TEMPORADA ${s.year}`;$('#summary-title').textContent=`${s.league.position}º lugar em ${s.league.name}`;$('#summary-subtitle').textContent=`${s.league.points} pontos · ${s.league.wins}V ${s.league.draws}E ${s.league.losses}D · ${state.offers.length} proposta(s) recebida(s)`;
+  const seasonTitles=(p.trophies||[]).slice(s.startTrophyCount||0).map(t=>t.name);const seasonAwards=(p.awards||[]).slice(s.startAwardCount||0).map(a=>a.name);
+  const seasonHonours=[...seasonTitles.map(name=>({name,type:'Título'})),...seasonAwards.map(name=>({name,type:'Prêmio'}))];
+  $('#summary-honours').innerHTML=seasonHonours.length?seasonHonours.map(h=>`<div class="summary-honour">${honourVisual(h.name)}<span><strong>${h.name}</strong><small>${h.type}</small></span></div>`).join(''):'<p class="muted">Nenhum título ou prêmio nesta temporada.</p>';
   const standings=s.league.standings||[];$('#summary-standings').innerHTML=standings.map(r=>`<tr class="${r.user?'user-row':''}"><td>${r.position}</td><td>${r.team}</td><td>${r.games}</td><td>${r.wins}</td><td>${r.draws}</td><td>${r.losses}</td><td>${r.gd>0?'+':''}${r.gd}</td><td><strong>${r.points}</strong></td></tr>`).join('');
   const cupItems=[{name:s.cup.name,status:s.finalCupStatus||cupFinalStatus(s.cup)}];if(s.continental)cupItems.push({name:s.continental.name,status:s.finalContinentalStatus||continentalFinalStatus(s.continental)});$('#summary-cups').innerHTML=cupItems.map(x=>`<div class="summary-status with-art">${honourVisual(x.name)}<strong>${x.name}</strong><span>${x.status}</span></div>`).join('');
   $('#summary-decisions').innerHTML=(s.decisionLogs||[]).map((d,i)=>`<div><strong>${i+1}. ${d.match}</strong><span>${d.choice} · ${d.outcome}</span></div>`).join('');$('#summary-offers').innerHTML=state.offers.length?state.offers.map(o=>`<div class="summary-offer"><strong>${o.club}</strong><span>${o.countryName} · Força ${o.strength} · ${money(o.value)}</span></div>`).join(''):'<p class="muted">Nenhuma proposta devido à aposentadoria.</p>';$('#season-summary-modal').classList.remove('hidden');
@@ -1432,15 +1637,56 @@ $('#summary-market').addEventListener('click',()=>{$('#season-summary-modal').cl
 $('#summary-close').addEventListener('click',()=>{$('#season-summary-modal').classList.add('hidden');if(state.player?.retired&&pendingCareerCard){pendingCareerCard=false;showCareerLegacyCard();return;}showPendingSeasonCelebration();});
 
 function normalizePersistentState(){
-  if(!state.player)return;const p=state.player;p.value=marketValue(p.value||1100000);p.nationalTrust=clamp(p.nationalTrust||0,0,100);p.injuryGames=Math.max(0,p.injuryGames||0);p.reputation=clamp(p.reputation||10,0,100);p.morale=clamp(p.morale||70,40,100);
+  if(!state.player)return;
+  const p=state.player;
+  p.value=marketValue(p.value||1100000);p.nationalTrust=clamp(p.nationalTrust||0,0,100);p.injuryGames=Math.max(0,p.injuryGames||0);p.reputation=clamp(p.reputation||10,0,100);p.morale=clamp(p.morale||70,40,100);p.recentCareerEventIds=p.recentCareerEventIds||[];
+
+  // Corrige país/liga do clube em saves antigos. O nome do clube é a fonte de verdade.
+  const canonical=canonicalClubCountryCode(p.club,p.clubCountry);
+  if(canonical&&canonical!==p.clubCountry){p.clubCountry=canonical;p.clubCountryName=countryByCode(canonical)?.name||canonical;}
+  else if(canonical&&!p.clubCountryName)p.clubCountryName=countryByCode(canonical)?.name||canonical;
+
+  (state.history||[]).forEach(h=>{
+    const code=canonicalClubCountryCode(h.club,h.clubCountry);
+    if(code)h.clubCountry=code;
+  });
+
+  const s=state.season;
+  if(s){
+    const seasonClub=s.clubAtStart||p.club;
+    const seasonCode=canonicalClubCountryCode(seasonClub,s.countryAtStart||p.clubCountry);
+    const rule=getCompetitionRule(seasonCode,countryByCode(seasonCode)?.name||'');
+    const format=getLeagueFormat(seasonCode);
+    const wrongLeague=seasonCode&&(s.countryAtStart!==seasonCode||s.league?.name!==rule.league);
+    s.countryAtStart=seasonCode||s.countryAtStart||p.clubCountry;
+    if(wrongLeague&&s.league){
+      const oldIndex=s.league.index||0;
+      s.league.name=rule.league;s.league.format=format;
+      s.league.schedule=generateLeagueSchedule(seasonCode,seasonClub,rule.league);
+      s.league.index=Math.min(oldIndex,s.league.schedule.length);
+      if(s.league.standings)s.league.standings=[];
+    }
+    if(s.cup){s.cup.name=rule.cup;if(!s.cup.stages?.length)s.cup.stages=domesticCupStages(seasonCode);}
+  }
+
   (p.trophies||[]).forEach(t=>{
-    if(t.name==='Premier League / Premiership')t.name='Scottish Premiership';
-    if(t.name==='Copa Nacional'){
-      const season=(state.history||[]).find(h=>h.year===t.year);
-      if(season?.clubCountry==='GB')t.name='Scottish Cup';
-      else if(season?.clubCountry==='MX')t.name='Copa MX';
+    const season=(state.history||[]).find(h=>h.year===t.year);
+    const seasonCode=canonicalClubCountryCode(season?.club||'',season?.clubCountry||'');
+    if(t.name==='Premier League / Premiership'||t.name==='Scottish Premiership'||t.name==='Premier League'){
+      if(seasonCode==='SCO')t.name='Scottish Premiership';
+      else if(seasonCode==='ENG')t.name='Premier League';
+    }
+    if(t.name==='Copa Nacional'||t.name==='Scottish Cup'||t.name==='FA Cup'){
+      if(seasonCode==='SCO')t.name='Scottish Cup';
+      else if(seasonCode==='ENG')t.name='FA Cup';
+      else if(seasonCode==='MX')t.name='Copa MX';
     }
   });
-  state.offers=(state.offers||[]).map(o=>({...o,value:marketValue(o.value||p.value)}));
+
+  state.offers=(state.offers||[]).map(o=>{
+    const code=canonicalClubCountryCode(o.club,o.countryCode);
+    return {...o,countryCode:code,countryName:countryByCode(code)?.name||code,league:getCompetitionRule(code,countryByCode(code)?.name||'').league,value:marketValue(o.value||p.value)};
+  });
 }
+
 preloadTrophyImages();populateCreationFields();setupBirthdateLimits();normalizePersistentState();sanitizeAwardsEligibility();save();render();if(state.pendingEvent)openPendingEvent();if(state.player?.retired&&!state.player.legacyCardSeen)setTimeout(showCareerLegacyCard,100);

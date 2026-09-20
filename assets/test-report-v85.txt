@@ -1,0 +1,19 @@
+Be The Legend v8.5 — Test Report
+
+PASS — node --check js/app.js
+PASS — node --check js/data.js
+PASS — 121 clubes locais possuem regra de liga e formato válidos
+PASS — 182 nomes dos pools de liga auditados estruturalmente
+PASS — 0 duplicidades de clube entre países após correção
+PASS — Chelsea: ENG -> Premier League
+PASS — Celtic: SCO -> Scottish Premiership
+PASS — Rangers: SCO -> Scottish Premiership
+PASS — migração de save antigo Chelsea/GB -> ENG/Premier League/FA Cup
+PASS — 28 eventos de carreira/incidentes disponíveis
+PASS — 56 ações de eventos possuem tratamento no código; 0 sem handler
+PASS — 22 cenários de decisão dentro de campo; 22 IDs únicos
+PASS — teste de repetição: goleiro, defensor, meia e atacante com variação e sem repetição imediata
+PASS — resumo de fim de temporada renderiza todos os títulos e prêmios da temporada
+PASS — temas exclusivos identificados para Bola de Ouro e Chuteira de Ouro
+PASS — todos os IDs usados diretamente por app.js existem no HTML; 0 ausentes
+PASS — todas as referências locais de troféus no app.js existem; 0 ausentes

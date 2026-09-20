@@ -1443,19 +1443,7 @@ const LOCAL_CLUBS = {
       "strength": 80
     }
   ],
-  "GB": [
-    {
-      "name": "Arsenal",
-      "strength": 90
-    },
-    {
-      "name": "Liverpool",
-      "strength": 91
-    },
-    {
-      "name": "Manchester City",
-      "strength": 92
-    },
+  "SCO": [
     {
       "name": "Celtic",
       "strength": 82
@@ -1463,10 +1451,6 @@ const LOCAL_CLUBS = {
     {
       "name": "Rangers",
       "strength": 81
-    },
-    {
-      "name": "Chelsea",
-      "strength": 87
     }
   ],
   "DE": [
@@ -1866,7 +1850,7 @@ const COMPETITION_RULES = {
       "UEFA Conference League"
     ]
   },
-  "GB": {
+  "SCO": {
     "league": "Scottish Premiership",
     "cup": "Scottish Cup",
     "continental": [
@@ -2005,17 +1989,18 @@ const LEAGUE_FORMATS = {
   UY:{teams:16,matches:30,mode:'double_round_robin',championPoints:61,label:'16 clubes · 30 jogos no modelo anual simplificado'},
   CO:{teams:20,matches:38,mode:'split_season',championPoints:70,label:'Apertura + Finalización, adaptados para 38 jogos regulares'},
   CL:{teams:16,matches:30,mode:'double_round_robin',championPoints:60,label:'16 clubes · 30 rodadas · turno e returno'},
-  GB:{teams:12,matches:38,mode:'split',championPoints:78,label:'fase regular + divisão em grupos, modelo simplificado'}
+  SCO:{teams:12,matches:38,mode:'split',championPoints:78,label:'12 clubes · fase regular + divisão em grupos, modelo simplificado'}
 };
 
 const LEAGUE_CLUB_POOLS = {
   BR:['Athletico Paranaense','Atlético Mineiro','Bahia','Botafogo','Chapecoense','Corinthians','Coritiba','Cruzeiro','Flamengo','Fluminense','Grêmio','Internacional','Mirassol','Palmeiras','Red Bull Bragantino','Remo','Santos','São Paulo','Vasco da Gama','Vitória'],
   ES:['Athletic Club','Atlético de Madrid','Barcelona','Real Betis','Celta de Vigo','Deportivo La Coruña','Espanyol','Getafe','Levante','Málaga','Osasuna','Racing Santander','Rayo Vallecano','Real Madrid','Real Sociedad','Sevilla','Valencia','Villarreal','Alavés','Elche'],
   ENG:['Arsenal','Aston Villa','Bournemouth','Brentford','Brighton','Chelsea','Coventry City','Crystal Palace','Everton','Fulham','Hull City','Ipswich Town','Leeds United','Liverpool','Manchester City','Manchester United','Newcastle United','Nottingham Forest','Sunderland','Tottenham'],
+  SCO:['Aberdeen','Celtic','Dundee','Dundee United','Falkirk','Hearts','Hibernian','Kilmarnock','Livingston','Motherwell','Rangers','St Mirren'],
   DE:['Bayern de Munique','Borussia Dortmund','RB Leipzig','Bayer Leverkusen','Eintracht Frankfurt','Stuttgart','Wolfsburg','Freiburg','Mainz','Werder Bremen','Borussia Mönchengladbach','Hoffenheim','Augsburg','Union Berlin','Hamburgo','Köln','St. Pauli','Heidenheim'],
   IT:['Inter de Milão','Milan','Juventus','Napoli','Roma','Lazio','Atalanta','Fiorentina','Bologna','Torino','Udinese','Genoa','Cagliari','Parma','Lecce','Como','Verona','Sassuolo','Pisa','Cremonese'],
   FR:['Paris Saint-Germain','Marseille','Monaco','Lyon','Lille','Nice','Lens','Rennes','Strasbourg','Toulouse','Nantes','Auxerre','Angers','Brest','Le Havre','Metz','Lorient','Paris FC'],
-  PT:['Benfica','Porto','Sporting CP','Braga','Vitória de Guimarães','Boavista','Famalicão','Rio Ave','Moreirense','Casa Pia','Estoril','Arouca','Gil Vicente','Santa Clara','Nacional','AVS','Alverca','Tondela'],
+  PT:['Benfica','Porto','Sporting CP','Braga','Vitória de Guimarães','Boavista','Famalicão','Rio Ave','Moreirense','Casa Pia','Estoril','Arouca','Gil Vicente','Santa Clara','Nacional da Madeira','AVS','Alverca','Tondela'],
   NL:['Ajax','PSV','Feyenoord','AZ Alkmaar','Twente','Utrecht','Heerenveen','Sparta Rotterdam','Groningen','NEC','Go Ahead Eagles','Heracles','Fortuna Sittard','PEC Zwolle','NAC Breda','Excelsior','Volendam','Telstar'],
   SA:['Al-Hilal','Al-Nassr','Al-Ittihad','Al-Ahli','Al-Ettifaq','Al-Shabab','Al-Taawoun','Al-Fateh','Damac','Al-Fayha','Al-Khaleej','Al-Raed','Al-Riyadh','Al-Wehda','Al-Okhdood','Al-Qadsiah','Al-Kholood','Neom SC']
 };
@@ -2024,6 +2009,7 @@ const DOMESTIC_CUP_FORMATS = {
   BR:{stages:[{name:'5ª fase',legs:2},{name:'Oitavas de final',legs:2},{name:'Quartas de final',legs:2},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
   ES:{stages:[{name:'Fase inicial',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:2},{name:'Final',legs:1}]},
   ENG:{stages:[{name:'3ª fase',legs:1},{name:'4ª fase',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:1},{name:'Final',legs:1}]},
+  SCO:{stages:[{name:'4ª fase',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:1},{name:'Final',legs:1}]},
   DE:{stages:[{name:'2ª fase',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:1},{name:'Final',legs:1}]},
   FR:{stages:[{name:'32-avos',legs:1},{name:'16-avos',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:1},{name:'Final',legs:1}]},
   PT:{stages:[{name:'3ª eliminatória',legs:1},{name:'4ª eliminatória',legs:1},{name:'Oitavas de final',legs:1},{name:'Quartas de final',legs:1},{name:'Semifinal',legs:2},{name:'Final',legs:1}]}
@@ -2451,7 +2437,31 @@ const INCIDENT_EVENTS = [
     {label:'Ignorar a repercussão',action:'rumor_ignore',effect:'pode afetar moral e pressão'}]},
   {id:'agent_tension',title:'Tensão com o empresário',description:'Seu agente quer forçar uma transferência, mas você não está convencido.',choices:[
     {label:'Manter portas abertas',action:'agent_open',effect:'+ mercado; - estabilidade'},
-    {label:'Priorizar o clube atual',action:'agent_stay',effect:'+ moral; menos pressão de mercado'}]}
+    {label:'Priorizar o clube atual',action:'agent_stay',effect:'+ moral; menos pressão de mercado'}]},
+  {id:'minor_illness',title:'Virose antes da rodada',description:'Você acorda indisposto dois dias antes da partida. O departamento médico recomenda cautela.',choices:[
+    {label:'Parar e recuperar',action:'illness_rest',effect:'pode perder um jogo; recuperação segura'},
+    {label:'Treinar normalmente',action:'illness_push',effect:'+ disponibilidade; risco de piora'}]},
+  {id:'transfer_leak',title:'Vazamento sobre transferência',description:'Um jornalista publica que você teria conversado com outro clube, mesmo sem anúncio oficial.',choices:[
+    {label:'Negar e encerrar o assunto',action:'leak_deny',effect:'+ estabilidade no clube'},
+    {label:'Deixar a especulação correr',action:'leak_feed',effect:'+ mercado; + pressão'}]},
+  {id:'derby_heat',title:'Clima de clássico',description:'A semana do clássico fica tensa após provocações do rival e pressão da torcida.',choices:[
+    {label:'Responder dentro de campo',action:'derby_focus',effect:'+ moral e reputação'},
+    {label:'Entrar na provocação',action:'derby_fire',effect:'+ reputação; + pressão'}]},
+  {id:'training_clash',title:'Choque forte no treino',description:'Um treino mais pegado termina em discussão depois de uma entrada dura.',choices:[
+    {label:'Aceitar as desculpas',action:'training_peace',effect:'+ ambiente; + moral'},
+    {label:'Cobrar publicamente',action:'training_confront',effect:'+ personalidade; - moral'}]},
+  {id:'travel_delay',title:'Viagem complicada',description:'A delegação enfrenta atraso e chega tarde ao destino na véspera de uma partida.',choices:[
+    {label:'Priorizar descanso',action:'travel_rest',effect:'+ recuperação'},
+    {label:'Fazer ativação extra',action:'travel_activate',effect:'+ preparação; pequeno desgaste'}]},
+  {id:'sponsor_pressure',title:'Pressão de patrocinador',description:'Uma campanha comercial importante coincide com uma semana decisiva de jogos.',choices:[
+    {label:'Cumprir a agenda completa',action:'sponsor_accept',effect:'+ reputação; + pressão'},
+    {label:'Reduzir compromissos',action:'sponsor_focus',effect:'+ preparação esportiva'}]},
+  {id:'fan_expectation',title:'Cobrança da torcida',description:'Uma sequência irregular aumenta a cobrança dos torcedores em treino aberto.',choices:[
+    {label:'Falar com os torcedores',action:'fans_talk',effect:'+ conexão e reputação'},
+    {label:'Blindar-se e treinar',action:'fans_train',effect:'+ foco e evolução'}]},
+  {id:'boot_issue',title:'Problema com chuteiras',description:'Seu novo material incomoda durante o aquecimento e a equipe de equipamento oferece uma troca.',choices:[
+    {label:'Voltar ao modelo antigo',action:'boots_safe',effect:'+ consistência'},
+    {label:'Manter o novo modelo',action:'boots_risk',effect:'chance de adaptação e bônus técnico'}]}
 ];
 
 const CAREER_EVENTS = [
@@ -2469,5 +2479,35 @@ const CAREER_EVENTS = [
     {label:'Priorizar estabilidade',action:'stability',effect:'+ moral no clube atual'}]},
   {id:'fatigue',title:'Sequência pesada de jogos',description:'Você sente o desgaste do calendário e precisa decidir como lidar com a próxima semana.',choices:[
     {label:'Jogar mesmo cansado',action:'play_tired',effect:'risco de queda de moral; + reputação'},
-    {label:'Pedir descanso',action:'rest',effect:'+ moral; sem bônus de reputação'}]}
+    {label:'Pedir descanso',action:'rest',effect:'+ moral; sem bônus de reputação'}]},
+  {id:'set_piece_role',title:'Nova função em bolas paradas',description:'O auxiliar oferece a você mais responsabilidade em faltas, pênaltis e escanteios.',choices:[
+    {label:'Assumir as cobranças',action:'setpiece_take',effect:'+ protagonismo e evolução técnica'},
+    {label:'Dividir as cobranças',action:'setpiece_share',effect:'+ ambiente e moral'}]},
+  {id:'mentor',title:'Um jovem pede sua ajuda',description:'Um atleta da base procura você depois do treino para pedir conselhos sobre a carreira.',choices:[
+    {label:'Virar mentor',action:'mentor_help',effect:'+ liderança e reputação'},
+    {label:'Manter foco pessoal',action:'mentor_focus',effect:'+ preparação individual'}]},
+  {id:'documentary',title:'Convite para documentário',description:'Uma produtora quer acompanhar sua rotina por algumas semanas.',choices:[
+    {label:'Aceitar as câmeras',action:'documentary_yes',effect:'+ reputação; + pressão'},
+    {label:'Recusar e preservar rotina',action:'documentary_no',effect:'+ estabilidade e moral'}]},
+  {id:'tactical_role',title:'Mudança tática',description:'O treinador quer testar você em uma função um pouco diferente durante a próxima sequência.',choices:[
+    {label:'Abraçar a nova função',action:'tactical_adapt',effect:'+ desenvolvimento e confiança'},
+    {label:'Pedir para manter sua função',action:'tactical_stay',effect:'+ estabilidade; menos evolução'}]},
+  {id:'captain_group',title:'Reunião de lideranças',description:'Você é chamado para uma conversa com os líderes do elenco antes de uma fase decisiva.',choices:[
+    {label:'Fazer um discurso forte',action:'captain_speech',effect:'+ liderança e reputação'},
+    {label:'Liderar pelo exemplo',action:'captain_example',effect:'+ moral e consistência'}]},
+  {id:'specialist',title:'Treino com especialista',description:'O clube traz um especialista para uma sessão individual de aperfeiçoamento.',choices:[
+    {label:'Focar na principal qualidade',action:'specialist_primary',effect:'+ desenvolvimento'},
+    {label:'Corrigir ponto fraco',action:'specialist_weak',effect:'+ potencial e equilíbrio'}]},
+  {id:'charity',title:'Ação com a comunidade',description:'O clube organiza uma ação social no dia de folga e convida você para participar.',choices:[
+    {label:'Participar da ação',action:'charity_join',effect:'+ reputação e moral'},
+    {label:'Usar o dia para descansar',action:'charity_rest',effect:'+ recuperação física'}]},
+  {id:'video_review',title:'Sessão de análise de vídeo',description:'A comissão separa lances seus para uma revisão individual antes do próximo jogo.',choices:[
+    {label:'Estudar os erros',action:'video_learn',effect:'+ evolução e consistência'},
+    {label:'Focar nos pontos fortes',action:'video_confidence',effect:'+ moral e confiança'}]},
+  {id:'contract_noise',title:'Rumores sobre renovação',description:'A imprensa noticia que o clube avalia seu futuro, mesmo sem proposta formal na mesa.',choices:[
+    {label:'Mostrar desejo de ficar',action:'contract_stay',effect:'+ moral e estabilidade'},
+    {label:'Ouvir o mercado',action:'contract_market',effect:'+ propostas e reputação'}]},
+  {id:'extra_recovery',title:'Nova tecnologia de recuperação',description:'O departamento de performance oferece uma sessão experimental de recuperação.',choices:[
+    {label:'Fazer o protocolo completo',action:'recovery_tech',effect:'+ condição e moral'},
+    {label:'Manter a rotina tradicional',action:'recovery_normal',effect:'+ estabilidade'}]}
 ];
