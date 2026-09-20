@@ -1,15 +1,15 @@
 const $ = selector => document.querySelector(selector);
 const $$ = selector => document.querySelectorAll(selector);
-const STORAGE_KEY = 'beTheLegendV91';
+const STORAGE_KEY = 'beTheLegendV92';
 const LEGACY_STORAGE_KEY = 'careerSimV7';
-const BADGE_KEY = 'beTheLegendBadgeCacheV91';
-const DRAFT_KEY = 'beTheLegendV91AttributeDraft';
-const PREVIOUS_DRAFT_KEY = 'beTheLegendV90AttributeDraft';
+const BADGE_KEY = 'beTheLegendBadgeCacheV92';
+const DRAFT_KEY = 'beTheLegendV92AttributeDraft';
+const PREVIOUS_DRAFT_KEY = 'beTheLegendV91AttributeDraft';
 
-let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('beTheLegendV90') || localStorage.getItem('beTheLegendV89') || localStorage.getItem('beTheLegendV88') || localStorage.getItem('beTheLegendV87') || localStorage.getItem('beTheLegendV86') || localStorage.getItem('beTheLegendV85') || localStorage.getItem('beTheLegendV84') || localStorage.getItem('beTheLegendV83') || localStorage.getItem('beTheLegendV82') || localStorage.getItem('beTheLegendV81') || localStorage.getItem('beTheLegendV80') || localStorage.getItem('beTheLegendV79') || localStorage.getItem('beTheLegendV781') || localStorage.getItem('beTheLegendV78') || localStorage.getItem('beTheLegendV77') || localStorage.getItem('beTheLegendV76') || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('beTheLegendV91') || localStorage.getItem('beTheLegendV90') || localStorage.getItem('beTheLegendV89') || localStorage.getItem('beTheLegendV88') || localStorage.getItem('beTheLegendV87') || localStorage.getItem('beTheLegendV86') || localStorage.getItem('beTheLegendV85') || localStorage.getItem('beTheLegendV84') || localStorage.getItem('beTheLegendV83') || localStorage.getItem('beTheLegendV82') || localStorage.getItem('beTheLegendV81') || localStorage.getItem('beTheLegendV80') || localStorage.getItem('beTheLegendV79') || localStorage.getItem('beTheLegendV781') || localStorage.getItem('beTheLegendV78') || localStorage.getItem('beTheLegendV77') || localStorage.getItem('beTheLegendV76') || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
   created:false, player:null, season:null, history:[], offers:[], news:[], pendingEvent:null, savedCareers:[]
 };
-let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('beTheLegendBadgeCacheV90') || localStorage.getItem('beTheLegendBadgeCacheV89') || localStorage.getItem('beTheLegendBadgeCacheV88') || localStorage.getItem('beTheLegendBadgeCacheV87') || localStorage.getItem('beTheLegendBadgeCacheV86') || localStorage.getItem('beTheLegendBadgeCacheV85') || localStorage.getItem('beTheLegendBadgeCacheV84') || localStorage.getItem('beTheLegendBadgeCacheV83') || localStorage.getItem('beTheLegendBadgeCacheV82') || localStorage.getItem('beTheLegendBadgeCacheV81') || localStorage.getItem('beTheLegendBadgeCacheV80') || localStorage.getItem('beTheLegendBadgeCacheV79') || localStorage.getItem('beTheLegendBadgeCacheV781') || localStorage.getItem('beTheLegendBadgeCacheV78') || localStorage.getItem('beTheLegendBadgeCacheV77') || localStorage.getItem('beTheLegendBadgeCacheV76') || localStorage.getItem('careerSimBadgeCacheV75') || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
+let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('beTheLegendBadgeCacheV91') || localStorage.getItem('beTheLegendBadgeCacheV90') || localStorage.getItem('beTheLegendBadgeCacheV89') || localStorage.getItem('beTheLegendBadgeCacheV88') || localStorage.getItem('beTheLegendBadgeCacheV87') || localStorage.getItem('beTheLegendBadgeCacheV86') || localStorage.getItem('beTheLegendBadgeCacheV85') || localStorage.getItem('beTheLegendBadgeCacheV84') || localStorage.getItem('beTheLegendBadgeCacheV83') || localStorage.getItem('beTheLegendBadgeCacheV82') || localStorage.getItem('beTheLegendBadgeCacheV81') || localStorage.getItem('beTheLegendBadgeCacheV80') || localStorage.getItem('beTheLegendBadgeCacheV79') || localStorage.getItem('beTheLegendBadgeCacheV781') || localStorage.getItem('beTheLegendBadgeCacheV78') || localStorage.getItem('beTheLegendBadgeCacheV77') || localStorage.getItem('beTheLegendBadgeCacheV76') || localStorage.getItem('careerSimBadgeCacheV75') || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
 let creationClubPool = [];
 let creationChoices = [];
 let creationClubRerollsRemaining = 3;
@@ -48,6 +48,46 @@ function money(v){ return '€ ' + (v >= 1e6 ? (v/1e6).toFixed(1)+' mi' : Math.r
 function toast(msg){ const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800); }
 function countryByCode(code){ return COUNTRIES.find(c=>c.code===code); }
 
+const SOUNDTRACK_KEY='beTheLegendSoundtrackV1';
+const FIFA_SOUNDTRACK=[
+  {id:'f14-love-me-again',fifa:14,title:'Love Me Again',artist:'John Newman'},
+  {id:'f14-dreaming',fifa:14,title:'Dreaming',artist:'Smallpools'},
+  {id:'f14-alive',fifa:14,title:'Alive',artist:'Empire of the Sun'},
+  {id:'f15-the-nights',fifa:15,title:'The Nights',artist:'Avicii'},
+  {id:'f15-walk',fifa:15,title:'Walk',artist:'Kwabs'},
+  {id:'f15-my-type',fifa:15,title:'My Type',artist:'Saint Motel'},
+  {id:'f16-mountain',fifa:16,title:'Mountain At My Gates',artist:'Foals'},
+  {id:'f16-trip-switch',fifa:16,title:'Trip Switch',artist:'Nothing But Thieves'},
+  {id:'f16-conqueror',fifa:16,title:'Conqueror',artist:'AURORA'},
+  {id:'f17-send-them-off',fifa:17,title:'Send Them Off!',artist:'Bastille'},
+  {id:'f17-shelter',fifa:17,title:'Shelter',artist:'Porter Robinson & Madeon'},
+  {id:'f17-are-we-ready',fifa:17,title:'Are We Ready? (Wreck)',artist:'Two Door Cinema Club'},
+  {id:'f18-best-friend',fifa:18,title:'Best Friend',artist:'Sofi Tukker feat. NERVO, The Knocks & Alisa UENO'},
+  {id:'f18-star-roving',fifa:18,title:'Star Roving',artist:'Slowdive'},
+  {id:'f18-system',fifa:18,title:'The System Only Dreams in Total Darkness',artist:'The National'},
+  {id:'f19-genius',fifa:19,title:'Genius',artist:'LSD (Labrinth, Sia & Diplo)'},
+  {id:'f19-feels-like-summer',fifa:19,title:'Feels Like Summer',artist:'Childish Gambino'},
+  {id:'f19-big-dreams',fifa:19,title:'Big Dreams',artist:'Bakar'},
+  {id:'f20-runner',fifa:20,title:'The Runner',artist:'Foals'},
+  {id:'f20-rushing-back',fifa:20,title:'Rushing Back',artist:'Flume feat. Vera Blue'},
+  {id:'f20-phone-numbers',fifa:20,title:'Phone Numbers',artist:'Dominic Fike'},
+  {id:'f21-heat-waves',fifa:21,title:'Heat Waves',artist:'Glass Animals'},
+  {id:'f21-ticket-to-ride',fifa:21,title:'Ticket To Ride',artist:'KAWALA'},
+  {id:'f21-is-it-true',fifa:21,title:'Is It True',artist:'Tame Impala'},
+  {id:'f22-landline',fifa:22,title:'Landline',artist:'binki'},
+  {id:'f22-feet',fifa:22,title:"Feet Don't Fail Me Now",artist:'Joy Crookes'},
+  {id:'f22-skeletons',fifa:22,title:'skeletons',artist:'easy life'},
+  {id:'f23-tonight',fifa:23,title:'Tonight',artist:'Phoenix feat. Ezra Koenig'},
+  {id:'f23-spitting',fifa:23,title:'Spitting Off the Edge of the World',artist:'Yeah Yeah Yeahs feat. Perfume Genius'},
+  {id:'f23-ojitos',fifa:23,title:'Ojitos Lindos',artist:'Bad Bunny & Bomba Estéreo'}
+];
+const defaultSoundtrackSettings=()=>({enabled:true,shuffle:true,volume:.38,selected:FIFA_SOUNDTRACK.map(t=>t.id),currentId:null,wasPlaying:false});
+let soundtrackSettings=(()=>{try{return {...defaultSoundtrackSettings(),...JSON.parse(localStorage.getItem(SOUNDTRACK_KEY)||'{}')}}catch(_){return defaultSoundtrackSettings()}})();
+let soundtrackAudio=null;
+let soundtrackPreviewCache=new Map();
+let soundtrackResolving=false;
+function saveSoundtrackSettings(){localStorage.setItem(SOUNDTRACK_KEY,JSON.stringify(soundtrackSettings));}
+function esc(value=''){return String(value).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));}
 const DEFAULT_APPEARANCE={hairEnabled:true,hairStyle:'fade',hairColor:'#17120f',beardEnabled:false,beardStyle:'stubble',skin:'skin-3'};
 const APPEARANCE_MENU=[
   {key:'appearance-hair-enabled',label:'Cabelo',type:'toggle',options:[{value:'yes',label:'Com cabelo'},{value:'no',label:'Careca'}]},
@@ -1257,31 +1297,66 @@ function maybeTriggerCareerEvent(){
   state.pendingEvent={...event};s.lastCareerEventAt=s.totalGames;state.resumeSeasonAfterEvent=true;save();openPendingEvent();return true;
 }
 function eventChoiceIcon(action=''){if(/train|learn|video|specialist|adapt/i.test(action))return '↗';if(/recover|rest|rehab|illness|travel/i.test(action))return '✚';if(/market|agent|contract|sponsor/i.test(action))return '€';if(/lead|ambitious|captain|derby|mentor|charity/i.test(action))return '★';if(/controversy|public|confront|fire|leak/i.test(action))return '!';if(/peace|humble|stability|stay|safe|share/i.test(action))return '●';return '◆';}
-function chooseFreshEventScene(candidates,e={}){
-  if(e.visualScene)return e.visualScene;
-  const p=state.player||{};const recent=Array.isArray(p.recentEventScenes)?p.recentEventScenes:[];
-  let pool=candidates.filter(x=>!recent.includes(x.scene));if(!pool.length)pool=candidates;
-  const chosen=pool[rnd(0,pool.length-1)]||candidates[0];
-  e.visualScene=chosen;if(state.player&&chosen)state.player.recentEventScenes=[...recent,chosen.scene].slice(-4);
-  return chosen;
-}
+const EVENT_SCENE_LIBRARY={
+  minor_injury:{scene:'minor-injury',theme:'medical',icon:'✚',label:'DM · MACA DE FISIOTERAPIA',props:['physio-table','monitor','ice-pack']},
+  controversy:{scene:'controversy',theme:'social',icon:'@',label:'REDES · REPERCUSSÃO',props:['phone','comments','camera-flash']},
+  locker_room:{scene:'locker-room',theme:'locker',icon:'◇',label:'VESTIÁRIO · PÓS-JOGO',props:['lockers','bench','jersey']},
+  nightlife:{scene:'nightlife',theme:'city',icon:'✦',label:'CIDADE · FORA DE CAMPO',props:['skyline','velvet-rope','camera-flash']},
+  agent_tension:{scene:'agent-tension',theme:'office',icon:'✎',label:'EMPRESÁRIO · ESCRITÓRIO',props:['desk','contract','phone']},
+  minor_illness:{scene:'minor-illness',theme:'clinic',icon:'＋',label:'DM · CONSULTÓRIO',props:['medical-bed','thermometer','monitor']},
+  transfer_leak:{scene:'transfer-leak',theme:'newsroom',icon:'▤',label:'IMPRENSA · VAZAMENTO',props:['newspaper','phone','camera']},
+  derby_heat:{scene:'derby-heat',theme:'stadium',icon:'⚡',label:'CLÁSSICO · ARQUIBANCADA',props:['stand','banner','flare']},
+  training_clash:{scene:'training-clash',theme:'pitch',icon:'!',label:'CT · TREINO INTENSO',props:['pitch-lines','two-players','whistle']},
+  travel_delay:{scene:'travel-delay',theme:'airport',icon:'✈',label:'AEROPORTO · ATRASO',props:['terminal','plane','suitcase']},
+  sponsor_pressure:{scene:'sponsor-pressure',theme:'studio',icon:'◆',label:'ESTÚDIO · CAMPANHA',props:['backdrop','softbox','boot']},
+  fan_expectation:{scene:'fan-expectation',theme:'fans',icon:'★',label:'CT · TREINO ABERTO',props:['fence','fans','megaphone']},
+  boot_issue:{scene:'boot-issue',theme:'bootroom',icon:'◇',label:'VESTIÁRIO · MATERIAL',props:['kit-bench','boot','kitbag']},
+  training:{scene:'training',theme:'pitch',icon:'↗',label:'CT · CAMPO DE TREINO',props:['goal','cones','ball']},
+  media:{scene:'media',theme:'press',icon:'●',label:'COLETIVA · IMPRENSA',props:['sponsor-wall','microphones','camera']},
+  coach:{scene:'coach',theme:'tactics',icon:'⌗',label:'COMISSÃO · SALA TÁTICA',props:['tactics-board','desk','whistle']},
+  agent:{scene:'agent',theme:'office',icon:'€',label:'EMPRESÁRIO · NEGOCIAÇÃO',props:['city-window','contract','suitcase']},
+  fatigue:{scene:'fatigue',theme:'recovery',icon:'≈',label:'CT · RECUPERAÇÃO',props:['massage-table','ice-tub','clock']},
+  set_piece_role:{scene:'set-piece-role',theme:'pitch',icon:'◎',label:'CT · BOLAS PARADAS',props:['goal','player-wall','ball']},
+  mentor:{scene:'mentor',theme:'academy',icon:'★',label:'BASE · PÓS-TREINO',props:['academy-bench','two-players','clipboard']},
+  documentary:{scene:'documentary',theme:'film',icon:'◫',label:'BASTIDORES · DOCUMENTÁRIO',props:['film-camera','boom-mic','clapboard']},
+  tactical_role:{scene:'tactical-role',theme:'tactics',icon:'⌗',label:'CT · QUADRO TÁTICO',props:['tactics-board','magnets','projector']},
+  captain_group:{scene:'captain-group',theme:'locker',icon:'★',label:'VESTIÁRIO · LIDERANÇAS',props:['lockers','round-table','captain-band']},
+  specialist:{scene:'specialist',theme:'lab',icon:'◎',label:'CT · LABORATÓRIO TÉCNICO',props:['target','sensor','ball']},
+  charity:{scene:'charity',theme:'community',icon:'♥',label:'COMUNIDADE · AÇÃO SOCIAL',props:['community-stage','heart-banner','fans']},
+  video_review:{scene:'video-review',theme:'analysis',icon:'◉',label:'CT · ANÁLISE DE VÍDEO',props:['big-screen','timeline','chair']},
+  contract_noise:{scene:'contract-noise',theme:'boardroom',icon:'✎',label:'CLUBE · RENOVAÇÃO',props:['board-table','contract','pen']},
+  extra_recovery:{scene:'extra-recovery',theme:'lab',icon:'✚',label:'PERFORMANCE · TECNOLOGIA',props:['cryo','monitor','pulse']},
+  tunnel_interview:{scene:'tunnel-interview',theme:'tunnel',icon:'●',label:'ESTÁDIO · TÚNEL',props:['tunnel','microphone','floodlights']},
+  night_training:{scene:'night-training',theme:'night-pitch',icon:'↗',label:'ESTÁDIO · TREINO NOTURNO',props:['floodlights','goal','cones']},
+  museum_invite:{scene:'museum-invite',theme:'museum',icon:'♜',label:'CLUBE · MUSEU',props:['trophy-case','statue','plaque']},
+  deadline_phone:{scene:'deadline-phone',theme:'deadline',icon:'☎',label:'JANELA · ÚLTIMAS HORAS',props:['clock','phone','papers']},
+  boot_lab:{scene:'boot-lab',theme:'lab',icon:'◇',label:'MATERIAL · LABORATÓRIO',props:['boot','scanner','design-board']},
+  captain_camera:{scene:'captain-camera',theme:'locker-media',icon:'◫',label:'VESTIÁRIO · CÂMERAS',props:['lockers','film-camera','captain-band']},
+  recovery_pool:{scene:'recovery-pool',theme:'pool',icon:'≈',label:'CT · PISCINA',props:['pool-water','lane-rope','towel']},
+  charity_match:{scene:'charity-match',theme:'charity-match',icon:'♥',label:'ESTÁDIO · JOGO BENEFICENTE',props:['goal','heart-banner','crowd']},
+  analyst_room:{scene:'analyst-room',theme:'analysis',icon:'◉',label:'CT · SALA DE ANALISTAS',props:['big-screen','heatmap','laptop']},
+  nt_camp_intensity:{scene:'nt-camp-intensity',theme:'national-pitch',icon:'★',label:'SELEÇÃO · CENTRO DE TREINO',props:['flag','goal','cones']},
+  nt_penalty_order:{scene:'nt-penalty-order',theme:'national-pitch',icon:'◎',label:'SELEÇÃO · PÊNALTIS',props:['goal','penalty-spots','clipboard']},
+  nt_press_room:{scene:'nt-press-room',theme:'national-press',icon:'●',label:'SELEÇÃO · COLETIVA',props:['flag-wall','microphones','camera']},
+  nt_tactical_role:{scene:'nt-tactical-role',theme:'national-tactics',icon:'⌗',label:'SELEÇÃO · SALA TÁTICA',props:['tactics-board','flag','projector']},
+  nt_leadership:{scene:'nt-leadership',theme:'national-locker',icon:'★',label:'SELEÇÃO · LIDERANÇAS',props:['lockers','captain-band','flag']},
+  nt_rivalry:{scene:'nt-rivalry',theme:'national-stadium',icon:'⚡',label:'SELEÇÃO · CLÁSSICO',props:['crowd','rival-banner','flare']},
+  wc_arrival:{scene:'wc-arrival',theme:'worldcup-arrival',icon:'✈',label:'COPA · CHEGADA',props:['team-bus','flags','hotel']},
+  wc_penalties:{scene:'wc-penalties',theme:'worldcup-pitch',icon:'◎',label:'COPA · TREINO DE PÊNALTIS',props:['goal','balls','flag']},
+  wc_family:{scene:'wc-family',theme:'worldcup-lounge',icon:'♥',label:'COPA · VISITA DA FAMÍLIA',props:['sofa','photo-frame','flag']},
+  wc_knockout:{scene:'wc-knockout',theme:'worldcup-analysis',icon:'◉',label:'COPA · VÉSPERA DE MATA-MATA',props:['bracket','big-screen','flag']},
+  wc_captain_room:{scene:'wc-captain-room',theme:'worldcup-tunnel',icon:'★',label:'COPA · TÚNEL',props:['tunnel','captain-band','flag']}
+};
 function eventSceneMeta(e={}){
-  const key=`${e.type||''} ${e.id||''} ${e.title||''}`.toLowerCase();let c;
-  if(/sponsor|patroc|document/.test(key))c=[{scene:'sponsor',icon:'◆',label:'FLASHES · CONTRATO'},{scene:'photoshoot',icon:'◫',label:'ESTÚDIO · CAMPANHA'},{scene:'bootroom',icon:'◇',label:'MATERIAL · LANÇAMENTO'},{scene:'boardroom',icon:'€',label:'REUNIÃO · NEGÓCIO'}];
-  else if(/sele|copa|national|wc_/.test(key))c=[{scene:'national',icon:'★',label:'SELEÇÃO · VESTIÁRIO'},{scene:'anthem',icon:'♫',label:'SELEÇÃO · HINO'},{scene:'tunnel',icon:'▥',label:'SELEÇÃO · TÚNEL'},{scene:'national-training',icon:'◎',label:'SELEÇÃO · TREINO'}];
-  else if(/injury|les|virose|recovery|recuper/.test(key))c=[{scene:'medical',icon:'✚',label:'DM · RECUPERAÇÃO'},{scene:'physio',icon:'＋',label:'FISIOTERAPIA'},{scene:'recovery-pool',icon:'≈',label:'RECUPERAÇÃO · PISCINA'}];
-  else if(/agent|transfer|contract|mercado|janela/.test(key))c=[{scene:'transfer',icon:'⇄',label:'MERCADO · BASTIDORES'},{scene:'agent-office',icon:'✎',label:'EMPRESÁRIO · ESCRITÓRIO'},{scene:'airport',icon:'✈',label:'AEROPORTO · NOVO DESTINO'}];
-  else if(/train|treino|specialist|tactical|video|anal/.test(key))c=[{scene:'training',icon:'↗',label:'CT · CAMPO'},{scene:'gym',icon:'▲',label:'CT · ACADEMIA'},{scene:'tactical-room',icon:'⌗',label:'CT · SALA TÁTICA'},{scene:'analysis-room',icon:'◉',label:'CT · VÍDEO'}];
-  else if(/media|entrevista|camera|documentary|microfone/.test(key))c=[{scene:'media',icon:'●',label:'MÍDIA · AO VIVO'},{scene:'press-room',icon:'◍',label:'COLETIVA · IMPRENSA'},{scene:'studio',icon:'◫',label:'TV · ESTÚDIO'}];
-  else if(/fan|torcida|derby|museu|charity/.test(key))c=[{scene:'crowd',icon:'★',label:'TORCIDA · CLUBE'},{scene:'fan-zone',icon:'✦',label:'FAN ZONE'},{scene:'trophy-room',icon:'♜',label:'CLUBE · SALA DE TROFÉUS'}];
-  else if(/locker|vesti|captain|lider/.test(key))c=[{scene:'locker',icon:'◇',label:'VESTIÁRIO'},{scene:'team-talk',icon:'◆',label:'PRELEÇÃO · EQUIPE'},{scene:'corridor',icon:'▤',label:'BASTIDORES · CORREDOR'}];
-  else if(/travel|viagem/.test(key))c=[{scene:'travel',icon:'✈',label:'DESLOCAMENTO'},{scene:'team-bus',icon:'▰',label:'ÔNIBUS · EQUIPE'},{scene:'hotel',icon:'▦',label:'HOTEL · CONCENTRAÇÃO'}];
-  else c=[{scene:'career',icon:'◆',label:'CARREIRA · DECISÃO'},{scene:'city-night',icon:'✦',label:'NOITE · CIDADE'},{scene:'club-corridor',icon:'▤',label:'CLUBE · BASTIDORES'},{scene:'academy',icon:'◎',label:'CT · BASE'}];
-  return chooseFreshEventScene(c,e);
+  if(e.type==='sponsor')return {scene:`sponsor-${normalizeKey(e.sponsorBrand||'brand')}`,theme:'sponsor-contract',icon:'◆',label:`${String(e.sponsorBrand||'PATROCINADOR').toUpperCase()} · CONTRATO`,props:['backdrop','contract','camera-flash']};
+  return EVENT_SCENE_LIBRARY[e.id]||{scene:`career-${normalizeKey(e.id||e.title||'event')}`,theme:'career',icon:'◆',label:'CARREIRA · DECISÃO',props:['city-window','desk','papers']};
+}
+function eventObjectMarkup(token,index){
+  return `<span class="scene-object obj-${token} obj-index-${index}" aria-hidden="true"><i></i><b></b><em></em></span>`;
 }
 function eventSceneMarkup(e){
-  const m=eventSceneMeta(e);
-  return `<div class="career-event-scene scene-${m.scene}" data-scene="${m.scene}"><div class="scene-sky"><i></i><i></i><i></i><i></i><i></i></div><div class="scene-prop prop-${m.scene}"><i></i><b></b><em></em></div><div class="scene-focus">${m.icon}</div><div class="scene-floor"><span></span><span></span><span></span></div><small>${m.label}</small></div>`;
+  const m=eventSceneMeta(e),sceneClass=String(m.scene).replace(/[^a-z0-9-]/gi,'-').toLowerCase();
+  return `<div class="career-event-scene scene-event-${sceneClass} scene-theme-${m.theme}" data-scene="${esc(m.scene)}"><div class="scene-ambient"><i></i><i></i><i></i><i></i></div><div class="scene-world">${(m.props||[]).map(eventObjectMarkup).join('')}</div><div class="scene-depth"><span></span><span></span><span></span></div><div class="scene-focus">${m.icon}</div><small>${esc(m.label)}</small></div>`;
 }
 function playCareerEventResolution(e,message){
   const scene=$('#event-modal .career-event-scene');if(!scene)return;scene.classList.add('resolved');const badge=document.createElement('div');badge.className='scene-result-badge';badge.innerHTML=`<b>✓</b><span>${message}</span>`;scene.appendChild(badge);
@@ -1513,17 +1588,53 @@ function renderHonours(){
 function getSavedCareers(){ state.savedCareers=Array.isArray(state.savedCareers)?state.savedCareers:[]; return state.savedCareers; }
 function saveCareerToHall(){
   const p=state.player;if(!p?.retired)return;
-  const totals=(state.history||[]).reduce((acc,row)=>{acc.games+=row.games||0;acc.goals+=row.goals||0;acc.assists+=row.assists||0;return acc;},{games:0,goals:0,assists:0});
+  const history=(state.history||[]).map(row=>({...row}));
+  const totals=history.reduce((acc,row)=>{acc.games+=row.games||0;acc.goals+=row.goals||0;acc.assists+=row.assists||0;return acc;},{games:0,goals:0,assists:0});
   const r=historicalRankBreakdown();
-  const entry={id:`${Date.now()}-${Math.random().toString(36).slice(2,7)}`,name:p.name,position:p.position,nationality:p.nationality,number:p.number||10,rank:r.rank,tier:r.tier,peak:r.peak,overall:p.overall,retiredAge:p.retiredAge||p.age,clubs:[...new Set([...(state.history||[]).map(h=>h.club).filter(Boolean),p.club].filter(Boolean))],titles:(p.trophies||[]).length,awards:(p.awards||[]).length,goals:totals.goals,assists:totals.assists,games:totals.games,appearance:normalizeAppearance(p.appearance||{}),savedAt:new Date().toISOString()};
+  const entry={
+    id:`${Date.now()}-${Math.random().toString(36).slice(2,7)}`,
+    name:p.name,position:p.position,nationality:p.nationality,nationalityCode:p.nationalityCode||'',number:p.number||10,
+    rank:r.rank,tier:r.tier,score:r.score,peak:r.peak,overall:p.overall,potential:p.potential||p.overall,retiredAge:p.retiredAge||p.age,
+    birthdate:p.birthdate||'',foot:p.foot||'',value:p.value||0,
+    clubs:[...new Set([...history.map(h=>h.club).filter(Boolean),p.club].filter(Boolean))],
+    titles:(p.trophies||[]).length,awards:(p.awards||[]).length,goals:totals.goals,assists:totals.assists,games:totals.games,
+    appearance:normalizeAppearance(p.appearance||{}),
+    history,
+    trophies:(p.trophies||[]).map(x=>({...x})),
+    awardList:(p.awards||[]).map(x=>({...x})),
+    national:{games:p.nationalTeamGames||0,goals:p.nationalTeamGoals||0,captain:!!p.nationalCaptain,trust:p.nationalTrust||0},
+    sponsor:p.sponsor?{...p.sponsor}:null,
+    clubIdols:Array.isArray(p.clubIdols)?[...p.clubIdols]:[],
+    savedAt:new Date().toISOString(),archiveVersion:2
+  };
   const list=getSavedCareers().filter(x=>!(x.name===entry.name&&x.retiredAge===entry.retiredAge&&x.games===entry.games));
   list.unshift(entry);state.savedCareers=list.slice(0,12);p.hallSaved=true;save();renderSavedCareers();const btn=$('#legacy-save');if(btn){btn.disabled=true;btn.textContent='Carreira salva ✓';}toast('Carreira salva no Hall da Fama.');
 }
 function renderSavedCareers(){
   const box=$('#saved-careers-list'),count=$('#home-save-count'),list=getSavedCareers();if(count)count.textContent=`${list.length} carreira(s) salva(s)`;if(!box)return;
   if(!list.length){box.innerHTML='<div class="hall-empty"><span>★</span><strong>Seu Hall da Fama está vazio</strong><small>Ao se aposentar, salve as carreiras que quiser manter.</small></div>';return;}
-  box.innerHTML=list.map((c,i)=>`<article class="saved-career-card" data-saved-career="${i}"><div class="saved-career-rank"><small>RANK HIST.</small><strong>#${c.rank||'—'}</strong></div><div class="saved-career-face">${appearanceMarkup(c.appearance||DEFAULT_APPEARANCE,true,c.number||10)}</div><div class="saved-career-info"><span class="saved-career-kicker">CARREIRA ARQUIVADA</span><h4>${c.name}</h4><p>${c.position||'Jogador'} · ${c.nationality||''}</p><div class="saved-career-clubs">${(c.clubs||[]).slice(0,4).map(x=>`<span>${x}</span>`).join('')}${(c.clubs||[]).length>4?`<span>+${c.clubs.length-4}</span>`:''}</div></div><div class="saved-career-numbers"><div><strong>${c.peak||c.overall||'—'}</strong><small>AUGE</small></div><div><strong>${c.titles||0}</strong><small>TÍTULOS</small></div><div><strong>${c.goals||0}</strong><small>GOLS</small></div><div><strong>${c.assists||0}</strong><small>ASSIST.</small></div></div></article>`).join('');
+  box.innerHTML=list.map((c,i)=>`<article class="saved-career-card" data-saved-career="${i}" role="button" tabindex="0" aria-label="Abrir carreira arquivada de ${esc(c.name||'jogador')}"><div class="saved-career-rank"><small>RANK HIST.</small><strong>#${esc(c.rank||'—')}</strong></div><div class="saved-career-face">${appearanceMarkup(c.appearance||DEFAULT_APPEARANCE,true,c.number||10)}</div><div class="saved-career-info"><span class="saved-career-kicker">CARREIRA ARQUIVADA</span><h4>${esc(c.name||'Jogador')}</h4><p>${esc(c.position||'Jogador')} · ${esc(c.nationality||'')}</p><div class="saved-career-clubs">${(c.clubs||[]).slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}${(c.clubs||[]).length>4?`<span>+${c.clubs.length-4}</span>`:''}</div></div><div class="saved-career-numbers"><div><strong>${esc(c.peak||c.overall||'—')}</strong><small>AUGE</small></div><div><strong>${esc(c.titles||0)}</strong><small>TÍTULOS</small></div><div><strong>${esc(c.goals||0)}</strong><small>GOLS</small></div><div><strong>${esc(c.assists||0)}</strong><small>ASSIST.</small></div></div><span class="saved-career-open-hint">Ver carreira ›</span></article>`).join('');
+  box.querySelectorAll('[data-saved-career]').forEach(card=>{
+    const open=()=>openSavedCareer(+card.dataset.savedCareer);
+    card.addEventListener('click',open);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+  });
 }
+function openSavedCareer(index){
+  const c=getSavedCareers()[index],modal=$('#saved-career-modal');if(!c||!modal)return;
+  $('#saved-career-name').textContent=c.name||'Carreira salva';
+  $('#saved-career-subtitle').textContent=`${c.position||'Jogador'} · ${c.nationality||'—'} · camisa ${c.number||10} · aposentado aos ${c.retiredAge||'—'} anos`;
+  const face=$('#saved-career-detail-face');face.innerHTML=appearanceMarkup(c.appearance||DEFAULT_APPEARANCE,true,c.number||10);
+  $('#saved-career-rank').textContent=`#${c.rank||'—'}`;$('#saved-career-peak').textContent=c.peak||c.overall||'—';$('#saved-career-overall').textContent=c.overall||'—';$('#saved-career-seasons').textContent=(c.history||[]).length||'—';
+  $('#saved-career-games').textContent=c.games||0;$('#saved-career-goals').textContent=c.goals||0;$('#saved-career-assists').textContent=c.assists||0;$('#saved-career-titles').textContent=c.titles||0;$('#saved-career-awards').textContent=c.awards||0;$('#saved-career-nt').textContent=c.national?.games||c.nationalTeamGames||0;
+  $('#saved-career-club-list').innerHTML=(c.clubs||[]).length?(c.clubs||[]).map(name=>`<span>${esc(name)}</span>`).join(''):'<small class="muted">Nenhum clube registrado.</small>';
+  const honours=[...(c.trophies||[]).map(x=>({...x,type:'Título'})),...(c.awardList||[]).map(x=>({...x,type:'Prêmio'}))].sort((a,b)=>(b.year||0)-(a.year||0)).slice(0,12);
+  $('#saved-career-honours').innerHTML=honours.length?honours.map(h=>`<div>${honourVisual(h.name)}<span><strong>${esc(h.name)}</strong><small>${esc(h.type)} · ${esc(h.year||'—')}</small></span></div>`).join(''):`<small class="muted">${c.archiveVersion?'Sem conquistas registradas.':'Este save foi arquivado em uma versão antiga, antes do histórico detalhado.'}</small>`;
+  const history=c.history||[];
+  $('#saved-career-history').innerHTML=history.length?history.map(row=>`<tr><td>${esc(row.year||'—')}</td><td>${esc(row.club||'—')}</td><td>${esc(row.overall||row.finalOverall||'—')}</td><td>${esc(row.games||0)}</td><td>${esc(row.goals||0)}</td><td>${esc(row.assists||0)}</td><td>${row.rating?Number(row.rating).toFixed(1):'—'}</td><td>${esc(row.league||row.leagueName||row.leaguePosition||'—')}</td></tr>`).join(''):`<tr><td colspan="8" class="saved-career-old-save">O progresso por temporada não estava armazenado quando esta carreira foi arquivada. As estatísticas-resumo acima continuam disponíveis.</td></tr>`;
+  let saved='';try{saved=c.savedAt?new Date(c.savedAt).toLocaleDateString('pt-BR'):''}catch(_){}$('#saved-career-saved-at').textContent=saved?`Salva em ${saved}`:'';
+  modal.classList.remove('hidden');observeSiteImages();
+}
+function closeSavedCareer(){ $('#saved-career-modal')?.classList.add('hidden'); }
 
 function legacyClubEligible(){
   const p=state.player,s=state.season;if(!p||p.retired||!s?.closed||p.age<35)return false;
@@ -1544,7 +1655,122 @@ function renderOffers(){
   if(!state.created)return;const box=$('#offers');box.innerHTML=state.offers.length?state.offers.map((o,i)=>`<article class="panel offer compact-offer" data-club-name="${o.club.replace(/"/g,'&quot;')}"><div class="offer-main"><span class="crest-shell"><img class="club-badge-img hidden" alt=""><span class="crest-fallback">⚽</span></span><div><small>${o.countryName} · ${o.league}</small><h3>${o.club}</h3><div class="offer-metrics"><span>€ ${money(o.value).replace('€ ','')}</span><span>FOR ${o.strength}</span></div></div></div><div class="offer-actions"><button class="primary" onclick="acceptOffer(${i})">Aceitar</button><button class="danger" onclick="rejectOffer(${i})">×</button></div></article>`).join(''):'<div class="empty-market"><span>◎</span><strong>Sem propostas</strong><small>Simule mais uma temporada para movimentar o mercado.</small></div>';hydrateRenderedBadges();
 }
 
+function soundtrackTrack(id){return FIFA_SOUNDTRACK.find(t=>t.id===id)||null;}
+function selectedSoundtrackTracks(){
+  const selected=new Set(Array.isArray(soundtrackSettings.selected)?soundtrackSettings.selected:[]);
+  return FIFA_SOUNDTRACK.filter(t=>selected.has(t.id));
+}
+function ensureSoundtrackAudio(){
+  if(soundtrackAudio)return soundtrackAudio;
+  soundtrackAudio=new Audio();soundtrackAudio.preload='none';soundtrackAudio.volume=clamp(Number(soundtrackSettings.volume)||.38,0,1);
+  soundtrackAudio.addEventListener('ended',()=>playNextSoundtrack(true));
+  soundtrackAudio.addEventListener('pause',()=>{soundtrackSettings.wasPlaying=false;saveSoundtrackSettings();syncSoundtrackPlayerUI();});
+  soundtrackAudio.addEventListener('play',()=>{soundtrackSettings.wasPlaying=true;saveSoundtrackSettings();syncSoundtrackPlayerUI();});
+  soundtrackAudio.addEventListener('error',()=>{if(!soundtrackResolving){toast('Não foi possível reproduzir esta prévia. Pulando para a próxima.');setTimeout(()=>playNextSoundtrack(true),220);}});
+  return soundtrackAudio;
+}
+function normalizeMusicQuery(v=''){return String(v).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();}
+async function resolveSoundtrackPreview(track){
+  if(!track)return null;if(soundtrackPreviewCache.has(track.id))return soundtrackPreviewCache.get(track.id);
+  const q=encodeURIComponent(`${track.title} ${track.artist}`);let url=null;
+  try{
+    const response=await fetch(`https://itunes.apple.com/search?term=${q}&entity=song&limit=12`);
+    if(!response.ok)throw new Error('catalog');const data=await response.json();
+    const tt=normalizeMusicQuery(track.title),ta=normalizeMusicQuery(track.artist.split(/feat\.|&|,/i)[0]);
+    const candidates=(data.results||[]).filter(x=>x.previewUrl);
+    const best=candidates.sort((a,b)=>{
+      const score=x=>{const n=normalizeMusicQuery(x.trackName),ar=normalizeMusicQuery(x.artistName);return (n===tt?8:n.includes(tt)||tt.includes(n)?5:0)+(ar.includes(ta)||ta.includes(ar)?4:0)};
+      return score(b)-score(a);
+    })[0];url=best?.previewUrl||null;
+  }catch(_){url=null;}
+  soundtrackPreviewCache.set(track.id,url);return url;
+}
+let soundtrackRequestToken=0;
+async function playSoundtrackTrack(id,quiet=false){
+  const track=soundtrackTrack(id),audio=ensureSoundtrackAudio();if(!track||!soundtrackSettings.enabled)return;
+  const selected=selectedSoundtrackTracks();if(!selected.some(t=>t.id===track.id)){if(!selected.length){audio.pause();soundtrackSettings.currentId=null;saveSoundtrackSettings();syncSoundtrackPlayerUI();}return;}
+  soundtrackSettings.currentId=track.id;saveSoundtrackSettings();syncSoundtrackPlayerUI();const token=++soundtrackRequestToken;soundtrackResolving=true;
+  const url=await resolveSoundtrackPreview(track);if(token!==soundtrackRequestToken)return;soundtrackResolving=false;
+  if(!url){if(!quiet)toast(`Prévia indisponível: ${track.title}`);playNextSoundtrack(true);return;}
+  if(audio.src!==url)audio.src=url;audio.volume=clamp(Number(soundtrackSettings.volume)||0,0,1);
+  try{await audio.play();}catch(_){soundtrackSettings.wasPlaying=false;saveSoundtrackSettings();syncSoundtrackPlayerUI();if(!quiet)toast('Clique em ▶ para iniciar a trilha sonora.');}
+}
+function pickNextSoundtrack(direction=1){
+  const tracks=selectedSoundtrackTracks();if(!tracks.length)return null;
+  const current=tracks.findIndex(t=>t.id===soundtrackSettings.currentId);
+  if(soundtrackSettings.shuffle&&tracks.length>1&&direction>0){const pool=tracks.filter(t=>t.id!==soundtrackSettings.currentId);return pool[rnd(0,pool.length-1)];}
+  const idx=current<0?(direction>0?0:tracks.length-1):(current+direction+tracks.length)%tracks.length;return tracks[idx];
+}
+function playNextSoundtrack(quiet=false){const t=pickNextSoundtrack(1);if(t)playSoundtrackTrack(t.id,quiet);else{ensureSoundtrackAudio().pause();soundtrackSettings.currentId=null;saveSoundtrackSettings();syncSoundtrackPlayerUI();}}
+function playPreviousSoundtrack(){const t=pickNextSoundtrack(-1);if(t)playSoundtrackTrack(t.id);}
+function toggleSoundtrackPlayback(){
+  const audio=ensureSoundtrackAudio();if(!soundtrackSettings.enabled){soundtrackSettings.enabled=true;saveSoundtrackSettings();}
+  if(!audio.paused){audio.pause();return;}const current=soundtrackTrack(soundtrackSettings.currentId);if(current&&selectedSoundtrackTracks().some(t=>t.id===current.id)&&audio.src){audio.play().catch(()=>playSoundtrackTrack(current.id));}else{const next=pickNextSoundtrack(1);if(next)playSoundtrackTrack(next.id);else toast('Selecione pelo menos uma música.');}
+}
+function renderSoundtrackList(){
+  const box=$('#soundtrack-list');if(!box)return;const selected=new Set(soundtrackSettings.selected||[]);
+  box.innerHTML=Array.from({length:10},(_,i)=>14+i).map(year=>`<section class="soundtrack-year"><header><b>FIFA ${year}</b><small>3 favoritas da comunidade</small></header><div>${FIFA_SOUNDTRACK.filter(t=>t.fifa===year).map(t=>`<label class="soundtrack-track ${selected.has(t.id)?'selected':''}"><input type="checkbox" data-soundtrack-track="${t.id}" ${selected.has(t.id)?'checked':''}><span><strong>${esc(t.title)}</strong><small>${esc(t.artist)}</small></span><em>FIFA ${t.fifa}</em></label>`).join('')}</div></section>`).join('');
+  box.querySelectorAll('[data-soundtrack-track]').forEach(input=>input.addEventListener('change',()=>{
+    const set=new Set(soundtrackSettings.selected||[]);input.checked?set.add(input.dataset.soundtrackTrack):set.delete(input.dataset.soundtrackTrack);soundtrackSettings.selected=[...set];saveSoundtrackSettings();renderSoundtrackList();syncSoundtrackPlayerUI();
+    if(!set.has(soundtrackSettings.currentId)&&soundtrackAudio&&!soundtrackAudio.paused)playNextSoundtrack(true);
+  }));
+}
+function syncSoundtrackPlayerUI(){
+  const track=soundtrackTrack(soundtrackSettings.currentId),audio=soundtrackAudio;const playing=!!audio&&!audio.paused&&!audio.ended;
+  const play=$('#soundtrack-play');if(play){play.textContent=playing?'❚❚':'▶';play.setAttribute('aria-label',playing?'Pausar':'Reproduzir');}
+  if($('#soundtrack-enabled'))$('#soundtrack-enabled').checked=!!soundtrackSettings.enabled;if($('#soundtrack-shuffle'))$('#soundtrack-shuffle').checked=!!soundtrackSettings.shuffle;if($('#soundtrack-volume'))$('#soundtrack-volume').value=Math.round((soundtrackSettings.volume??.38)*100);
+  if($('#soundtrack-current-title'))$('#soundtrack-current-title').textContent=track?track.title:'Nenhuma faixa';if($('#soundtrack-current-meta'))$('#soundtrack-current-meta').textContent=track?`${track.artist} · FIFA ${track.fifa}`:(selectedSoundtrackTracks().length?'Pressione ▶ para começar':'Selecione ao menos uma música');
+  const widget=$('#now-playing');if(widget){widget.classList.toggle('hidden',!soundtrackSettings.enabled||!track);$('#now-playing-title').textContent=track?track.title:'—';$('#now-playing-meta').textContent=track?`${track.artist} · FIFA ${track.fifa}${playing?'':' · pausado'}`:'—';$('#now-playing-toggle').textContent=playing?'❚❚':'♫';}
+}
+function openSoundtrack(){renderSoundtrackList();syncSoundtrackPlayerUI();$('#soundtrack-modal')?.classList.remove('hidden');}
+function closeSoundtrack(){saveSoundtrackSettings();$('#soundtrack-modal')?.classList.add('hidden');syncSoundtrackPlayerUI();}
+function initSoundtrack(){
+  soundtrackSettings.selected=(soundtrackSettings.selected||[]).filter(id=>FIFA_SOUNDTRACK.some(t=>t.id===id));if(!soundtrackSettings.selected.length&&soundtrackSettings.enabled===undefined)soundtrackSettings.selected=FIFA_SOUNDTRACK.map(t=>t.id);
+  ensureSoundtrackAudio();saveSoundtrackSettings();renderSoundtrackList();syncSoundtrackPlayerUI();
+  if(soundtrackSettings.currentId&&soundtrackSettings.wasPlaying){const resume=()=>{document.removeEventListener('pointerdown',resume);document.removeEventListener('keydown',resume);playSoundtrackTrack(soundtrackSettings.currentId,true);};document.addEventListener('pointerdown',resume,{once:true});document.addEventListener('keydown',resume,{once:true});}
+}
 $$('[data-view]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();showView(el.dataset.view);}));
+
+// Hall da Fama e trilha sonora do menu principal.
+$('#home-hall-btn')?.addEventListener('click',()=>{
+  const hall=$('#home-hall-section');
+  if(hall)hall.scrollIntoView({behavior:'smooth',block:'start'});
+});
+$('#saved-career-close')?.addEventListener('click',closeSavedCareer);
+$('#saved-career-close-x')?.addEventListener('click',closeSavedCareer);
+$('#saved-career-modal')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeSavedCareer();});
+
+$('#soundtrack-btn')?.addEventListener('click',openSoundtrack);
+$('#soundtrack-close')?.addEventListener('click',closeSoundtrack);
+$('#soundtrack-close-x')?.addEventListener('click',closeSoundtrack);
+$('#soundtrack-modal')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeSoundtrack();});
+$('#soundtrack-play')?.addEventListener('click',toggleSoundtrackPlayback);
+$('#soundtrack-prev')?.addEventListener('click',playPreviousSoundtrack);
+$('#soundtrack-next')?.addEventListener('click',()=>playNextSoundtrack());
+$('#now-playing-toggle')?.addEventListener('click',toggleSoundtrackPlayback);
+$('#now-playing-next')?.addEventListener('click',()=>playNextSoundtrack());
+$('#soundtrack-enabled')?.addEventListener('change',e=>{
+  soundtrackSettings.enabled=!!e.target.checked;
+  if(!soundtrackSettings.enabled&&soundtrackAudio)soundtrackAudio.pause();
+  saveSoundtrackSettings();syncSoundtrackPlayerUI();
+});
+$('#soundtrack-shuffle')?.addEventListener('change',e=>{soundtrackSettings.shuffle=!!e.target.checked;saveSoundtrackSettings();});
+$('#soundtrack-volume')?.addEventListener('input',e=>{
+  soundtrackSettings.volume=clamp(Number(e.target.value)/100,0,1);
+  if(soundtrackAudio)soundtrackAudio.volume=soundtrackSettings.volume;
+  saveSoundtrackSettings();syncSoundtrackPlayerUI();
+});
+$('#soundtrack-select-all')?.addEventListener('click',()=>{
+  soundtrackSettings.selected=FIFA_SOUNDTRACK.map(t=>t.id);saveSoundtrackSettings();renderSoundtrackList();syncSoundtrackPlayerUI();
+});
+$('#soundtrack-clear')?.addEventListener('click',()=>{
+  soundtrackSettings.selected=[];if(soundtrackAudio)soundtrackAudio.pause();soundtrackSettings.currentId=null;saveSoundtrackSettings();renderSoundtrackList();syncSoundtrackPlayerUI();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  if(!$('#saved-career-modal')?.classList.contains('hidden'))closeSavedCareer();
+  else if(!$('#soundtrack-modal')?.classList.contains('hidden'))closeSoundtrack();
+});
 $('#start-btn').addEventListener('click',()=>showView(state.created?'career':attributeDraft?'attribute-draft':'create'));
 $('#nationality').addEventListener('change',loadClubChoices);
 $('#reroll-clubs').addEventListener('click',()=>{if(creationClubRerollsRemaining<=0)return;creationClubRerollsRemaining--;$('#selected-club').value='';$('#create-submit').disabled=true;drawThreeClubs();updateClubRerollButton();});
@@ -2293,4 +2519,4 @@ function normalizePersistentState(){
   });
 }
 
-preloadTrophyImages();populateCreationFields();setupBirthdateLimits();renderAppearanceStudio();updateAppearancePreview();normalizePersistentState();sanitizeAwardsEligibility();save();render();if(state.created&&state.player&&!state.player.retired&&$('#home')?.classList.contains('active'))showView('career');observeSiteImages();if(state.pendingEvent)openPendingEvent();if(state.pendingPenaltyShootout)setTimeout(openPenaltyShootoutDecision,120);if(state.player?.retired&&!state.player.legacyCardSeen)setTimeout(showCareerLegacyCard,100);
+preloadTrophyImages();populateCreationFields();setupBirthdateLimits();renderAppearanceStudio();updateAppearancePreview();normalizePersistentState();sanitizeAwardsEligibility();save();initSoundtrack();render();if(state.created&&state.player&&!state.player.retired&&$('#home')?.classList.contains('active'))showView('career');observeSiteImages();if(state.pendingEvent)openPendingEvent();if(state.pendingPenaltyShootout)setTimeout(openPenaltyShootoutDecision,120);if(state.player?.retired&&!state.player.legacyCardSeen)setTimeout(showCareerLegacyCard,100);

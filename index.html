@@ -11,10 +11,10 @@
   <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.1">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.1">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=9.1">
-  <link rel="stylesheet" href="css/style.css?v=9.1">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.2">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=9.2">
+  <link rel="stylesheet" href="css/style.css?v=9.2">
 </head>
 <body>
   <header class="topbar">
@@ -71,6 +71,11 @@
               <span class="football-menu-number">04</span>
               <span class="football-menu-copy"><b>Hall da Fama</b><small>Rever carreiras que você decidiu preservar</small></span>
               <span class="football-menu-arrow">★</span>
+            </button>
+            <button class="football-menu-option" id="soundtrack-btn" type="button">
+              <span class="football-menu-number">05</span>
+              <span class="football-menu-copy"><b>Som / Trilha sonora</b><small>Escolher músicas, volume e reprodução durante a gameplay</small></span>
+              <span class="football-menu-arrow">♫</span>
             </button>
           </nav>
 
@@ -536,8 +541,98 @@
     </div>
   </div>
 
+
+  <div id="saved-career-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="saved-career-name">
+    <div class="modal-card saved-career-detail-card">
+      <div class="saved-career-detail-head">
+        <div>
+          <p class="eyebrow">HALL DA FAMA · CARREIRA ARQUIVADA</p>
+          <h2 id="saved-career-name">Carreira salva</h2>
+          <p id="saved-career-subtitle"></p>
+        </div>
+        <button id="saved-career-close-x" class="icon-close" type="button" aria-label="Fechar">×</button>
+      </div>
+      <div class="saved-career-detail-hero">
+        <div id="saved-career-detail-face" class="saved-career-detail-face"></div>
+        <div class="saved-career-detail-summary">
+          <div><small>RANK HIST.</small><strong id="saved-career-rank">#—</strong></div>
+          <div><small>AUGE</small><strong id="saved-career-peak">—</strong></div>
+          <div><small>GER FINAL</small><strong id="saved-career-overall">—</strong></div>
+          <div><small>TEMPORADAS</small><strong id="saved-career-seasons">—</strong></div>
+        </div>
+      </div>
+      <div class="saved-career-detail-stats">
+        <div><strong id="saved-career-games">0</strong><small>Jogos</small></div>
+        <div><strong id="saved-career-goals">0</strong><small>Gols</small></div>
+        <div><strong id="saved-career-assists">0</strong><small>Assist.</small></div>
+        <div><strong id="saved-career-titles">0</strong><small>Títulos</small></div>
+        <div><strong id="saved-career-awards">0</strong><small>Prêmios</small></div>
+        <div><strong id="saved-career-nt">0</strong><small>Seleção</small></div>
+      </div>
+      <div class="saved-career-detail-grid">
+        <section>
+          <h3>Clubes da carreira</h3>
+          <div id="saved-career-club-list" class="saved-career-detail-clubs"></div>
+        </section>
+        <section>
+          <h3>Principais conquistas</h3>
+          <div id="saved-career-honours" class="saved-career-detail-honours"></div>
+        </section>
+      </div>
+      <section class="saved-career-history-wrap">
+        <div class="section-title"><h3>Progresso por temporada</h3><span id="saved-career-saved-at"></span></div>
+        <div class="table-wrap">
+          <table class="saved-career-history-table">
+            <thead><tr><th>Temp.</th><th>Clube</th><th>GER</th><th>J</th><th>G</th><th>A</th><th>Nota</th><th>Liga</th></tr></thead>
+            <tbody id="saved-career-history"></tbody>
+          </table>
+        </div>
+      </section>
+      <button id="saved-career-close" class="primary full" type="button">Fechar carreira arquivada</button>
+    </div>
+  </div>
+
+  <div id="soundtrack-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="soundtrack-title">
+    <div class="modal-card soundtrack-card">
+      <div class="soundtrack-head">
+        <div>
+          <p class="eyebrow">BE THE LEGEND · AUDIO</p>
+          <h2 id="soundtrack-title">Trilha sonora</h2>
+          <p>30 faixas favoritas da comunidade, com 3 músicas de cada FIFA entre 14 e 23.</p>
+        </div>
+        <button id="soundtrack-close-x" class="icon-close" type="button" aria-label="Fechar">×</button>
+      </div>
+      <div class="soundtrack-player">
+        <button id="soundtrack-prev" type="button" aria-label="Faixa anterior">◀</button>
+        <button id="soundtrack-play" class="soundtrack-play" type="button" aria-label="Reproduzir">▶</button>
+        <button id="soundtrack-next" type="button" aria-label="Próxima faixa">▶▶</button>
+        <div class="soundtrack-current">
+          <small>TOCANDO AGORA</small>
+          <strong id="soundtrack-current-title">Nenhuma faixa</strong>
+          <span id="soundtrack-current-meta">Selecione músicas abaixo</span>
+        </div>
+        <label class="soundtrack-volume">Volume <input id="soundtrack-volume" type="range" min="0" max="100" value="38"></label>
+      </div>
+      <div class="soundtrack-options">
+        <label><input id="soundtrack-enabled" type="checkbox" checked> Trilha sonora ativa</label>
+        <label><input id="soundtrack-shuffle" type="checkbox" checked> Embaralhar</label>
+        <button id="soundtrack-select-all" class="secondary" type="button">Selecionar todas</button>
+        <button id="soundtrack-clear" class="secondary" type="button">Limpar seleção</button>
+      </div>
+      <div id="soundtrack-list" class="soundtrack-list"></div>
+      <p class="soundtrack-license-note">A reprodução usa prévias oficiais disponibilizadas pelo catálogo do iTunes quando disponíveis. Para tocar faixas completas, use arquivos de áudio que você tenha direito de utilizar em <code>assets/audio/</code>.</p>
+      <button id="soundtrack-close" class="primary full" type="button">Salvar e voltar</button>
+    </div>
+  </div>
+
+  <div id="now-playing" class="now-playing hidden" aria-live="polite">
+    <button id="now-playing-toggle" type="button" aria-label="Pausar ou reproduzir">♫</button>
+    <div><small>TRILHA SONORA</small><strong id="now-playing-title">—</strong><span id="now-playing-meta">—</span></div>
+    <button id="now-playing-next" type="button" aria-label="Próxima faixa">›</button>
+  </div>
+
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=9.1"></script>
-  <script src="js/app.js?v=9.1"></script>
+  <script src="js/data.js?v=9.2"></script>
+  <script src="js/app.js?v=9.2"></script>
 </body>
 </html>

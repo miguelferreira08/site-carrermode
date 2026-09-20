@@ -1,0 +1,13 @@
+BE THE LEGEND V9.2 — TESTES ESTÁTICOS
+
+- Trilha sonora: 30 faixas; por FIFA = {14: 3, 15: 3, 16: 3, 17: 3, 18: 3, 19: 3, 20: 3, 21: 3, 22: 3, 23: 3}
+- INCIDENT_EVENTS: 13 eventos
+- CAREER_EVENTS: 24 eventos
+- NATIONAL_TEAM_EVENTS: 11 eventos
+- Cenários: 48/48 eventos estáticos com mapeamento exclusivo + evento dinâmico de patrocinador.
+- Objetos cenográficos: 91 tipos com CSS.
+- CSS: sem erros de parsing pelo tinycss2.
+- HTML: controles novos do Hall e da trilha sonora presentes.
+- Assets principais: caminhos locais válidos.
+
+Observação: o ambiente de execução desta sessão bloqueou navegação local do Chromium por política administrativa; por isso o teste visual automatizado em navegador não pôde ser concluído aqui. O JavaScript foi validado separadamente com node --check.
