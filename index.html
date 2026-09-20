@@ -11,10 +11,10 @@
   <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=8.6">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=8.6">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=8.6">
-  <link rel="stylesheet" href="css/style.css?v=8.6">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=8.7">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=8.7">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=8.7">
+  <link rel="stylesheet" href="css/style.css?v=8.7">
 </head>
 <body>
   <header class="topbar">
@@ -114,6 +114,64 @@
       </div>
 
       <form id="player-form" class="panel form-grid">
+        <section class="appearance-builder full" aria-labelledby="appearance-title">
+          <div class="appearance-preview-wrap">
+            <p class="eyebrow">APARÊNCIA</p>
+            <h3 id="appearance-title">Monte o rosto do seu jogador</h3>
+            <div id="appearance-preview" class="appearance-preview" aria-label="Prévia do rosto"></div>
+            <small>Essa aparência acompanha o jogador durante a carreira.</small>
+          </div>
+          <div class="appearance-controls">
+            <label>Cabelo
+              <select id="appearance-hair-enabled">
+                <option value="yes">Com cabelo</option>
+                <option value="no">Sem cabelo</option>
+              </select>
+            </label>
+            <label>Estilo do cabelo
+              <select id="appearance-hair-style">
+                <option value="fade">Degradê</option>
+                <option value="short">Curto</option>
+                <option value="curly">Cacheado</option>
+                <option value="afro">Afro</option>
+                <option value="mohawk">Moicano</option>
+                <option value="long">Longo</option>
+              </select>
+            </label>
+            <label>Cor do cabelo
+              <select id="appearance-hair-color">
+                <option value="#17120f">Preto</option>
+                <option value="#4b2e1f">Castanho</option>
+                <option value="#d5b56a">Loiro</option>
+                <option value="#8f3f23">Ruivo</option>
+                <option value="#8d9298">Grisalho</option>
+              </select>
+            </label>
+            <label>Barba
+              <select id="appearance-beard-enabled">
+                <option value="no">Sem barba</option>
+                <option value="yes">Com barba</option>
+              </select>
+            </label>
+            <label>Estilo de barba
+              <select id="appearance-beard-style">
+                <option value="stubble">Por fazer</option>
+                <option value="goatee">Cavanhaque</option>
+                <option value="full">Cheia</option>
+                <option value="mustache">Bigode</option>
+              </select>
+            </label>
+            <label>Tom de pele
+              <select id="appearance-skin">
+                <option value="skin-2">Claro</option>
+                <option value="skin-3" selected>Médio</option>
+                <option value="skin-4">Moreno</option>
+                <option value="skin-5">Escuro</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
         <label>Nome
           <input id="name" required maxlength="24" placeholder="João Silva" autocomplete="off">
         </label>
@@ -206,6 +264,7 @@
               <span><b id="p-age"></b><small> anos</small></span>
               <span><b id="p-country"></b></span>
               <span class="birth-chip"><small>🎂</small><b id="p-birthdate"></b></span>
+              <span id="p-sponsor-chip" class="sponsor-profile-chip hidden"><small>Patrocínio</small><b id="p-sponsor"></b></span>
             </div>
           </div>
           <div class="rating-stack">
@@ -471,7 +530,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=8.6"></script>
-  <script src="js/app.js?v=8.6"></script>
+  <script src="js/data.js?v=8.7"></script>
+  <script src="js/app.js?v=8.7"></script>
 </body>
 </html>

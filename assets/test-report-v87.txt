@@ -1,0 +1,27 @@
+Be The Legend v8.7 — relatório de validação
+
+VALIDAÇÕES AUTOMÁTICAS
+- js/app.js: node --check OK
+- js/data.js: node --check OK
+- CSS: 0 erros de parsing com tinycss2
+- HTML: parseado com sucesso, 0 IDs duplicados
+- Referências locais de assets: 62 verificadas, 0 ausentes
+- Menu de aparência: 7 IDs obrigatórios presentes
+- Eventos de seleção: 11 eventos / 22 escolhas; todos os actions possuem handlers no app.js
+- Patrocínios: 7 marcas e 3 decisões de oferta com handlers presentes
+- Chuteira de Ouro transparente: PNG RGBA local, ~64% dos pixels totalmente transparentes
+- Brasileirão transparente: SVG local sem retângulo de fundo full-canvas
+
+MUDANÇAS V8.7
+- Menu visual de rosto antes da criação: cabelo, estilo, cor, barba, estilo de barba e tom de pele
+- Aparência salva na carreira e exibida no card do jogador
+- Mais interações de seleção; em anos de Copa há mais jogos, mais decisões e até 3 conversas especiais
+- 11 eventos de seleção, incluindo concentração, pênaltis, coletiva, liderança e eventos exclusivos da Copa
+- Eventos aleatórios de patrocínio: Nike, adidas, PUMA, New Balance, Under Armour, Mizuno e Umbro
+- Patrocínio salvo no perfil do jogador
+- Novas animações de partida: bola em movimento, luzes de estádio, feedback de sucesso/erro
+- Novas animações de temporada: cards vivos, progresso animado, competição em destaque e efeito especial em ano de Copa
+- Ajustes de transparência para Brasileirão e Chuteira de Ouro
+
+OBSERVAÇÃO DE TESTE VISUAL
+- O Chromium headless do ambiente não concluiu a captura por erro interno de DBus/zygote. A validação final foi feita por sintaxe, parsing, integridade DOM/IDs, assets e auditoria estática.
