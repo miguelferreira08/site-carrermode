@@ -1,0 +1,60 @@
+Be The Legend v8.2 — validação de troféus locais
+
+OK      AFC Champions League Elite -> assets/trophies/afc-champions-elite.svg
+OK      AFC Champions League Two -> assets/trophies/afc-champions-two.svg
+OK      Belgian Pro League -> assets/trophies/belgian-pro-league.svg
+OK      Bola de Ouro -> assets/trophies/ballon-dor.svg
+OK      Brasileirão Série A -> assets/trophies/brasileirao.svg
+OK      Bundesliga -> assets/trophies/bundesliga.svg
+OK      CAF Champions League -> assets/trophies/caf-champions-league.svg
+OK      CONCACAF Champions Cup -> assets/trophies/concacaf-champions-cup.svg
+OK      CONMEBOL Libertadores -> assets/trophies/libertadores.svg
+OK      CONMEBOL Sul-Americana -> assets/trophies/sudamericana.svg
+OK      Categoría Primera A -> assets/trophies/liga-betplay.svg
+OK      Chuteira de Ouro -> assets/trophies/golden-shoe.svg
+OK      Copa AUF Uruguay -> assets/trophies/copa-auf-uruguay.svg
+OK      Copa Argentina -> assets/trophies/copa-argentina.svg
+OK      Copa Chile -> assets/trophies/copa-chile.svg
+OK      Copa Colombia -> assets/trophies/copa-colombia.svg
+OK      Copa Nacional -> assets/trophies/national-cup.svg
+OK      Copa da Bélgica -> assets/trophies/belgian-cup.svg
+OK      Copa da Turquia -> assets/trophies/turkish-cup.svg
+OK      Copa do Brasil -> assets/trophies/copa-do-brasil.svg
+OK      Copa do Imperador -> assets/trophies/emperors-cup.svg
+OK      Copa do Mundo -> assets/trophies/fifa-world-cup.svg
+OK      Copa do Rei -> assets/trophies/copa-del-rey.svg
+OK      Coppa Italia -> assets/trophies/coppa-italia.svg
+OK      Coupe de France -> assets/trophies/coupe-de-france.svg
+OK      DFB-Pokal -> assets/trophies/dfb-pokal.svg
+OK      Eliminatórias da Copa do Mundo -> assets/trophies/world-cup-qualifiers.svg
+OK      Eredivisie -> assets/trophies/eredivisie.svg
+OK      FA Cup -> assets/trophies/fa-cup.svg
+OK      FIFA Club World Cup -> assets/trophies/club-world-cup.svg
+OK      FIFA World Cup -> assets/trophies/fifa-world-cup.svg
+OK      J1 League -> assets/trophies/j1-league.svg
+OK      KNVB Beker -> assets/trophies/knvb-beker.svg
+OK      King Cup -> assets/trophies/king-cup.svg
+OK      LaLiga -> assets/trophies/laliga.svg
+OK      Liga MX -> assets/trophies/liga-mx.svg
+OK      Liga Profesional Argentina -> assets/trophies/liga-profesional-argentina.svg
+OK      Ligue 1 -> assets/trophies/ligue-1.svg
+OK      Major League Soccer -> assets/trophies/mls.svg
+OK      Melhor Jogador Jovem -> assets/trophies/golden-boy.svg
+OK      OFC Champions League -> assets/trophies/ofc-champions-league.svg
+OK      Premier League -> assets/trophies/premier-league.svg
+OK      Premier League / Premiership -> assets/trophies/scottish-premiership.svg
+OK      Primeira Liga -> assets/trophies/primeira-liga.svg
+OK      Primera División Uruguaia -> assets/trophies/campeonato-uruguayo.svg
+OK      Primera División do Chile -> assets/trophies/campeonato-chileno.svg
+OK      Saudi Pro League -> assets/trophies/saudi-pro-league.svg
+OK      Serie A -> assets/trophies/serie-a.svg
+OK      Süper Lig -> assets/trophies/super-lig.svg
+OK      Taça de Portugal -> assets/trophies/taca-de-portugal.svg
+OK      Time da Temporada -> assets/trophies/tots.svg
+OK      U.S. Open Cup -> assets/trophies/us-open-cup.svg
+OK      UEFA Champions League -> assets/trophies/champions-league.svg
+OK      UEFA Conference League -> assets/trophies/conference-league.svg
+OK      UEFA Europa League -> assets/trophies/europa-league.svg
+
+Total de nomes validados: 55
+Sem mapeamento: 0

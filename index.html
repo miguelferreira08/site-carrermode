@@ -8,10 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=8.1">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=8.1">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=8.1">
-  <link rel="stylesheet" href="css/style.css?v=8.1">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=8.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=8.2">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=8.2">
+  <link rel="stylesheet" href="css/style.css?v=8.2">
 </head>
 <body>
   <header class="topbar">
@@ -178,7 +178,11 @@
         <article class="panel draft-build">
           <div class="section-title"><h3>Seu DNA até agora</h3><span id="draft-overall-preview">GER inicial 68</span></div>
           <div id="draft-slots" class="draft-slots"></div>
-          <p class="draft-note">Escolha um atributo por jogador sorteado. Você tem apenas 1 pulo durante toda a seleção. Ao fechar os 7 atributos, a carreira começa automaticamente com GER 68 e o potencial calculado pela média das escolhas.</p>
+          <div class="draft-visual-rules" aria-label="Regras do sorteio">
+            <span><b>7</b><small>atributos</small></span>
+            <span><b>1×</b><small>pulo</small></span>
+            <span><b>68</b><small>GER inicial</small></span>
+          </div>
         </article>
       </div>
     </section>
@@ -194,8 +198,12 @@
           <div>
             <p class="muted">JOGADOR</p>
             <h2 id="p-name">Jogador</h2>
-            <p><span id="p-pos"></span> · <span id="p-age"></span> anos · <span id="p-country"></span></p>
-            <small class="muted">Nascimento: <span id="p-birthdate"></span></small>
+            <div class="profile-meta-chips">
+              <span><b id="p-pos"></b></span>
+              <span><b id="p-age"></b><small> anos</small></span>
+              <span><b id="p-country"></b></span>
+              <span class="birth-chip"><small>🎂</small><b id="p-birthdate"></b></span>
+            </div>
           </div>
           <div class="rating-stack">
             <div class="overall"><strong id="p-overall">68</strong><small>GER</small></div>
@@ -213,10 +221,11 @@
           <p class="muted">PRÓXIMA PARTIDA</p>
           <span id="match-competition" class="competition-tag"></span>
           <h3 id="match-title">Clube A x Clube B</h3>
-          <p class="muted" id="match-context">Temporada</p>
+          <div class="match-context-chip" id="match-context">Temporada</div>
           <div class="versus"><span id="home-team"></span><b>×</b><span id="away-team"></span></div>
-          <div class="favoritism-box">
-            <div id="favorite-line">Favoritismo calculado pela força e mando de campo.</div>
+          <div class="match-visual-meter">
+            <div class="match-meter-head"><span id="favorite-line">⚡ Favoritismo</span><strong id="favorite-percent">50%</strong></div>
+            <div class="match-meter-track"><span id="favorite-meter-fill"></span></div>
             <small id="strength-line"></small>
           </div>
           <button class="primary full" id="simulate-btn">Simular temporada →</button>
@@ -225,7 +234,7 @@
         <article class="panel player-attributes-card">
           <div class="section-title"><h3>Atributos do jogador</h3><span>DNA DE LENDAS</span></div>
           <div id="player-attributes" class="player-attributes"></div>
-          <small class="muted">O valor grande é o atributo atual; abaixo aparece o DNA de auge escolhido no sorteio.</small>
+          <div class="legend-key"><span>● atual</span><span>◇ DNA de auge</span><span>★ atributo-chave</span></div>
         </article>
 
         <article class="panel season-card">
@@ -254,6 +263,7 @@
             <div class="flag-circle" id="national-flag">🌍</div>
             <div><strong id="national-country"></strong><small id="national-message"></small></div>
           </div>
+          <div class="national-trust-meter"><span id="national-trust-fill"></span><b id="national-trust-label">0%</b></div>
           <div class="mini-stat-row">
             <div><strong id="nt-games">0</strong><small>Jogos</small></div>
             <div><strong id="nt-goals">0</strong><small>Gols</small></div>
@@ -307,11 +317,11 @@
     </section>
 
     <section id="market" class="view page">
-      <div class="page-head"><p class="eyebrow">MERCADO</p><h2>Propostas de transferência</h2><p>O nível dos clubes interessados acompanha seu overall e sua temporada.</p></div>
+      <div class="page-head market-head"><p class="eyebrow">MERCADO</p><h2>Propostas de transferência</h2><div class="market-factors"><span>⚡ GER</span><span>🔥 forma</span><span>🌍 reputação</span></div></div>
       <div id="market-tier" class="panel market-tier"></div>
       <article id="legacy-club-panel" class="panel legacy-club-panel hidden">
         <div class="section-title"><h3>Último capítulo da carreira</h3><span>STATUS DE LENDA</span></div>
-        <p>Você já se consolidou. No fim da carreira, pode escolher diretamente onde quer jogar.</p>
+        <div class="legend-status-strip"><span>★ consolidado</span><span>✍ escolha livre</span><span>🏁 reta final</span></div>
         <div class="legacy-club-controls">
           <select id="legacy-club-choice" aria-label="Escolher clube"></select>
           <button id="legacy-club-sign" class="primary" type="button">Assinar com este clube</button>
@@ -432,7 +442,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=8.1"></script>
-  <script src="js/app.js?v=8.1"></script>
+  <script src="js/data.js?v=8.2"></script>
+  <script src="js/app.js?v=8.2"></script>
 </body>
 </html>

@@ -1,11 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <defs>
-    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b141a"/><stop offset="1" stop-color="#17242d"/></linearGradient>
-    <linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#f39c12" stop-opacity=".95"/><stop offset="1" stop-color="#ffffff" stop-opacity=".95"/></linearGradient>
-  </defs>
-  <rect width="256" height="256" rx="34" fill="url(#bg)"/>
-  <circle cx="128" cy="70" r="34" fill="none" stroke="#f39c12" stroke-opacity=".35" stroke-width="10"/>
-  <path d="M92 42h72v18c0 27-14 50-36 66-22-16-36-39-36-66V42zm-18 14h18v17c0 10-8 19-18 19-10 0-18-9-18-19 0-10 8-17 18-17zm108 0h18c10 0 18 7 18 17 0 10-8 19-18 19-10 0-18-9-18-19V56zM113 128h30v24h26v18H87v-18h26v-24z" fill="url(#gl)"/>
-  <text x="128" y="202" text-anchor="middle" fill="#edf3f6" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">Copa do Rei</text>
-  <text x="128" y="224" text-anchor="middle" fill="#f39c12" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">CDR</text>
+<defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#071016"/><stop offset="1" stop-color="#13232c"/></linearGradient><linearGradient id="m" x1="0" x2="1"><stop offset="0" stop-color="#f0b429"/><stop offset="1" stop-color="#8d1f2d"/></linearGradient></defs>
+<rect x="5" y="5" width="246" height="246" rx="30" fill="url(#bg)" stroke="#f0b429" stroke-opacity=".38" stroke-width="4"/>
+<path d="M93 74h70v20c0 29-14 54-35 69-21-15-35-40-35-69z" fill="url(#m)"/><path d="M86 82c-22 0-29 21-15 37 8 9 15 12 24 13M170 82c22 0 29 21 15 37-8 9-15 12-24 13" fill="none" stroke="#f0b429" stroke-width="8"/><path d="M109 166h38v17h26v18H83v-18h26z" fill="url(#m)"/><path d="M104 54l11 13 13-20 13 20 11-13 8 21H96z" fill="#8d1f2d"/>
+<rect x="42" y="216" width="172" height="24" rx="12" fill="#071016" stroke="#f0b429" stroke-opacity=".45"/>
+<text x="128" y="232" text-anchor="middle" fill="#edf5f7" font-size="11" font-family="Arial,Helvetica,sans-serif" font-weight="700">COPA DEL REY</text>
 </svg>

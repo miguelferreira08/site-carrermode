@@ -1,11 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <defs>
-    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b141a"/><stop offset="1" stop-color="#17242d"/></linearGradient>
-    <linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#9b59b6" stop-opacity=".95"/><stop offset="1" stop-color="#ffffff" stop-opacity=".95"/></linearGradient>
-  </defs>
-  <rect width="256" height="256" rx="34" fill="url(#bg)"/>
-  <circle cx="128" cy="70" r="34" fill="none" stroke="#9b59b6" stroke-opacity=".35" stroke-width="10"/>
-  <path d="M92 42h72v18c0 27-14 50-36 66-22-16-36-39-36-66V42zm-18 14h18v17c0 10-8 19-18 19-10 0-18-9-18-19 0-10 8-17 18-17zm108 0h18c10 0 18 7 18 17 0 10-8 19-18 19-10 0-18-9-18-19V56zM113 128h30v24h26v18H87v-18h26v-24z" fill="url(#gl)"/>
-  <text x="128" y="202" text-anchor="middle" fill="#edf3f6" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">Melhor Jogador Jovem</text>
-  <text x="128" y="224" text-anchor="middle" fill="#9b59b6" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">MJJ</text>
+<defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#071016"/><stop offset="1" stop-color="#13232c"/></linearGradient><linearGradient id="m" x1="0" x2="1"><stop offset="0" stop-color="#9b59b6"/><stop offset="1" stop-color="#f5d76e"/></linearGradient></defs>
+<rect x="5" y="5" width="246" height="246" rx="30" fill="url(#bg)" stroke="#9b59b6" stroke-opacity=".38" stroke-width="4"/>
+<path d="M128 35l23 47 52 8-38 37 9 53-46-25-46 25 9-53-38-37 52-8z" fill="url(#m)"/><circle cx="128" cy="111" r="28" fill="#0b141a" fill-opacity=".55" stroke="#f5d76e" stroke-width="4"/>
+<rect x="42" y="216" width="172" height="24" rx="12" fill="#071016" stroke="#9b59b6" stroke-opacity=".45"/>
+<text x="128" y="232" text-anchor="middle" fill="#edf5f7" font-size="11" font-family="Arial,Helvetica,sans-serif" font-weight="700">GOLDEN BOY</text>
 </svg>
