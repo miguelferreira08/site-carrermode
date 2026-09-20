@@ -11,10 +11,10 @@
   <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.0">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=9.0">
-  <link rel="stylesheet" href="css/style.css?v=9.0">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.1">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=9.1">
+  <link rel="stylesheet" href="css/style.css?v=9.1">
 </head>
 <body>
   <header class="topbar">
@@ -32,84 +32,83 @@
   </header>
 
   <main>
-    <section id="home" class="view active hero">
-      <div class="hero-glow"></div>
-      <div class="pitch-lines" aria-hidden="true">
-        <span class="pitch-center"></span>
-        <span class="pitch-circle"></span>
-        <span class="pitch-box pitch-box-left"></span>
-        <span class="pitch-box pitch-box-right"></span>
+    <section id="home" class="view active hero game-home">
+      <div class="game-home-bg" aria-hidden="true">
+        <span class="stadium-beam beam-a"></span>
+        <span class="stadium-beam beam-b"></span>
+        <span class="stadium-stand stand-a"></span>
+        <span class="stadium-stand stand-b"></span>
       </div>
 
-      <div class="hero-shell">
-        <div class="hero-content">
-          <div class="hero-kicker"><span></span> SUA CARREIRA. SUAS DECISÕES. SEU LEGADO.</div>
-          <h1>Da primeira chuteira ao <span>estádio lotado.</span></h1>
-          <p class="lead">Monte seu jogador com atributos herdados de 200 craques, escolha seu primeiro clube e construa uma carreira temporada por temporada — com evolução, mercado, seleção, títulos e decisões dentro de campo.</p>
-
-          <div class="hero-football-icons">
-            <span>🏆 UCL</span><span>⚽ Bola de Ouro</span><span>🇧🇷 Seleção</span><span>🧤 Luva de Ouro</span><span>📋 Mercado</span>
+      <div class="game-home-shell">
+        <header class="game-brand-lockup">
+          <img src="assets/favicon.svg" alt="" class="game-brand-mark">
+          <div>
+            <span class="game-brand-kicker">CAREER MODE</span>
+            <h1>Be The <strong>Legend</strong></h1>
+            <p>Sua história. Seu futebol.</p>
           </div>
+        </header>
 
-          <div class="game-menu-actions" aria-label="Menu principal do jogo">
-            <button class="game-menu-entry active" id="start-btn" type="button"><span class="game-menu-icon">▶</span><span><b>Jogar carreira</b><small>Continuar ou criar um novo jogador</small></span><em>ENTER</em></button>
-            <button class="game-menu-entry" data-view="stats" type="button"><span class="game-menu-icon">▥</span><span><b>Estatísticas</b><small>Histórico, títulos e desempenho</small></span><em>→</em></button>
-            <button class="game-menu-entry" data-view="market" type="button"><span class="game-menu-icon">⇄</span><span><b>Mercado</b><small>Propostas e próximos destinos</small></span><em>→</em></button>
-          </div>
-          <div class="hero-save-note"><span>●</span> Salvamento local ativo · Hall da Fama preservado</div>
+        <div class="game-home-main">
+          <nav class="football-menu-list" aria-label="Menu principal do jogo">
+            <button class="football-menu-option primary-option" id="start-btn" type="button">
+              <span class="football-menu-number">01</span>
+              <span class="football-menu-copy"><b>Nova carreira</b><small>Criar jogador e começar sua trajetória</small></span>
+              <span class="football-menu-arrow">▶</span>
+            </button>
+            <button class="football-menu-option" data-view="stats" type="button">
+              <span class="football-menu-number">02</span>
+              <span class="football-menu-copy"><b>Estatísticas</b><small>Histórico, recordes, títulos e desempenho</small></span>
+              <span class="football-menu-arrow">›</span>
+            </button>
+            <button class="football-menu-option" data-view="market" type="button">
+              <span class="football-menu-number">03</span>
+              <span class="football-menu-copy"><b>Mercado</b><small>Propostas, destinos e status da carreira</small></span>
+              <span class="football-menu-arrow">›</span>
+            </button>
+            <button class="football-menu-option" id="home-hall-btn" type="button">
+              <span class="football-menu-number">04</span>
+              <span class="football-menu-copy"><b>Hall da Fama</b><small>Rever carreiras que você decidiu preservar</small></span>
+              <span class="football-menu-arrow">★</span>
+            </button>
+          </nav>
 
-          <div class="hero-stats">
-            <div><strong>200</strong><small>150 históricos + 50 atuais</small></div>
-            <div><strong>7</strong><small>atributos para montar</small></div>
-            <div><strong>99</strong><small>GER máximo</small></div>
-          </div>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-          <div class="stadium-lights stadium-lights-left"></div>
-          <div class="stadium-lights stadium-lights-right"></div>
-
-          <div class="locker-board">
-            <div class="board-top">
-              <span>BE THE LEGEND</span>
-              <small>PLANO DE CARREIRA</small>
+          <aside class="home-career-slot" id="home-career-slot">
+            <div class="home-career-slot-head">
+              <span>CARREIRA ATUAL</span>
+              <b id="home-career-status">NOVA</b>
             </div>
-
-            <div class="shirt-display">
-              <div class="shirt">
-                <span class="shirt-name">SEU NOME</span>
-                <strong>10</strong>
+            <div class="home-career-player">
+              <div id="home-career-face" class="home-career-face"><span>10</span></div>
+              <div>
+                <small id="home-career-club">SEM CLUBE</small>
+                <h2 id="home-current-player">Crie sua lenda</h2>
+                <p id="home-career-meta">Escolha país, posição e primeiro clube.</p>
               </div>
-              <div class="shirt-shadow"></div>
             </div>
-
-            <div class="career-route">
-              <div class="route-step active"><i>01</i><span><b>Primeiro contrato</b><small>17–22 anos</small></span></div>
-              <div class="route-line"></div>
-              <div class="route-step"><i>02</i><span><b>Virar protagonista</b><small>evoluir o GER</small></span></div>
-              <div class="route-line"></div>
-              <div class="route-step"><i>03</i><span><b>Conquistar o mundo</b><small>seleção e títulos</small></span></div>
+            <div class="home-career-stats">
+              <span><b id="home-career-overall">68</b><small>GER</small></span>
+              <span><b id="home-career-season">—</b><small>TEMP.</small></span>
+              <span><b id="home-career-titles">0</b><small>TÍTULOS</small></span>
             </div>
-
-            <div class="scout-strip">
-              <span>SCOUT</span>
-              <b>RIT</b><strong>?</strong>
-              <b>FIN</b><strong>?</strong>
-              <b>DRI</b><strong>?</strong>
-              <b>PAS</b><strong>?</strong>
-            </div>
-          </div>
-
-          <div class="floating-chip chip-one"><span>⚽</span><div><small>Sorteio de lendas</small><strong>1 atributo por craque</strong></div></div>
-          <div class="floating-chip chip-two"><span>🏆</span><div><small>Carreira</small><strong>do contrato ao legado</strong></div></div>
+            <div class="home-career-progress"><span id="home-career-progress-fill"></span></div>
+            <small id="home-career-progress-label">Pronto para o primeiro contrato</small>
+          </aside>
         </div>
-      </div>
 
-      <div class="hero-ticker"><span>BRASILEIRÃO</span><i></i><span>CHAMPIONS</span><i></i><span>SELEÇÃO</span><i></i><span>MERCADO</span><i></i><span>BOLA DE OURO</span></div>
-      <section class="home-hall panel">
-        <div class="section-title"><h3>Hall da fama</h3><span id="home-save-count">0 carreira(s) salva(s)</span></div>
-        <div id="saved-careers-list" class="saved-careers-list"></div>
-      </section>
+        <div class="game-home-footer-strip" aria-hidden="true">
+          <span>⚽ CARREIRA</span><i></i><span>🏆 TÍTULOS</span><i></i><span>🌍 SELEÇÃO</span><i></i><span>⇄ MERCADO</span><i></i><span>★ LEGADO</span>
+        </div>
+
+        <section class="home-hall game-hall" id="home-hall-section">
+          <div class="section-title">
+            <div><span class="game-brand-kicker">LEGACY VAULT</span><h3>Hall da Fama</h3></div>
+            <span id="home-save-count">0 carreira(s) salva(s)</span>
+          </div>
+          <div id="saved-careers-list" class="saved-careers-list"></div>
+        </section>
+      </div>
     </section>
 
     <section id="create" class="view page create-page">
@@ -538,7 +537,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=9.0"></script>
-  <script src="js/app.js?v=9.0"></script>
+  <script src="js/data.js?v=9.1"></script>
+  <script src="js/app.js?v=9.1"></script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+Be The Legend V9.1 — relatório de validação
+
+PASS | node --check js/app.js
+PASS | node --check js/data.js
+PASS | HTML IDs únicos | 206 IDs; duplicados=[]
+PASS | IDs usados pelo JS existem no HTML | 190 refs; ausentes=[]
+PASS | CSS parse | 1372 rules; erros=0
+PASS | Menu inicial desaparece durante carreira | CSS hide=True; redirect=True; reload redirect=True
+PASS | Novo menu estilo jogo | logo + menu central + slot de carreira + Hall da Fama
+PASS | Somente um CSS no pacote | style.css
+PASS | Cenários interativos de partida ampliados | 46 cenários únicos
+PASS | Cenários visuais de partida variados | 20 temas; sem CSS=[]
+PASS | Eventos de carreira/seleção variados | {'INCIDENT_EVENTS': 13, 'CAREER_EVENTS': 24, 'NATIONAL_TEAM_EVENTS': 11}; total=48
+PASS | Cenários visuais de eventos variados | 34 temas; sem CSS=[]
+PASS | Todas as decisões de eventos têm handler | 78 ações; faltando=[]
+PASS | Assets locais do HTML existem | ausentes=[]
+
+INFO | Chromium visual E2E | o Chromium headless deste ambiente não concluiu a renderização por falhas internas de DBus/zygote; por isso a validação visual completa não foi considerada como PASS.
