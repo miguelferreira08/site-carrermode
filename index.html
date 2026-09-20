@@ -7,7 +7,7 @@
   <title>CareerSim — Sua história. Seu futebol.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -28,18 +28,58 @@
   <main>
     <section id="home" class="view active hero">
       <div class="hero-glow"></div>
-      <div class="hero-content">
-        <p class="eyebrow">SIMULADOR DE CARREIRA</p>
-        <h1>Sua história.<br><span>Seu futebol.</span></h1>
-        <p class="lead">Comece jovem, dispute calendários completos, evolua seu potencial, mude de clube, defenda sua seleção e tente chegar ao topo do futebol mundial.</p>
-        <button class="primary big" id="start-btn">Começar agora →</button>
-        <div class="hero-stats">
-          <div><strong>200+</strong><small>nacionalidades</small></div>
-          <div><strong>38</strong><small>rodadas no Brasileirão</small></div>
-          <div><strong>46</strong><small>idade máxima</small></div>
+      <div class="hero-grid"></div>
+
+      <div class="hero-shell">
+        <div class="hero-content">
+          <div class="hero-kicker"><span></span> SIMULADOR DE CARREIRA NO FUTEBOL</div>
+          <h1>Do primeiro contrato ao <span>topo do mundo.</span></h1>
+          <p class="lead">Crie seu jogador, dispute temporadas completas, evolua seu overall, receba propostas e construa uma carreira que pode terminar entre as maiores do futebol.</p>
+
+          <div class="hero-actions">
+            <button class="primary big" id="start-btn">Iniciar minha carreira <b>→</b></button>
+            <div class="hero-save-note"><span>●</span> Progresso salvo no navegador</div>
+          </div>
+
+          <div class="hero-stats">
+            <div><strong>200+</strong><small>nacionalidades</small></div>
+            <div><strong>38</strong><small>rodadas no Brasileirão</small></div>
+            <div><strong>46</strong><small>idade máxima</small></div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="visual-orbit orbit-one"></div>
+          <div class="visual-orbit orbit-two"></div>
+
+          <div class="career-card">
+            <div class="career-card-top">
+              <span>CAREER<span>SIM</span></span>
+              <small>PLAYER CARD</small>
+            </div>
+
+            <div class="jersey">
+              <i></i>
+              <span>10</span>
+            </div>
+
+            <div class="career-card-copy">
+              <small>SEU PRÓXIMO CAPÍTULO</small>
+              <strong>COMEÇA AGORA</strong>
+            </div>
+
+            <div class="card-ratings">
+              <div><strong>67</strong><small>GER INICIAL</small></div>
+              <div><strong>95</strong><small>POTENCIAL</small></div>
+            </div>
+          </div>
+
+          <div class="floating-chip chip-one"><span>⚽</span><div><small>Calendário</small><strong>temporadas completas</strong></div></div>
+          <div class="floating-chip chip-two"><span>🏆</span><div><small>Objetivo</small><strong>construir seu legado</strong></div></div>
         </div>
       </div>
-      <div class="player-silhouette"><span>10</span></div>
+
+      <div class="hero-ticker"><span>CLUBES</span><i></i><span>SELEÇÃO</span><i></i><span>MERCADO</span><i></i><span>TÍTULOS</span><i></i><span>DECISÕES</span></div>
     </section>
 
     <section id="create" class="view page create-page">
