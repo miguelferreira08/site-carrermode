@@ -2436,6 +2436,24 @@ const CURRENT_DRAFT_PLAYERS = CURRENT_DRAFT_RAW.map(([name,rating,position,pace,
 
 const LEGEND_POOL = [...HISTORICAL_DRAFT_PLAYERS,...CURRENT_DRAFT_PLAYERS];
 
+const INCIDENT_EVENTS = [
+  {id:'minor_injury',title:'Desconforto muscular',description:'Você sente a coxa pesar após uma sequência intensa. A comissão médica oferece dois caminhos.',choices:[
+    {label:'Fazer recuperação completa',action:'injury_rehab',effect:'perde alguns jogos, mas reduz o risco de piorar'},
+    {label:'Tentar voltar antes',action:'injury_rush',effect:'volta mais rápido, porém com risco físico'}]},
+  {id:'controversy',title:'Polêmica nas redes',description:'Uma fala sua é recortada e ganha repercussão. A imprensa transforma o assunto em manchete.',choices:[
+    {label:'Publicar um esclarecimento',action:'controversy_apologize',effect:'+ estabilidade; pequena queda de reputação'},
+    {label:'Sustentar sua posição',action:'controversy_defend',effect:'+ personalidade; mais pressão'}]},
+  {id:'locker_room',title:'Atrito no vestiário',description:'Um companheiro reclama da sua postura após uma partida difícil.',choices:[
+    {label:'Resolver internamente',action:'locker_peace',effect:'+ moral e ambiente'},
+    {label:'Responder em público',action:'locker_public',effect:'+ reputação; risco de desgaste'}]},
+  {id:'nightlife',title:'Rumor fora de campo',description:'Uma foto sua circula na véspera de um treino importante e vira assunto no clube.',choices:[
+    {label:'Assumir o erro e focar no treino',action:'rumor_focus',effect:'+ recuperação de confiança'},
+    {label:'Ignorar a repercussão',action:'rumor_ignore',effect:'pode afetar moral e pressão'}]},
+  {id:'agent_tension',title:'Tensão com o empresário',description:'Seu agente quer forçar uma transferência, mas você não está convencido.',choices:[
+    {label:'Manter portas abertas',action:'agent_open',effect:'+ mercado; - estabilidade'},
+    {label:'Priorizar o clube atual',action:'agent_stay',effect:'+ moral; menos pressão de mercado'}]}
+];
+
 const CAREER_EVENTS = [
   {id:'training',title:'Semana livre para treinar',description:'O treinador oferece uma sessão extra. Você pode forçar o desenvolvimento ou preservar o físico.',choices:[
     {label:'Treinar forte',action:'train_hard',effect:'+ chance de evolução; - moral se der errado'},

@@ -430,3 +430,43 @@ body{transition:background .35s ease,color .25s ease}
   .chance-board .visual-stage::before,.chance-board .visual-stage::after{display:none}
   .chance-board .visual-choice{position:static;width:auto;transform:none!important;min-height:unset}
 }
+
+/* ===== V7.7: identidade de troféus, seleção e fim de carreira ===== */
+.competition-item{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:10px}
+.competition-item .honour-art{width:38px;height:38px}
+.honour-row{display:grid!important;grid-template-columns:52px 1fr auto!important;align-items:center!important;gap:12px!important;padding:10px 12px!important}
+.honour-row>span:nth-child(2){display:grid;gap:2px;min-width:0}
+.honour-row>span:nth-child(2) b{font-size:12px;color:var(--text);white-space:normal}
+.honour-row>span:nth-child(2) small{font-size:9px;color:var(--muted)}
+.honour-row>strong{font-size:13px;color:var(--green)}
+.honour-art{width:48px;height:48px;border-radius:12px;border:1px solid var(--border);background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.08),rgba(0,0,0,.18));display:grid;place-items:center;overflow:hidden;position:relative;flex:0 0 auto}
+.honour-art img{width:100%;height:100%;object-fit:contain;padding:3px;filter:drop-shadow(0 4px 7px rgba(0,0,0,.28))}
+.honour-art b{display:none;place-items:center;width:100%;height:100%;font-size:10px;letter-spacing:.04em;color:var(--green);text-align:center;padding:4px}
+.honour-art.fallback b{display:grid}
+.celebration-icon img{width:90px;height:90px;object-fit:contain;border-radius:14px;filter:drop-shadow(0 14px 20px rgba(0,0,0,.28))}
+.national-role-line{display:flex;justify-content:space-between;align-items:center;margin:12px 0 10px;padding:10px 12px;border-radius:9px;border:1px solid var(--border);background:color-mix(in srgb,var(--panel) 75%,#000);font-size:11px}
+.national-role-line span{color:var(--muted)}
+.national-role-line strong{color:var(--green)}
+.national-card #national-action{margin-top:4px}
+.national-modal-card{max-width:620px}
+.legacy-club-panel{margin:16px 0 18px;border-color:color-mix(in srgb,var(--green) 34%,var(--border));background:linear-gradient(145deg,color-mix(in srgb,var(--green) 6%,var(--panel2)),var(--panel))}
+.legacy-club-panel>p{color:var(--muted);line-height:1.55;margin:8px 0 16px}
+.legacy-club-controls{display:grid;grid-template-columns:1fr auto;gap:10px}
+.legacy-club-controls select{min-width:0;background:#09131a;color:#fff;border:1px solid var(--border);padding:12px 13px;border-radius:9px;outline:none}
+.legacy-club-controls select:focus{border-color:var(--green)}
+.market-tier small{display:block;margin-top:9px;color:var(--muted)}
+.career-legacy-card{width:min(860px,100%);max-height:92vh;overflow:auto;background:radial-gradient(circle at 75% 10%,color-mix(in srgb,var(--green) 12%,transparent),transparent 32%),linear-gradient(150deg,var(--panel2),var(--panel));border-color:color-mix(in srgb,var(--green) 42%,var(--border))}
+.legacy-card-head{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start}.legacy-card-head h2{font-family:"Space Grotesk",Inter,sans-serif;font-size:36px;margin:6px 0}.legacy-card-head p{margin:0;color:var(--muted)}
+.legacy-rank-badge{min-width:120px;border:1px solid color-mix(in srgb,var(--green) 35%,var(--border));border-radius:16px;padding:13px;text-align:center;background:color-mix(in srgb,var(--green) 6%,var(--panel))}.legacy-rank-badge small{display:block;font-size:8px;letter-spacing:.1em;color:var(--muted)}.legacy-rank-badge strong{display:block;font-family:"Space Grotesk",Inter,sans-serif;font-size:34px;color:var(--green);margin-top:4px}
+.legacy-card-hero{display:grid;grid-template-columns:190px 1fr;gap:22px;align-items:center;margin:24px 0}.legacy-shirt{height:190px;clip-path:polygon(20% 7%,38% 0,50% 9%,62% 0,80% 7%,100% 25%,84% 45%,76% 38%,77% 100%,23% 100%,24% 38%,16% 45%,0 25%);background:linear-gradient(145deg,var(--green),color-mix(in srgb,var(--green) 58%,var(--club-secondary)));display:grid;place-items:center;align-content:center;color:var(--button-text);filter:drop-shadow(0 18px 22px rgba(0,0,0,.26))}.legacy-shirt span{font-size:10px;font-weight:900;letter-spacing:.12em}.legacy-shirt strong{font-family:"Space Grotesk",Inter,sans-serif;font-size:68px;line-height:.9}
+.legacy-card-mainstats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.legacy-card-mainstats>div,.legacy-card-stats>div{border:1px solid var(--border);border-radius:12px;padding:14px;background:color-mix(in srgb,var(--panel) 74%,#000)}.legacy-card-mainstats small,.legacy-card-stats small{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.08em}.legacy-card-mainstats strong{display:block;font-size:28px;margin-top:4px}.legacy-card-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.legacy-card-stats strong{display:block;font-size:25px;color:var(--green);margin-bottom:3px}.legacy-honours-preview{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px}.legacy-honours-preview>div{display:grid;grid-template-columns:46px 1fr;gap:9px;align-items:center;border:1px solid var(--border);border-radius:11px;padding:9px;background:color-mix(in srgb,var(--panel) 75%,#000)}.legacy-honours-preview .honour-art{width:42px;height:42px}.legacy-honours-preview span{display:grid;gap:2px;min-width:0}.legacy-honours-preview strong{font-size:10px;line-height:1.25}.legacy-honours-preview small{font-size:9px;color:var(--muted)}.legacy-rank-note{font-size:9px!important;color:var(--muted)!important;margin-top:16px!important}
+
+@media(max-width:720px){
+  .legacy-club-controls{grid-template-columns:1fr}
+  .legacy-card-head{grid-template-columns:1fr}.legacy-rank-badge{justify-self:start}
+  .legacy-card-hero{grid-template-columns:1fr}.legacy-shirt{width:180px;justify-self:center}
+  .legacy-card-stats{grid-template-columns:repeat(2,1fr)}
+  .legacy-honours-preview{grid-template-columns:1fr}
+}
+.summary-status.with-art{display:grid;grid-template-columns:44px 1fr auto;align-items:center}.summary-status.with-art .honour-art{width:40px;height:40px}.summary-status.with-art strong{font-size:11px}.summary-status.with-art span{font-size:11px}
+@media(max-width:620px){.summary-status.with-art{grid-template-columns:40px 1fr}.summary-status.with-art span{grid-column:2;text-align:left}}

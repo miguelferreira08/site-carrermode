@@ -1,20 +1,22 @@
 const $ = selector => document.querySelector(selector);
 const $$ = selector => document.querySelectorAll(selector);
-const STORAGE_KEY = 'beTheLegendV76';
+const STORAGE_KEY = 'beTheLegendV77';
 const LEGACY_STORAGE_KEY = 'careerSimV7';
-const BADGE_KEY = 'beTheLegendBadgeCacheV76';
-const DRAFT_KEY = 'beTheLegendV76AttributeDraft';
+const BADGE_KEY = 'beTheLegendBadgeCacheV77';
+const DRAFT_KEY = 'beTheLegendV77AttributeDraft';
 
-let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('beTheLegendV76') || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
   created:false, player:null, season:null, history:[], offers:[], news:[], pendingEvent:null
 };
-let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('careerSimBadgeCacheV75') || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
+let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('beTheLegendBadgeCacheV76') || localStorage.getItem('careerSimBadgeCacheV75') || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
 let creationClubPool = [];
 let creationChoices = [];
 let nextEventCache = null;
 let pendingSeasonCelebration = null;
 let pendingPlayerProfile = null;
 let attributeDraft = null;
+let pendingCareerCard = false;
+const MAX_MARKET_VALUE = 300000000;
 try{
   const savedDraft=JSON.parse(sessionStorage.getItem(DRAFT_KEY)||'null');
   if(savedDraft?.attributeDraft&&savedDraft?.pendingPlayerProfile){attributeDraft=savedDraft.attributeDraft;pendingPlayerProfile=savedDraft.pendingPlayerProfile;}
@@ -33,9 +35,39 @@ function rnd(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 function sample(array,count){ return [...array].sort(()=>Math.random()-.5).slice(0,count); }
 function shuffle(array){ return [...array].sort(()=>Math.random()-.5); }
 function clamp(n,min,max){ return Math.max(min,Math.min(max,n)); }
+function marketValue(v){ return clamp(Math.round(v),150000,MAX_MARKET_VALUE); }
 function money(v){ return '€ ' + (v >= 1e6 ? (v/1e6).toFixed(1)+' mi' : Math.round(v/1000)+' mil'); }
 function toast(msg){ const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800); }
 function countryByCode(code){ return COUNTRIES.find(c=>c.code===code); }
+const TROPHY_ART = [
+  {test:/UEFA Champions League/i,url:'https://commons.wikimedia.org/wiki/Special:FilePath/UEFA%20Champions%20League%20Trophy%20-%20cropped.JPG'},
+  {test:/CONMEBOL Libertadores/i,url:'https://w7.pngwing.com/pngs/670/628/png-transparent-boca-juniors-2016-copa-libertadores-2010-copa-libertadores-copa-sudamericana-club-universidad-de-chile-champagne-glass-sports-world-cup-boca-juniors.png'},
+  {test:/Premier League/i,url:'https://image.pngaaa.com/519/2791519-middle.png'},
+  {test:/Copa do Brasil/i,url:'https://i.pinimg.com/originals/20/fa/e5/20fae541cc5ca907f6b589bd86dd21ca.jpg'},
+  {test:/Brasileir[aã]o/i,url:'https://conexaonoticias.com.br/hf-conteudo/uploads/posts/2021/05/3967_b607ba543ad05417b8507ee86c54fcb7.jpg'},
+  {test:/Bundesliga/i,url:'https://w7.pngwing.com/pngs/934/209/png-transparent-2-bundesliga-fc-bayern-munich-borussia-dortmund-uefa-champions-league-football-sport-sports-auto-part.png'},
+  {test:/Serie A/i,url:'https://i.pinimg.com/originals/57/44/2b/57442b6b5a91ce8d2df78a7fbc66ad45.png'},
+  {test:/Ligue 1/i,url:'https://stonesing.com/cdn/shop/files/f0d8431214b8ad558565692fad7660c3.png?v=1740650810&width=533'},
+  {test:/FA Cup/i,url:'https://www.kindpng.com/picc/m/419-4195027_820-x-1222-fa-cup-trophy-png-transparent.png'},
+  {test:/Copa do Rei|Copa del Rey/i,url:'https://statics-maker.llt-services.com/zar/images/2023/03/22/xlarge/f46e855f-76ed-413f-ae84-cd75b9a6e727.jpg'},
+  {test:/Coppa Italia/i,url:'https://i.pinimg.com/originals/3f/b8/0f/3fb80f631fe22bc9c383a38a835d8449.png'},
+  {test:/LaLiga/i,url:'https://www.nicepng.com/png/detail/927-9274163_la-liga-trophy-png.png'},
+  {test:/Primeira Liga/i,url:'https://commons.wikimedia.org/wiki/Special:FilePath/Primeira%20Liga%20Trophy.svg'},
+  {test:/Eredivisie/i,url:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Eredivisie_Trophy.png/851px-Eredivisie_Trophy.png'},
+  {test:/Major League Soccer|MLS/i,url:'https://www.tudn.com/_next/image?q=75&url=https%3A%2F%2Fst1.uvnimg.com%2Fe7%2F52%2Fcd145f014563bd02ced3aa272495%2Fcup-mls-3.jpg&w=1280'},
+  {test:/Belgian Pro League/i,url:'https://pbs.twimg.com/media/G0b3iFYWYAA-VuK.jpg'},
+  {test:/Saudi Pro League/i,url:'https://media.liga-de.com/competition/trophy/saudi-arabian-pro-league-trophy.webp'},
+  {test:/Bola de Ouro/i,url:'https://www.aljazeera.net/wp-content/uploads/2021/11/RTS28U93.jpg?resize=1800%2C1800'},
+  {test:/Chuteira de Ouro/i,url:'https://www.thesportsdb.com/images/media/honour/trophy/ntofu71650829888.png'},
+  {test:/Melhor Jogador Jovem/i,url:'https://juvenildivisiondehonor.com/wp-content/uploads/2020/09/Golden-Boy.jpg'}
+];
+function trophyArtFor(name){ return TROPHY_ART.find(x=>x.test.test(name||''))?.url||''; }
+function honourInitials(name){ return (name||'BTL').split(/\s+/).filter(Boolean).slice(0,3).map(x=>x[0]).join('').toUpperCase(); }
+function honourVisual(name){
+  const url=trophyArtFor(name);
+  return url?`<span class="honour-art"><img src="${url}" alt="Troféu ${name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><b>${honourInitials(name)}</b></span>`:`<span class="honour-art fallback"><b>${honourInitials(name)}</b></span>`;
+}
+
 function countryFlag(code){
   const special={ENG:'🏴',SCO:'🏴',WAL:'🏴',NIR:'🏴'};
   if(special[code]) return special[code];
@@ -258,7 +290,7 @@ function finalizeCareerFromDraft(){
   const potential=calculatePotentialFromAttributes(dnaAttributes,profile.position);
   const attributes=buildStartingAttributes(dnaAttributes,potential);
   const value=1100000;
-  const player={...profile,overall,potential,initialPotential:potential,value,titles:0,trophies:[],awards:[],calledUp:false,nationalTeamGames:0,nationalTeamGoals:0,morale:70,reputation:10,developmentBoost:0,marketBonus:0,retired:false,attributes,dnaAttributes,attributeOrigins};
+  const player={...profile,overall,potential,initialPotential:potential,value,titles:0,trophies:[],awards:[],calledUp:false,nationalTeamGames:0,nationalTeamGoals:0,nationalTrust:0,nationalCaptain:false,morale:70,reputation:10,developmentBoost:0,marketBonus:0,retired:false,attributes,dnaAttributes,attributeOrigins};
   state={created:true,player,season:null,history:[],offers:[],news:[`${player.name}, ${player.age} anos, inicia a carreira com GER 68. O DNA escolhido definiu POT ${potential}.`],pendingEvent:null};
   state.season=createSeason(player,START_YEAR,undefined);
   pendingPlayerProfile=null;attributeDraft=null;clearDraftState();save();showView('career');toast(`Carreira iniciada! GER 68 · POT ${potential}`);
@@ -581,12 +613,17 @@ function simulatePlayerPerformance(teamGoals,oppGoals){
 function simulateMatchCore(event){
   const p=state.player,s=state.season;const playerIsHome=event.type==='national'?event.home===p.nationality:event.home===p.club;
   const score=simulateScore(event);const teamGoals=playerIsHome?score.homeGoals:score.awayGoals;const oppGoals=playerIsHome?score.awayGoals:score.homeGoals;
+  if((p.injuryGames||0)>0){
+    p.injuryGames=Math.max(0,p.injuryGames-1);processCompetitionResult(event,teamGoals,oppGoals);
+    if(p.injuryGames===0)state.news.push(`${p.name} está recuperado e volta a ficar disponível.`);
+    return {event,playerIsHome,teamGoals,oppGoals,homeGoals:score.homeGoals,awayGoals:score.awayGoals,perf:{goals:0,assists:0,rating:0,extraLabel:'Status',extraValue:'Fora'},model:score.model,missed:true};
+  }
   const perf=simulatePlayerPerformance(teamGoals,oppGoals);
   s.totalGames++;s.goals+=perf.goals;s.assists+=perf.assists;s.ratingSum+=perf.rating;
   if(event.type!=='national'){
     s.clubGames++;s.clubGoals+=perf.goals;s.clubAssists+=perf.assists;
-    p.value=Math.max(200000,Math.round(p.value*(1+(perf.rating-6.5)/260)));
-  }else{p.nationalTeamGames++;p.nationalTeamGoals+=perf.goals;}
+    p.value=marketValue(p.value*(1+(perf.rating-6.5)/260));
+  }else{p.nationalTeamGames++;p.nationalTeamGoals+=perf.goals;p.nationalTrust=clamp((p.nationalTrust||0)+(perf.rating>=8?3:perf.rating>=7.2?2:perf.rating<6.2?-1:1),0,100);}
   processCompetitionResult(event,teamGoals,oppGoals);
   if(perf.rating>=8)state.news.push(`${p.name} foi destaque em ${event.competition}, com nota ${perf.rating.toFixed(1)}.`);
   return {event,playerIsHome,teamGoals,oppGoals,homeGoals:score.homeGoals,awayGoals:score.awayGoals,perf,model:score.model};
@@ -618,7 +655,7 @@ function generateMatchMoments(log){
 }
 function addTrophy(name){
   const p=state.player;p.trophies=p.trophies||[];if(p.trophies.some(t=>t.year===state.season.year&&t.name===name))return;
-  p.trophies.push({year:state.season.year,name});p.titles=p.trophies.length;state.news.push(`${p.name} é campeão de ${name} com o ${p.club}!`);if(!state.simulatingSeason)showCelebration('🏆',`Campeão: ${name}`,`${p.name} adiciona mais um título à carreira.`);
+  p.trophies.push({year:state.season.year,name});p.titles=p.trophies.length;state.news.push(`${p.name} é campeão de ${name} com o ${p.club}!`);if(!state.simulatingSeason)showCelebration(trophyArtFor(name)||honourInitials(name),`Campeão: ${name}`,`${p.name} adiciona mais um título à carreira.`);
 }
 function legacyV4_finalizeLeague(){
   const l=state.season.league;if(l.finished)return;l.finished=true;const pts=l.points,champ=l.format.championPoints;
@@ -658,10 +695,26 @@ function processCompetitionResult(event,pf,pa){
   else if(event.type==='national'){s.lastNationalAt=s.totalGames;}
 }
 
+function nationalRoleForPlayer(p=state.player){
+  if(!p?.calledUp)return 'Fora do grupo';
+  if(p.nationalCaptain)return 'Capitão';
+  const trust=p.nationalTrust||0,caps=p.nationalTeamGames||0;
+  if(trust>=70&&caps>=12)return 'Titular';
+  if(trust>=42)return 'Rotação';
+  return 'Reserva';
+}
 function updateSelectionAtSeasonEnd(avg){
   const p=state.player,was=p.calledUp;const eligible=p.overall>=73&&avg>=7.1;
-  if(!was&&eligible&&Math.random()<clamp(.35+(avg-7.1)*.35+(p.overall-73)*.035,.35,.95)){p.calledUp=true;state.news.push(`${p.name} recebe sua primeira convocação para a seleção de ${p.nationality}!`);}
-  else if(was&&(avg<6.6||p.overall<71)&&Math.random()<.5){p.calledUp=false;state.news.push(`${p.name} ficou fora da nova convocação de ${p.nationality}.`);}
+  if(!was&&eligible&&Math.random()<clamp(.35+(avg-7.1)*.35+(p.overall-73)*.035,.35,.95)){
+    p.calledUp=true;p.nationalTrust=Math.max(p.nationalTrust||0,22);state.news.push(`${p.name} recebe sua primeira convocação para a seleção de ${p.nationality}!`);
+  }else if(was&&(avg<6.6||p.overall<71)&&Math.random()<.5){
+    p.calledUp=false;p.nationalCaptain=false;p.nationalTrust=Math.max(0,(p.nationalTrust||0)-10);state.news.push(`${p.name} ficou fora da nova convocação de ${p.nationality}.`);
+  }else if(was){
+    p.nationalTrust=clamp((p.nationalTrust||0)+(avg>=8?5:avg>=7.3?3:avg<6.5?-3:1),0,100);
+  }
+  if(p.calledUp&&!p.nationalCaptain&&(p.nationalTeamGames||0)>=18&&(p.nationalTrust||0)>=82&&(p.reputation||0)>=45&&p.age>=25){
+    p.nationalCaptain=true;state.news.push(`${p.name} recebe a braçadeira de capitão da seleção de ${p.nationality}.`);
+  }
 }
 function legacyV4_developmentResult(avg){
   const p=state.player;const age=p.age;const gk=p.position==='Goleiro';const devAge=gk?age-3:age;let delta=0;
@@ -689,7 +742,7 @@ function evaluateAwards(avg){
   const bootTarget=attacking?18:p.position==='Volante'?10:7;if(s.clubGoals>=bootTarget)awards.push('Chuteira de Ouro');
   const contributions=s.clubGoals+s.clubAssists;if(p.overall>=89&&avg>=7.9&&contributions>=24&&Math.random()<.68)awards.push('Bola de Ouro');
   p.awards=p.awards||[];awards.forEach(name=>{if(!p.awards.some(a=>a.year===s.year&&a.name===name))p.awards.push({year:s.year,name,countryCode:seasonCountry,club:s.clubAtStart||p.club});});
-  if(awards.length){state.news.push(`${p.name} recebeu: ${awards.join(', ')}.`);if(!state.simulatingSeason)showCelebration('⭐','Prêmios da temporada',awards.join(' · '));}
+  if(awards.length){state.news.push(`${p.name} recebeu: ${awards.join(', ')}.`);if(!state.simulatingSeason)showCelebration(trophyArtFor(awards[0])||honourInitials(awards[0]),'Prêmios da temporada',awards.join(' · '));}
   return awards;
 }
 function sanitizeAwardsEligibility(){
@@ -709,13 +762,18 @@ function legacyV4_generateOffers(avg){
   let pool=[...tierTargets,...normal];pool=[...new Map(pool.map(c=>[`${c.countryCode}:${c.name}`,c])).values()];
   const baseCount=avg>=7.8?3:avg>=7.0?2:1;const count=clamp(baseCount+(p.marketBonus||0),1,4);p.marketBonus=0;
   const chosen=sample(pool,Math.min(count,pool.length));
-  state.offers=chosen.map(c=>({club:c.name,countryCode:c.countryCode,countryName:countryByCode(c.countryCode)?.name||c.countryCode,league:getCompetitionRule(c.countryCode,countryByCode(c.countryCode)?.name||'').league,strength:c.strength||clubStrength(c.name,c.countryCode),minOverall:c.minOverall||null,value:Math.round(p.value*(1.05+Math.random()*.70))}));
+  state.offers=chosen.map(c=>({club:c.name,countryCode:c.countryCode,countryName:countryByCode(c.countryCode)?.name||c.countryCode,league:getCompetitionRule(c.countryCode,countryByCode(c.countryCode)?.name||'').league,strength:c.strength||clubStrength(c.name,c.countryCode),minOverall:c.minOverall||null,value:marketValue(p.value*(1.05+Math.random()*.70))}));
   if(state.offers.length)state.news.push(`${p.name} recebeu ${state.offers.length} proposta(s) ao fim da temporada.`);
 }
 
 function maybeTriggerCareerEvent(){
-  const s=state.season;if(state.pendingEvent||s.totalGames-s.lastCareerEventAt<5||Math.random()>.17)return;
-  const event=CAREER_EVENTS[rnd(0,CAREER_EVENTS.length-1)];state.pendingEvent={...event};s.lastCareerEventAt=s.totalGames;save();openPendingEvent();
+  const s=state.season;
+  if(!s||state.pendingEvent||s.totalGames-(s.lastCareerEventAt||0)<6||Math.random()>.14)return false;
+  const incidentPool=typeof INCIDENT_EVENTS!=='undefined'?INCIDENT_EVENTS:[];
+  const useIncident=incidentPool.length&&Math.random()<.48;
+  const pool=useIncident?incidentPool:CAREER_EVENTS;
+  const event=pool[rnd(0,pool.length-1)];
+  state.pendingEvent={...event};s.lastCareerEventAt=s.totalGames;state.resumeSeasonAfterEvent=true;save();openPendingEvent();return true;
 }
 function openPendingEvent(){
   const e=state.pendingEvent;if(!e)return;$('#event-title').textContent=e.title;$('#event-description').textContent=e.description;
@@ -731,14 +789,24 @@ function resolveCareerEvent(index){
   if(action==='leadership'){p.reputation+=3;const seasonCap=currentSeasonOverallCap();if(Math.random()<.22&&p.overall<p.potential&&p.overall<seasonCap)p.overall++;message='Você assumiu mais responsabilidade no elenco.';}
   if(action==='learn'){if(p.age<=24)p.potential=clamp(p.potential+1,75,96);message='Você priorizou aprendizado e desenvolvimento.';}
   if(action==='market_push'){p.marketBonus=(p.marketBonus||0)+1;message='Seu empresário vai trabalhar por mais opções no mercado.';}
-  if(action==='stability'){p.morale=clamp(p.morale+5,40,100);message='A estabilidade melhorou seu ambiente no clube.';}
+  if(action==='stability'){p.morale=clamp(p.morale+5,40,100);message='A estabilidade melhorou seu ambiente no clube atual.';}
   if(action==='play_tired'){p.reputation+=2;p.morale=clamp(p.morale-4,40,100);message='Você mostrou disposição, mas sentiu o desgaste.';}
   if(action==='rest'){p.morale=clamp(p.morale+4,40,100);message='O descanso ajudou sua recuperação.';}
-  state.news.push(`${e.title}: ${message}`);state.pendingEvent=null;$('#event-modal').classList.add('hidden');save();render();toast(message);
+  if(action==='injury_rehab'){p.injuryGames=Math.max(p.injuryGames||0,rnd(2,4));p.morale=clamp(p.morale+1,40,100);message=`Você inicia tratamento e deve perder cerca de ${p.injuryGames} jogo(s).`;}
+  if(action==='injury_rush'){p.injuryGames=Math.max(p.injuryGames||0,rnd(1,2));p.morale=clamp(p.morale-2,40,100);if(Math.random()<.28){p.injuryGames+=2;message='A volta foi apressada e o incômodo piorou. Você ficará mais tempo fora.';}else message='Você acelera o retorno e deve perder poucos jogos, mas assume algum risco.';}
+  if(action==='controversy_apologize'){p.reputation=clamp((p.reputation||0)-1,0,100);p.morale=clamp(p.morale+2,40,100);p.pressure=Math.max(0,(p.pressure||0)-1);message='O esclarecimento reduz a pressão e o assunto perde força.';}
+  if(action==='controversy_defend'){p.reputation=clamp((p.reputation||0)+2,0,100);p.pressure=(p.pressure||0)+2;p.morale=clamp(p.morale-2,40,100);message='Sua postura divide opiniões: sua personalidade cresce, mas a pressão também.';}
+  if(action==='locker_peace'){p.morale=clamp(p.morale+5,40,100);message='A conversa interna melhora o ambiente do elenco.';}
+  if(action==='locker_public'){p.reputation=clamp((p.reputation||0)+2,0,100);p.morale=clamp(p.morale-5,40,100);p.pressure=(p.pressure||0)+1;message='A resposta pública aumenta a repercussão e desgasta o vestiário.';}
+  if(action==='rumor_focus'){p.morale=clamp(p.morale+2,40,100);p.pressure=Math.max(0,(p.pressure||0)-1);message='Você responde em campo e recupera a confiança do clube.';}
+  if(action==='rumor_ignore'){p.morale=clamp(p.morale-rnd(2,5),40,100);p.pressure=(p.pressure||0)+1;message='O assunto continua rendendo e aumenta o desgaste fora de campo.';}
+  if(action==='agent_open'){p.marketBonus=(p.marketBonus||0)+1;p.morale=clamp(p.morale-2,40,100);message='Seu nome passa a circular mais no mercado, mas o ambiente fica menos estável.';}
+  if(action==='agent_stay'){p.morale=clamp(p.morale+4,40,100);p.pressure=Math.max(0,(p.pressure||0)-1);message='Você encerra as especulações e reforça o compromisso com o clube.';}
+  state.news.push(`${e.title}: ${message}`);const resume=!!state.resumeSeasonAfterEvent;state.resumeSeasonAfterEvent=false;state.pendingEvent=null;$('#event-modal').classList.add('hidden');save();render();toast(message);if(resume&&!state.player?.retired&&state.season&&!state.season.closed)setTimeout(continueSeasonSimulation,120);
 }
 
 function showCelebration(icon,title,subtitle){
-  $('#celebration-icon').textContent=icon;$('#celebration-title').textContent=title;$('#celebration-subtitle').textContent=subtitle;
+  const iconBox=$('#celebration-icon');if(/^https?:/i.test(icon||''))iconBox.innerHTML=`<img src="${icon}" alt="${title}" referrerpolicy="no-referrer">`;else iconBox.textContent=icon;$('#celebration-title').textContent=title;$('#celebration-subtitle').textContent=subtitle;
   $('#confetti').innerHTML=Array.from({length:38},(_,i)=>`<i style="--x:${rnd(-46,46)}vw;--r:${rnd(90,720)}deg;--d:${(Math.random()*1.4+.8).toFixed(2)}s;--delay:${(Math.random()*.5).toFixed(2)}s"></i>`).join('');
   $('#celebration').classList.remove('hidden');
 }
@@ -776,11 +844,11 @@ function render(){
     }else{
       $('#match-title').textContent=s.closed?'Mercado aberto':'Temporada pronta para ser encerrada';$('#home-team').textContent='';$('#away-team').textContent='';$('#match-competition').textContent='';$('#match-context').textContent=s.closed?'Veja as propostas e depois avance para a próxima temporada.':'';$('#favorite-line').textContent='';$('#strength-line').textContent='';$('#simulate-btn').disabled=true;$('#simulate-btn').textContent=s.closed?'Temporada simulada':'Sem partidas pendentes';
     }
-    $('#competitions-list').innerHTML=competitionStatus().map(c=>`<div class="competition-item ${c.type==='continental'?'international':''}"><strong>${c.type==='league'?'🏆':c.type==='cup'?'🥇':'🌍'} ${c.title}</strong><small>${c.status}</small></div>`).join('');
+    $('#competitions-list').innerHTML=competitionStatus().map(c=>`<div class="competition-item ${c.type==='continental'?'international':''}">${honourVisual(c.title)}<div><strong>${c.title}</strong><small>${c.status}</small></div></div>`).join('');
   }else{
     $('#season-year').textContent='—';$('#s-games').textContent='0';$('#s-goals').textContent='0';$('#s-assists').textContent='0';$('#s-rating').textContent='—';$('#league-round-label').textContent='Carreira encerrada';$('#league-points').textContent='';$('#league-progress-bar').style.width='100%';$('#season-progress').textContent='Aposentado';$('#finish-season').disabled=true;$('#finish-season').textContent='Carreira encerrada';$('#competitions-list').innerHTML='<div class="competition-item"><strong>👟 Carreira concluída</strong><small>Veja o histórico completo na aba Estatísticas.</small></div>';$('#match-title').textContent='Carreira encerrada';$('#home-team').textContent='';$('#away-team').textContent='';$('#match-competition').textContent='';$('#match-context').textContent='';$('#favorite-line').textContent='';$('#strength-line').textContent='';$('#simulate-btn').disabled=true;$('#simulate-btn').textContent='Aposentado';
   }
-  $('#national-country').textContent=`Seleção de ${p.nationality}`;$('#national-flag').textContent=countryFlag(p.nationalityCode);$('#national-status').textContent=p.calledUp?'Convocado':'Ainda não convocado';$('#national-message').textContent=p.calledUp?'Partidas internacionais entram na simulação da temporada.':'Overall e desempenho aumentam as chances de convocação.';$('#nt-games').textContent=p.nationalTeamGames;$('#nt-goals').textContent=p.nationalTeamGoals;
+  $('#national-country').textContent=`Seleção de ${p.nationality}`;$('#national-flag').textContent=countryFlag(p.nationalityCode);$('#national-status').textContent=p.calledUp?'Convocado':'Ainda não convocado';$('#national-message').textContent=p.calledUp?(p.nationalCaptain?'Você é o capitão e uma das referências da seleção.':'Jogos internacionais também podem gerar decisões interativas.'):'Overall e desempenho aumentam as chances de convocação.';$('#nt-games').textContent=p.nationalTeamGames;$('#nt-goals').textContent=p.nationalTeamGoals;$('#national-role').textContent=nationalRoleForPlayer(p);const nationalAction=$('#national-action');nationalAction.disabled=!p.calledUp||p.retired||(s&&p.lastNationalInteractionYear===s.year);nationalAction.textContent=!p.calledUp?'Aguardando convocação':(s&&p.lastNationalInteractionYear===s.year?'Conversa já realizada':'Conversar com a seleção');
   $('#news').innerHTML=(state.news.slice(-6).reverse().map((n,i)=>`<div class="news-item"><span class="news-icon">${i===0?'📰':'•'}</span><div><strong>${n}</strong><small>Be The Legend News</small></div></div>`).join('')||'<p class="muted">Nenhuma notícia ainda.</p>');
   renderHistory();renderOffers();renderHonours();renderMarketTier();if(state.pendingEvent)openPendingEvent();
 }
@@ -790,10 +858,23 @@ function renderHistory(){
   $('#history-body').innerHTML=state.history.length?state.history.slice().reverse().map(h=>`<tr><td>${h.year}</td><td>${h.club}</td><td>${h.overall}</td><td>${h.games}</td><td>${h.goals}</td><td>${h.assists}</td><td>${h.rating}</td><td>${h.leaguePosition?`${h.leaguePosition}º`: '-'}</td></tr>`).join(''):'<tr><td colspan="8" class="muted">Conclua sua primeira temporada para criar o histórico.</td></tr>';
 }
 function renderHonours(){
-  if(!state.created)return;const p=state.player;$('#trophies-list').innerHTML=p.trophies?.length?p.trophies.slice().reverse().map(t=>`<div><span>🏆 ${t.name}</span><strong>${t.year}</strong></div>`).join(''):'<p class="muted">Nenhum título ainda.</p>';$('#awards-list').innerHTML=p.awards?.length?p.awards.slice().reverse().map(a=>`<div><span>⭐ ${a.name}</span><strong>${a.year}</strong></div>`).join(''):'<p class="muted">Nenhum prêmio individual ainda.</p>';
+  if(!state.created)return;const p=state.player;
+  $('#trophies-list').innerHTML=p.trophies?.length?p.trophies.slice().reverse().map(t=>`<div class="honour-row">${honourVisual(t.name)}<span><b>${t.name}</b><small>Título conquistado</small></span><strong>${t.year}</strong></div>`).join(''):'<p class="muted">Nenhum título ainda.</p>';
+  $('#awards-list').innerHTML=p.awards?.length?p.awards.slice().reverse().map(a=>`<div class="honour-row">${honourVisual(a.name)}<span><b>${a.name}</b><small>Prêmio individual</small></span><strong>${a.year}</strong></div>`).join(''):'<p class="muted">Nenhum prêmio individual ainda.</p>';
+}
+function legacyClubEligible(){
+  const p=state.player,s=state.season;if(!p||p.retired||!s?.closed||p.age<35)return false;
+  const consolidated=(p.overall>=84)||(p.titles||0)>=2||(p.awards||[]).length>=1||(p.reputation||0)>=45;
+  return consolidated;
+}
+function renderLegacyClubChoice(){
+  const panel=$('#legacy-club-panel'),select=$('#legacy-club-choice');if(!panel||!select)return;
+  const eligible=legacyClubEligible();panel.classList.toggle('hidden',!eligible);if(!eligible)return;
+  const p=state.player;const clubs=allTransferClubs().filter(c=>c.name!==p.club).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+  select.innerHTML=clubs.map(c=>`<option value="${c.countryCode}|${c.name.replace(/"/g,'&quot;')}">${c.name} · ${countryByCode(c.countryCode)?.name||c.countryCode}</option>`).join('');
 }
 function renderMarketTier(){
-  if(!state.created)return;const o=state.player.overall;let text='Clubes nacionais e mercados menores acompanham você.';if(o>=90)text='Elite mundial liberada: clubes como Bayern, Barcelona e Real Madrid podem aparecer.';else if(o>=85)text='Grandes clubes europeus liberados: Chelsea, Arsenal e outros podem fazer propostas.';else if(o>=75)text='Mercado europeu em expansão: Benfica, Porto e clubes semelhantes podem aparecer.';$('#market-tier').innerHTML=`<strong>Faixa atual: GER ${o}</strong><p>${text}</p>`;
+  if(!state.created)return;const o=state.player.overall;let text='Clubes nacionais e mercados menores acompanham você.';if(o>=90)text='Elite mundial liberada: clubes como Bayern, Barcelona e Real Madrid podem aparecer.';else if(o>=85)text='Grandes clubes europeus liberados: Chelsea, Arsenal e outros podem fazer propostas.';else if(o>=75)text='Mercado europeu em expansão: Benfica, Porto e clubes semelhantes podem aparecer.';$('#market-tier').innerHTML=`<strong>Faixa atual: GER ${o}</strong><p>${text}</p><small>Valor de mercado máximo no simulador: ${money(MAX_MARKET_VALUE)}</small>`;renderLegacyClubChoice();
 }
 function renderOffers(){
   if(!state.created)return;const box=$('#offers');box.innerHTML=state.offers.length?state.offers.map((o,i)=>`<article class="panel offer" data-club-name="${o.club.replace(/"/g,'&quot;')}"><div class="offer-main"><span class="crest-shell"><img class="club-badge-img hidden" alt=""><span class="crest-fallback">⚽</span></span><div><p class="eyebrow">${o.countryName} · ${o.league}</p><h3>${o.club}</h3><p>Oferta estimada: <strong>${money(o.value)}</strong> · Força: ${o.strength}</p></div></div><div class="offer-actions"><button class="primary" onclick="acceptOffer(${i})">Aceitar</button><button class="danger" onclick="rejectOffer(${i})">Recusar</button></div></article>`).join(''):'<article class="panel"><h3>Nenhuma proposta no momento</h3><p class="muted">Conclua temporadas e aumente seu overall. Os clubes disponíveis mudam conforme seu nível.</p></article>';hydrateRenderedBadges();
@@ -806,7 +887,7 @@ $('#reroll-clubs').addEventListener('click',()=>{$('#selected-club').value='';$(
 $('#number').addEventListener('input',sanitizeShirtNumber);
 $('#number').addEventListener('blur',()=>{sanitizeShirtNumber();if(!$('#number').value)$('#number').value='10';});
 $('#close-result').addEventListener('click',()=>$('#match-result').classList.add('hidden'));
-$('#close-celebration').addEventListener('click',()=>$('#celebration').classList.add('hidden'));
+$('#close-celebration').addEventListener('click',()=>{$('#celebration').classList.add('hidden');if(pendingCareerCard){pendingCareerCard=false;showCareerLegacyCard();}});
 
 $('#reroll-legend').addEventListener('click',()=>{
   if(!attributeDraft||(attributeDraft.skipsRemaining||0)<=0)return;
@@ -823,6 +904,54 @@ $('#player-form').addEventListener('submit',e=>{
   startAttributeDraft(profile);
 });
 
+$('#national-action').addEventListener('click',openNationalInteraction);
+$('#national-modal-close').addEventListener('click',()=>$('#national-modal').classList.add('hidden'));
+$('#legacy-club-sign').addEventListener('click',signLegacyClub);
+$('#legacy-close').addEventListener('click',()=>{if(state.player){state.player.legacyCardSeen=true;save();}$('#career-legacy-modal').classList.add('hidden');});
+$('#legacy-view-stats').addEventListener('click',()=>{if(state.player){state.player.legacyCardSeen=true;save();}$('#career-legacy-modal').classList.add('hidden');showView('stats');});
+
+function openNationalInteraction(){
+  const p=state.player,s=state.season;if(!p?.calledUp){toast('Você ainda precisa ser convocado para interagir com a seleção.');return;}
+  if(p.retired)return;
+  $('#national-modal-title').textContent=`${p.nationality} · ${nationalRoleForPlayer(p)}`;
+  $('#national-modal-copy').textContent=`Confiança na seleção: ${p.nationalTrust||0}/100. Escolha como conduzir sua relação com a comissão técnica.`;
+  const choices=[
+    {label:'Pedir mais minutos',effect:'Aumenta confiança, mas também a cobrança.',action:'minutes'},
+    {label:'Focar no entrosamento',effect:'Melhora confiança e moral com baixo risco.',action:'chemistry'},
+    {label:'Assumir liderança',effect:'Busca protagonismo e pode aproximar a braçadeira.',action:'leadership'}
+  ];
+  $('#national-modal-choices').innerHTML=choices.map((c,i)=>`<button class="event-choice national-choice" data-national-choice="${i}"><strong>${c.label}</strong><small>${c.effect}</small></button>`).join('');
+  $$('.national-choice').forEach(b=>b.addEventListener('click',()=>resolveNationalInteraction(choices[+b.dataset.nationalChoice].action)));
+  $('#national-modal').classList.remove('hidden');
+}
+function resolveNationalInteraction(action){
+  const p=state.player,s=state.season;if(!p||!s)return;let msg='Conversa concluída.';
+  if(action==='minutes'){p.nationalTrust=clamp((p.nationalTrust||0)+4,0,100);p.pressure=(p.pressure||0)+1;msg='Você pede mais espaço e entra no radar para ter mais protagonismo.';}
+  if(action==='chemistry'){p.nationalTrust=clamp((p.nationalTrust||0)+3,0,100);p.morale=clamp(p.morale+3,40,100);msg='A postura coletiva melhora seu entrosamento com o grupo.';}
+  if(action==='leadership'){p.nationalTrust=clamp((p.nationalTrust||0)+5,0,100);p.reputation=clamp((p.reputation||0)+2,0,100);msg='Você assume mais responsabilidade dentro da seleção.';}
+  if(!p.nationalCaptain&&(p.nationalTeamGames||0)>=18&&(p.nationalTrust||0)>=82&&(p.reputation||0)>=45&&p.age>=25){p.nationalCaptain=true;msg+=' A comissão entrega a braçadeira de capitão a você.';}
+  p.lastNationalInteractionYear=s.year;state.news.push(`Seleção de ${p.nationality}: ${msg}`);$('#national-modal').classList.add('hidden');save();render();toast(msg);
+}
+function careerTotals(){
+  const p=state.player;return (state.history||[]).reduce((a,h)=>({games:a.games+(h.games||0),goals:a.goals+(h.goals||0),assists:a.assists+(h.assists||0)}),{games:0,goals:0,assists:0});
+}
+function historicalRankEstimate(){
+  const p=state.player,tot=careerTotals(),peak=Math.max(p.overall||0,...(state.history||[]).map(h=>h.overall||0),68);const titles=(p.trophies||[]).length,awards=(p.awards||[]).length;
+  const score=(peak-68)*4.4+titles*9+awards*12+tot.goals/12+tot.assists/18+(p.nationalTeamGames||0)/8+(p.nationalTeamGoals||0)/4+(state.history||[]).length*1.4;
+  return clamp(Math.round(220-score),1,300);
+}
+function showCareerLegacyCard(){
+  const p=state.player;if(!p)return;const tot=careerTotals(),peak=Math.max(p.overall||0,...(state.history||[]).map(h=>h.overall||0),68),rank=historicalRankEstimate();
+  $('#legacy-card-name').textContent=p.name;$('#legacy-card-subtitle').textContent=`${p.position} · ${p.nationality} · aposentado aos ${p.retiredAge||p.age} anos`;
+  $('#legacy-rank').textContent=`#${rank}`;$('#legacy-peak-overall').textContent=peak;$('#legacy-seasons').textContent=(state.history||[]).length;$('#legacy-titles').textContent=(p.trophies||[]).length;$('#legacy-awards').textContent=(p.awards||[]).length;$('#legacy-games').textContent=tot.games;$('#legacy-goals').textContent=tot.goals;$('#legacy-assists').textContent=tot.assists;$('#legacy-nt').textContent=p.nationalTeamGames||0;$('#legacy-shirt-name').textContent=p.name.split(' ').slice(-1)[0].toUpperCase();$('#legacy-shirt-number').textContent=p.number||10;
+  const honours=[...(p.trophies||[]).slice(-4),...(p.awards||[]).slice(-2)];$('#legacy-honours-preview').innerHTML=honours.length?honours.map(h=>`<div>${honourVisual(h.name)}<span><strong>${h.name}</strong><small>${h.year}</small></span></div>`).join(''):'<p class="muted">A carreira terminou sem títulos ou prêmios registrados.</p>';
+  $('#career-legacy-modal').classList.remove('hidden');
+}
+function signLegacyClub(){
+  const p=state.player;if(!legacyClubEligible())return;const raw=$('#legacy-club-choice').value;if(!raw)return;const sep=raw.indexOf('|'),code=raw.slice(0,sep),name=raw.slice(sep+1);const club=allTransferClubs().find(c=>c.countryCode===code&&c.name===name);if(!club)return;
+  const old=p.club;p.club=club.name;p.clubCountry=club.countryCode;p.clubCountryName=countryByCode(club.countryCode)?.name||club.countryCode;p.clubStrength=club.strength||clubStrength(club.name,club.countryCode);p.value=marketValue(p.value);state.offers=[];state.news.push(`${p.name}, já consolidado, escolhe o ${club.name} para um dos últimos capítulos da carreira, deixando o ${old}.`);applyClubTheme(p.club);save();render();showCelebration('✍️',`Destino escolhido: ${club.name}`,`${p.name} decide onde quer escrever o fim da própria história.`);
+}
+
 function showSeasonSpotlight(log){
   if(!log)return;
   const moments=generateMatchMoments(log);const fav=log.model;
@@ -838,10 +967,10 @@ function legacyV4_processSeasonEnd(){
   const avg=s.totalGames?s.ratingSum/s.totalGames:6.5;
   evaluateAwards(avg);updateSelectionAtSeasonEnd(avg);const delta=developmentResult(avg);
   state.history.push({year:s.year,club:s.clubAtStart||p.club,overall:p.overall,games:s.clubGames,goals:s.clubGoals,assists:s.clubAssists,rating:avg.toFixed(1),leaguePosition:s.league.position,competitions:competitionStatus().map(c=>c.title)});
-  p.value=Math.max(150000,Math.round(p.value*(1+delta*.11)));p.age++;
+  p.value=marketValue(p.value*(1+delta*.11));p.age++;
   state.news.push(`${p.name} encerra ${s.year} com média ${avg.toFixed(1)}. GER ${p.overall} (${delta>=0?'+':''}${delta}) e POT ${p.potential}.`);
   generateOffers(avg);s.endProcessed=true;s.closed=true;s.endAverage=avg;s.developmentDelta=delta;
-  if(p.age>=46){p.retired=true;p.age=46;state.news.push(`${p.name} encerra oficialmente a carreira aos 46 anos.`);state.offers=[];}
+  if(p.age>=46){p.retired=true;p.age=46;p.retiredAge=46;p.legacyCardSeen=false;pendingCareerCard=true;state.news.push(`${p.name} encerra oficialmente a carreira aos 46 anos.`);state.offers=[];}
 }
 function legacyV4_simulateWholeSeason(){
   const p=state.player,s=state.season;if(!s||s.closed||p.retired)return;
@@ -861,7 +990,7 @@ function legacyV4_simulateWholeSeason(){
 function showPendingSeasonCelebration(){
   const c=pendingSeasonCelebration;pendingSeasonCelebration=null;if(!c)return;
   const parts=[];if(c.titles.length)parts.push(`Títulos: ${c.titles.join(', ')}`);if(c.awards.length)parts.push(`Prêmios: ${c.awards.join(', ')}`);
-  if(parts.length)showCelebration(c.titles.length?'🏆':'⭐',c.titles.length?'Temporada de conquistas':'Prêmios da temporada',parts.join(' · '));
+  if(parts.length){const first=c.titles[0]||c.awards[0];showCelebration(trophyArtFor(first)||honourInitials(first),c.titles.length?'Temporada de conquistas':'Prêmios da temporada',parts.join(' · '));}
 }
 
 $('#simulate-btn').addEventListener('click',simulateWholeSeason);
@@ -878,7 +1007,7 @@ $('#finish-season').addEventListener('click',()=>{
 });
 
 window.acceptOffer=index=>{
-  const o=state.offers[index],p=state.player;if(!o||p.retired)return;const old=p.club;p.club=o.club;p.clubCountry=o.countryCode;p.clubCountryName=o.countryName;p.clubStrength=o.strength;p.value=o.value;p.morale=clamp(p.morale+5,40,100);state.news.push(`${p.name} deixa o ${old} e é anunciado pelo ${o.club}.`);state.offers=[];applyClubTheme(p.club);save();render();showCelebration('✍️',`Novo clube: ${o.club}`,`${p.name} inicia um novo capítulo da carreira.`);
+  const o=state.offers[index],p=state.player;if(!o||p.retired)return;const old=p.club;p.club=o.club;p.clubCountry=o.countryCode;p.clubCountryName=o.countryName;p.clubStrength=o.strength;p.value=marketValue(o.value);p.morale=clamp(p.morale+5,40,100);state.news.push(`${p.name} deixa o ${old} e é anunciado pelo ${o.club}.`);state.offers=[];applyClubTheme(p.club);save();render();showCelebration('✍️',`Novo clube: ${o.club}`,`${p.name} inicia um novo capítulo da carreira.`);
 };
 window.rejectOffer=index=>{state.offers.splice(index,1);save();render();toast('Proposta recusada.');};
 
@@ -895,8 +1024,8 @@ $('#retire-career').addEventListener('click',()=>{
     const avg=s.totalGames?s.ratingSum/s.totalGames:6.5;
     state.history.push({year:s.year,club:s.clubAtStart||p.club,clubCountry:s.countryAtStart||p.clubCountry,overall:p.overall,games:s.clubGames,goals:s.clubGoals,assists:s.clubAssists,rating:avg.toFixed(1),leaguePosition:s.league.position||null,cupStatus:'Aposentadoria durante a temporada',continentalStatus:'Aposentadoria durante a temporada',competitions:competitionStatus().map(c=>c.title)});
   }
-  p.retired=true;p.retiredAge=p.age;state.offers=[];state.pendingEvent=null;state.pendingMatchDecision=null;state.season=null;
-  state.news.push(`${p.name} anunciou a aposentadoria aos ${p.age} anos.`);
+  p.retired=true;p.retiredAge=p.age;p.legacyCardSeen=false;state.offers=[];state.pendingEvent=null;state.pendingMatchDecision=null;state.season=null;
+  state.news.push(`${p.name} anunciou a aposentadoria aos ${p.age} anos.`);pendingCareerCard=true;
   nextEventCache=null;save();render();showCelebration('👟','Fim de carreira',`${p.name} encerra sua trajetória profissional aos ${p.age} anos.`);
 });
 
@@ -969,21 +1098,26 @@ function developmentResult(avg){
     base=Math.min(base,cap);
   }
 
-  if(devAge>=36&&avg<8.4)base=Math.min(base,0);
-  if(devAge>=38)base=avg>=8.7?0:-1;
-  if(devAge>=40)base=-rnd(1,2);
-  if(devAge>=43)base=-rnd(2,4);
+  // Declínio físico: a partir dos 35 anos o GER passa a cair em todas as posições.
+  // Temporadas excelentes reduzem o ritmo da queda, mas não voltam a gerar crescimento.
+  if(age>=35){
+    if(age<=36)base=-1;
+    else if(age<=38)base=avg>=8.6?-1:-rnd(1,2);
+    else if(age<=40)base=-rnd(1,2);
+    else if(age<=42)base=-rnd(2,3);
+    else base=-rnd(3,5);
+  }
 
   // Bônus de treino pode ajudar, mas não deve romper a curva de evolução.
   const trainingBoost=clamp(p.developmentBoost||0,0,1);p.developmentBoost=0;
-  if(base>0&&trainingBoost){
+  if(age<35&&base>0&&trainingBoost){
     const trainingCap=devAge<=22?(p.overall<72?4:3):devAge<=25?3:devAge<=29?2:1;
     base=Math.min(base+trainingBoost,trainingCap+(avg>=8.8&&devAge<=29?1:0));
   }
   base=clamp(base,-5,5);
 
   // O potencial segue dinâmico, porém agora se move de forma mais gradual.
-  let potentialDelta=avg>=8.8?3:avg>=8.2?2:avg>=7.2?1:avg<5.9&&age<=29?-1:0;
+  let potentialDelta=age>=35?-1:(avg>=8.8?3:avg>=8.2?2:avg>=7.2?1:avg<5.9&&age<=29?-1:0);
   if(avg>=8.3&&rate>=contributionTarget*1.40)potentialDelta=Math.min(3,potentialDelta+1);
   if(avg>=8.6&&primaryValue>=85&&roleSkill>=84)potentialDelta=Math.min(3,potentialDelta+1);
   p.potential=clamp(p.potential+potentialDelta,Math.max(68,p.overall),99);
@@ -1019,7 +1153,7 @@ function generateOffers(avg){
   for(const c of candidatePool){if(chosen.length>=count)break;if(c&&!chosen.some(x=>x.name===c.name&&x.countryCode===c.countryCode))chosen.push(c);}
   for(const c of ranked){if(chosen.length>=count)break;if(!chosen.some(x=>x.name===c.name&&x.countryCode===c.countryCode))chosen.push(c);}
   if(chosen.length<2){for(const c of all){if(chosen.length>=2)break;if(!chosen.some(x=>x.name===c.name&&x.countryCode===c.countryCode))chosen.push(c);}}
-  state.offers=chosen.slice(0,count).map(c=>({club:c.name,countryCode:c.countryCode,countryName:countryByCode(c.countryCode)?.name||c.countryCode,league:getCompetitionRule(c.countryCode,countryByCode(c.countryCode)?.name||'').league,strength:c.strength||clubStrength(c.name,c.countryCode),minOverall:c.minOverall||null,value:Math.round(p.value*(1.08+Math.random()*.72))}));
+  state.offers=chosen.slice(0,count).map(c=>({club:c.name,countryCode:c.countryCode,countryName:countryByCode(c.countryCode)?.name||c.countryCode,league:getCompetitionRule(c.countryCode,countryByCode(c.countryCode)?.name||'').league,strength:c.strength||clubStrength(c.name,c.countryCode),minOverall:c.minOverall||null,value:marketValue(p.value*(1.08+Math.random()*.72))}));
   state.news.push(`${p.name} recebeu ${state.offers.length} proposta(s) ao fim da temporada.`);
 }
 function cupFinalStatus(comp){
@@ -1074,7 +1208,7 @@ function ensureDecisionPlan(){
   const s=state.season;if(s.decisionTargets?.length)return;const base=s.league.schedule.length;s.decisionTargets=[.14,.31,.49,.67,.85].map(x=>Math.max(2,Math.round(base*x)));s.decisionIndex=s.decisionIndex||0;s.decisionLogs=s.decisionLogs||[];s.startTrophyCount=state.player.trophies?.length||0;s.startAwardCount=state.player.awards?.length||0;
 }
 function openMatchDecision(event){
-  const scenario=buildDecisionScenario(event);state.pendingMatchDecision={event,scenario};save();
+  const scenario=buildDecisionScenario(event);state.pendingMatchDecision={event,scenario,isNationalDecision:event.type==='national'};if(event.type==='national')state.season.nationalDecisionCount=(state.season.nationalDecisionCount||0)+1;save();
   const fav=favoritismForEvent(event);$('#decision-competition').textContent=`${event.competition}${event.stage?` · ${event.stage}`:''}`;$('#decision-title').textContent=`${scenario.minute}' · ${scenario.title}`;$('#decision-match').textContent=`${event.home} x ${event.away} · favorito: ${fav.favorite} (${fav.favoritePct}%)`;$('#decision-description').textContent=scenario.description;
   $('#decision-result').classList.add('hidden');$('#decision-continue').classList.add('hidden');renderDecisionChoices(scenario);$('#match-decision-modal').classList.remove('hidden');
 }
@@ -1088,23 +1222,31 @@ function simulateInteractiveMatch(event,option){
   else {perf.rating-=.28;if(option.type==='defense'&&Math.random()<(option.risk||.12)){oppGoals++;outcome='A tentativa falha e o adversário aproveita para marcar.';}}
   perf.goals=Math.min(perf.goals,teamGoals);perf.assists=Math.min(perf.assists,Math.max(0,teamGoals-perf.goals));perf.rating=clamp(perf.rating,5,10);
   const homeGoals=playerIsHome?teamGoals:oppGoals,awayGoals=playerIsHome?oppGoals:teamGoals;s.totalGames++;s.goals+=perf.goals;s.assists+=perf.assists;s.ratingSum+=perf.rating;
-  if(event.type!=='national'){s.clubGames++;s.clubGoals+=perf.goals;s.clubAssists+=perf.assists;p.value=Math.max(200000,Math.round(p.value*(1+(perf.rating-6.5)/260)));}else{p.nationalTeamGames++;p.nationalTeamGoals+=perf.goals;}
+  if(event.type!=='national'){s.clubGames++;s.clubGoals+=perf.goals;s.clubAssists+=perf.assists;p.value=marketValue(p.value*(1+(perf.rating-6.5)/260));}else{p.nationalTeamGames++;p.nationalTeamGoals+=perf.goals;p.nationalTrust=clamp((p.nationalTrust||0)+(perf.rating>=8?3:perf.rating>=7.2?2:perf.rating<6.2?-1:1),0,100);}
   processCompetitionResult(event,teamGoals,oppGoals);if(perf.rating>=8)state.news.push(`${p.name} foi destaque em ${event.competition}, com nota ${perf.rating.toFixed(1)}.`);
   return {event,playerIsHome,teamGoals,oppGoals,homeGoals,awayGoals,perf,model:score.model,outcome,success};
 }
 function resolveMatchDecision(index){
-  const pending=state.pendingMatchDecision;if(!pending)return;const option=pending.scenario.options[index];const log=simulateInteractiveMatch(pending.event,option);const s=state.season;s.decisionLogs=s.decisionLogs||[];s.decisionLogs.push({competition:log.event.competition,match:`${log.event.home} ${log.homeGoals} x ${log.awayGoals} ${log.event.away}`,choice:option.label,outcome:log.outcome,rating:log.perf.rating.toFixed(1)});s.decisionIndex=(s.decisionIndex||0)+1;state.pendingMatchDecision=null;save();render();
+  const pending=state.pendingMatchDecision;if(!pending)return;const option=pending.scenario.options[index];const log=simulateInteractiveMatch(pending.event,option);const s=state.season;s.decisionLogs=s.decisionLogs||[];s.decisionLogs.push({competition:log.event.competition,match:`${log.event.home} ${log.homeGoals} x ${log.awayGoals} ${log.event.away}`,choice:option.label,outcome:log.outcome,rating:log.perf.rating.toFixed(1)});if(!pending.isNationalDecision)s.decisionIndex=(s.decisionIndex||0)+1;else state.player.nationalTrust=clamp((state.player.nationalTrust||0)+(log.success?3:-1),0,100);state.pendingMatchDecision=null;save();render();
   $('#decision-visual').classList.add('hidden');$('#decision-choices').classList.add('hidden');$('#decision-result').classList.remove('hidden');$('#decision-result').innerHTML=`<strong>${log.outcome}</strong><span>Placar: ${log.event.home} ${log.homeGoals} × ${log.awayGoals} ${log.event.away}</span><span>Sua nota: ${log.perf.rating.toFixed(1)} · ${log.perf.goals} gol(s) · ${log.perf.assists} assistência(s)</span>`;$('#decision-continue').classList.remove('hidden');
 }
 function processSeasonEnd(){
   const p=state.player,s=state.season;if(!s||s.endProcessed)return;const avg=s.totalGames?s.ratingSum/s.totalGames:6.5;evaluateAwards(avg);updateSelectionAtSeasonEnd(avg);const delta=developmentResult(avg);
   const cupStatus=cupFinalStatus(s.cup),continentalStatus=s.continental?continentalFinalStatus(s.continental):'Não disputou';state.history.push({year:s.year,club:s.clubAtStart||p.club,clubCountry:s.countryAtStart||p.clubCountry,overall:p.overall,games:s.clubGames,goals:s.clubGoals,assists:s.clubAssists,rating:avg.toFixed(1),leaguePosition:s.league.position,cupStatus,continentalStatus,competitions:competitionStatus().map(c=>c.title)});
-  p.value=Math.max(150000,Math.round(p.value*(1+delta*.11)));p.age++;state.news.push(`${p.name} encerra ${s.year} com média ${avg.toFixed(1)}. GER ${p.overall} (${delta>=0?'+':''}${delta}) e POT ${p.potential}.`);generateOffers(avg);s.endProcessed=true;s.closed=true;s.endAverage=avg;s.developmentDelta=delta;s.finalCupStatus=cupStatus;s.finalContinentalStatus=continentalStatus;
-  if(p.age>=46){p.retired=true;p.age=46;state.news.push(`${p.name} encerra oficialmente a carreira aos 46 anos.`);state.offers=[];}
+  p.value=marketValue(p.value*(1+delta*.11));p.age++;state.news.push(`${p.name} encerra ${s.year} com média ${avg.toFixed(1)}. GER ${p.overall} (${delta>=0?'+':''}${delta}) e POT ${p.potential}.`);generateOffers(avg);s.endProcessed=true;s.closed=true;s.endAverage=avg;s.developmentDelta=delta;s.finalCupStatus=cupStatus;s.finalContinentalStatus=continentalStatus;
+  if(p.age>=46){p.retired=true;p.age=46;p.retiredAge=46;p.legacyCardSeen=false;pendingCareerCard=true;state.news.push(`${p.name} encerra oficialmente a carreira aos 46 anos.`);state.offers=[];}
 }
 function continueSeasonSimulation(){
   const p=state.player,s=state.season;if(!s||s.closed||p.retired||state.pendingMatchDecision)return;ensureDecisionPlan();state.simulatingSeason=true;let safety=0;
-  while(!seasonComplete()&&safety<160){const event=chooseNextEvent();if(!event)break;const target=s.decisionTargets[s.decisionIndex];if(event.type!=='national'&&target!==undefined&&s.clubGames+1>=target){openMatchDecision(event);save();render();return;}simulateMatchCore(event);safety++;}
+  while(!seasonComplete()&&safety<160){
+    const event=chooseNextEvent();if(!event)break;const target=s.decisionTargets[s.decisionIndex];
+    const healthy=(p.injuryGames||0)<=0;
+    const nationalDecision=event.type==='national'&&healthy&&(s.nationalDecisionCount||0)<2&&Math.random()<.58;
+    if(nationalDecision){openMatchDecision(event);save();render();return;}
+    if(event.type!=='national'&&healthy&&target!==undefined&&s.clubGames+1>=target){openMatchDecision(event);save();render();return;}
+    simulateMatchCore(event);safety++;
+    if(healthy&&event.type!=='national'&&maybeTriggerCareerEvent()){state.simulatingSeason=false;save();render();return;}
+  }
   if(safety>=160){state.simulatingSeason=false;toast('A simulação atingiu o limite de segurança do calendário.');save();render();return;}
   processSeasonEnd();const newTitles=(p.trophies||[]).slice(s.startTrophyCount||0).map(t=>t.name);const newAwards=(p.awards||[]).slice(s.startAwardCount||0).map(a=>a.name);pendingSeasonCelebration={titles:newTitles,awards:newAwards};state.simulatingSeason=false;nextEventCache=null;save();render();showSeasonSummary();toast(`${state.offers.length} proposta(s) chegaram ao fim da temporada.`);
 }
@@ -1114,11 +1256,15 @@ function simulateWholeSeason(){
 function showSeasonSummary(){
   const s=state.season,p=state.player;if(!s||!s.closed)return;$('#summary-year').textContent=`TEMPORADA ${s.year}`;$('#summary-title').textContent=`${s.league.position}º lugar em ${s.league.name}`;$('#summary-subtitle').textContent=`${s.league.points} pontos · ${s.league.wins}V ${s.league.draws}E ${s.league.losses}D · ${state.offers.length} proposta(s) recebida(s)`;
   const standings=s.league.standings||[];$('#summary-standings').innerHTML=standings.map(r=>`<tr class="${r.user?'user-row':''}"><td>${r.position}</td><td>${r.team}</td><td>${r.games}</td><td>${r.wins}</td><td>${r.draws}</td><td>${r.losses}</td><td>${r.gd>0?'+':''}${r.gd}</td><td><strong>${r.points}</strong></td></tr>`).join('');
-  const cupItems=[{name:s.cup.name,status:s.finalCupStatus||cupFinalStatus(s.cup)}];if(s.continental)cupItems.push({name:s.continental.name,status:s.finalContinentalStatus||continentalFinalStatus(s.continental)});$('#summary-cups').innerHTML=cupItems.map(x=>`<div class="summary-status"><strong>${x.name}</strong><span>${x.status}</span></div>`).join('');
+  const cupItems=[{name:s.cup.name,status:s.finalCupStatus||cupFinalStatus(s.cup)}];if(s.continental)cupItems.push({name:s.continental.name,status:s.finalContinentalStatus||continentalFinalStatus(s.continental)});$('#summary-cups').innerHTML=cupItems.map(x=>`<div class="summary-status with-art">${honourVisual(x.name)}<strong>${x.name}</strong><span>${x.status}</span></div>`).join('');
   $('#summary-decisions').innerHTML=(s.decisionLogs||[]).map((d,i)=>`<div><strong>${i+1}. ${d.match}</strong><span>${d.choice} · ${d.outcome}</span></div>`).join('');$('#summary-offers').innerHTML=state.offers.length?state.offers.map(o=>`<div class="summary-offer"><strong>${o.club}</strong><span>${o.countryName} · Força ${o.strength} · ${money(o.value)}</span></div>`).join(''):'<p class="muted">Nenhuma proposta devido à aposentadoria.</p>';$('#season-summary-modal').classList.remove('hidden');
 }
 $('#decision-continue').addEventListener('click',()=>{$('#match-decision-modal').classList.add('hidden');continueSeasonSimulation();});
-$('#summary-market').addEventListener('click',()=>{$('#season-summary-modal').classList.add('hidden');showView('market');showPendingSeasonCelebration();});
-$('#summary-close').addEventListener('click',()=>{$('#season-summary-modal').classList.add('hidden');showPendingSeasonCelebration();});
+$('#summary-market').addEventListener('click',()=>{$('#season-summary-modal').classList.add('hidden');if(state.player?.retired&&pendingCareerCard){pendingCareerCard=false;showCareerLegacyCard();return;}showView('market');showPendingSeasonCelebration();});
+$('#summary-close').addEventListener('click',()=>{$('#season-summary-modal').classList.add('hidden');if(state.player?.retired&&pendingCareerCard){pendingCareerCard=false;showCareerLegacyCard();return;}showPendingSeasonCelebration();});
 
-populateCreationFields();setupBirthdateLimits();sanitizeAwardsEligibility();save();render();if(state.pendingEvent)openPendingEvent();
+function normalizePersistentState(){
+  if(!state.player)return;const p=state.player;p.value=marketValue(p.value||1100000);p.nationalTrust=clamp(p.nationalTrust||0,0,100);p.injuryGames=Math.max(0,p.injuryGames||0);p.reputation=clamp(p.reputation||10,0,100);p.morale=clamp(p.morale||70,40,100);
+  state.offers=(state.offers||[]).map(o=>({...o,value:marketValue(o.value||p.value)}));
+}
+populateCreationFields();setupBirthdateLimits();normalizePersistentState();sanitizeAwardsEligibility();save();render();if(state.pendingEvent)openPendingEvent();if(state.player?.retired&&!state.player.legacyCardSeen)setTimeout(showCareerLegacyCard,100);

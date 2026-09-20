@@ -8,7 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=7.6">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="css/style.css?v=7.7">
 </head>
 <body>
   <header class="topbar">
@@ -39,7 +40,7 @@
         <div class="hero-content">
           <div class="hero-kicker"><span></span> SUA CARREIRA. SUAS DECISÕES. SEU LEGADO.</div>
           <h1>Da primeira chuteira ao <span>estádio lotado.</span></h1>
-          <p class="lead">Monte seu jogador com atributos herdados de 150 lendas, escolha seu primeiro clube e construa uma carreira temporada por temporada — com evolução, mercado, seleção, títulos e decisões dentro de campo.</p>
+          <p class="lead">Monte seu jogador com atributos herdados de 200 craques, escolha seu primeiro clube e construa uma carreira temporada por temporada — com evolução, mercado, seleção, títulos e decisões dentro de campo.</p>
 
           <div class="hero-football-icons">
             <span>🏆 UCL</span><span>⚽ Bola de Ouro</span><span>🇧🇷 Seleção</span><span>🧤 Luva de Ouro</span><span>📋 Mercado</span>
@@ -51,7 +52,7 @@
           </div>
 
           <div class="hero-stats">
-            <div><strong>150</strong><small>lendas no sorteio</small></div>
+            <div><strong>200</strong><small>150 históricos + 50 atuais</small></div>
             <div><strong>7</strong><small>atributos para montar</small></div>
             <div><strong>99</strong><small>GER máximo</small></div>
           </div>
@@ -255,6 +256,8 @@
             <div><strong id="nt-games">0</strong><small>Jogos</small></div>
             <div><strong id="nt-goals">0</strong><small>Gols</small></div>
           </div>
+          <div class="national-role-line"><span>Função</span><strong id="national-role">Fora do grupo</strong></div>
+          <button id="national-action" class="secondary full" type="button">Conversar com a seleção</button>
         </article>
 
         <article class="panel news-card">
@@ -304,6 +307,14 @@
     <section id="market" class="view page">
       <div class="page-head"><p class="eyebrow">MERCADO</p><h2>Propostas de transferência</h2><p>O nível dos clubes interessados acompanha seu overall e sua temporada.</p></div>
       <div id="market-tier" class="panel market-tier"></div>
+      <article id="legacy-club-panel" class="panel legacy-club-panel hidden">
+        <div class="section-title"><h3>Último capítulo da carreira</h3><span>STATUS DE LENDA</span></div>
+        <p>Você já se consolidou. No fim da carreira, pode escolher diretamente onde quer jogar.</p>
+        <div class="legacy-club-controls">
+          <select id="legacy-club-choice" aria-label="Escolher clube"></select>
+          <button id="legacy-club-sign" class="primary" type="button">Assinar com este clube</button>
+        </div>
+      </article>
       <div id="offers" class="offers"></div>
     </section>
   </main>
@@ -356,6 +367,47 @@
     </div>
   </div>
 
+  <div id="national-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card national-modal-card">
+      <p class="eyebrow">SELEÇÃO NACIONAL</p>
+      <h2 id="national-modal-title">Conversa com a comissão</h2>
+      <p id="national-modal-copy"></p>
+      <div id="national-modal-choices" class="event-choices"></div>
+      <button id="national-modal-close" class="secondary full" type="button">Fechar</button>
+    </div>
+  </div>
+
+  <div id="career-legacy-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card career-legacy-card">
+      <div class="legacy-card-head">
+        <div>
+          <p class="eyebrow">BE THE LEGEND · FIM DE CARREIRA</p>
+          <h2 id="legacy-card-name">Sua lenda</h2>
+          <p id="legacy-card-subtitle"></p>
+        </div>
+        <div class="legacy-rank-badge"><small>RANKING HISTÓRICO*</small><strong id="legacy-rank">#—</strong></div>
+      </div>
+      <div class="legacy-card-hero">
+        <div class="legacy-shirt"><span id="legacy-shirt-name">JOGADOR</span><strong id="legacy-shirt-number">10</strong></div>
+        <div class="legacy-card-mainstats">
+          <div><small>Pico de GER</small><strong id="legacy-peak-overall">—</strong></div>
+          <div><small>Temporadas</small><strong id="legacy-seasons">—</strong></div>
+          <div><small>Títulos</small><strong id="legacy-titles">—</strong></div>
+          <div><small>Prêmios</small><strong id="legacy-awards">—</strong></div>
+        </div>
+      </div>
+      <div class="legacy-card-stats">
+        <div><strong id="legacy-games">0</strong><small>Jogos por clubes</small></div>
+        <div><strong id="legacy-goals">0</strong><small>Gols</small></div>
+        <div><strong id="legacy-assists">0</strong><small>Assistências</small></div>
+        <div><strong id="legacy-nt">0</strong><small>Jogos pela seleção</small></div>
+      </div>
+      <div id="legacy-honours-preview" class="legacy-honours-preview"></div>
+      <p class="legacy-rank-note">*Ranking estimado pelo simulador a partir de desempenho, pico de GER, títulos, prêmios e carreira internacional.</p>
+      <div class="summary-actions"><button id="legacy-view-stats" class="secondary" type="button">Ver estatísticas</button><button id="legacy-close" class="primary" type="button">Encerrar</button></div>
+    </div>
+  </div>
+
   <div id="celebration" class="celebration hidden">
     <div id="confetti" class="confetti"></div>
     <div class="celebration-card">
@@ -368,7 +420,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=7.6"></script>
-  <script src="js/app.js?v=7.6"></script>
+  <script src="js/data.js?v=7.7"></script>
+  <script src="js/app.js?v=7.7"></script>
 </body>
 </html>
