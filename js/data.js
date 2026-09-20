@@ -2620,8 +2620,8 @@ const INCIDENT_EVENTS = [
     {label:'Priorizar descanso',action:'travel_rest',effect:'+ recuperação'},
     {label:'Fazer ativação extra',action:'travel_activate',effect:'+ preparação; pequeno desgaste'}]},
   {id:'sponsor_pressure',title:'Pressão de patrocinador',description:'Uma campanha comercial importante coincide com uma semana decisiva de jogos.',choices:[
-    {label:'Cumprir a agenda completa',action:'sponsor_accept',effect:'+ reputação; + pressão'},
-    {label:'Reduzir compromissos',action:'sponsor_focus',effect:'+ preparação esportiva'}]},
+    {label:'Cumprir a agenda completa',action:'sponsor_campaign_accept',effect:'+ reputação; + pressão'},
+    {label:'Reduzir compromissos',action:'sponsor_campaign_focus',effect:'+ preparação esportiva'}]},
   {id:'fan_expectation',title:'Cobrança da torcida',description:'Uma sequência irregular aumenta a cobrança dos torcedores em treino aberto.',choices:[
     {label:'Falar com os torcedores',action:'fans_talk',effect:'+ conexão e reputação'},
     {label:'Blindar-se e treinar',action:'fans_train',effect:'+ foco e evolução'}]},
@@ -2675,7 +2675,34 @@ const CAREER_EVENTS = [
     {label:'Ouvir o mercado',action:'contract_market',effect:'+ propostas e reputação'}]},
   {id:'extra_recovery',title:'Nova tecnologia de recuperação',description:'O departamento de performance oferece uma sessão experimental de recuperação.',choices:[
     {label:'Fazer o protocolo completo',action:'recovery_tech',effect:'+ condição e moral'},
-    {label:'Manter a rotina tradicional',action:'recovery_normal',effect:'+ estabilidade'}]}
+    {label:'Manter a rotina tradicional',action:'recovery_normal',effect:'+ estabilidade'}]},
+  {id:'tunnel_interview',title:'Microfone no túnel',description:'A transmissão pede uma resposta rápida antes de uma partida grande, com a arquibancada já pulsando.',choices:[
+    {label:'Prometer uma grande atuação',action:'ambitious',effect:'+ reputação; + pressão'},
+    {label:'Falar pouco e focar no jogo',action:'humble',effect:'+ moral e estabilidade'}]},
+  {id:'night_training',title:'Treino noturno no estádio',description:'O treinador fecha o estádio para uma sessão tática sob os refletores, simulando a atmosfera do próximo jogo.',choices:[
+    {label:'Ficar para a sessão extra',action:'tactical_adapt',effect:'+ evolução e repertório'},
+    {label:'Preservar energia',action:'recover',effect:'+ recuperação e moral'}]},
+  {id:'museum_invite',title:'Convite ao museu do clube',description:'O clube convida você para conhecer ídolos históricos e gravar uma mensagem para a torcida.',choices:[
+    {label:'Participar e falar com os torcedores',action:'fans_talk',effect:'+ conexão e reputação'},
+    {label:'Agradecer e manter foco esportivo',action:'fans_train',effect:'+ foco e desenvolvimento'}]},
+  {id:'deadline_phone',title:'Telefone no último dia da janela',description:'Seu empresário recebe uma ligação inesperada nas horas finais do mercado.',choices:[
+    {label:'Ouvir a proposta',action:'contract_market',effect:'+ mercado e possibilidades'},
+    {label:'Desligar e permanecer',action:'contract_stay',effect:'+ estabilidade e moral'}]},
+  {id:'boot_lab',title:'Laboratório de chuteiras',description:'A fornecedora apresenta um protótipo personalizado e pede que você teste o material em treino.',choices:[
+    {label:'Testar o protótipo',action:'boots_risk',effect:'chance de ganho técnico'},
+    {label:'Manter seu modelo atual',action:'boots_safe',effect:'+ consistência'}]},
+  {id:'captain_camera',title:'Câmera no vestiário',description:'Uma equipe de mídia acompanha a preleção e você é convidado a dizer algumas palavras ao grupo.',choices:[
+    {label:'Fazer um discurso',action:'captain_speech',effect:'+ liderança e reputação'},
+    {label:'Liderar em silêncio',action:'captain_example',effect:'+ moral e confiança'}]},
+  {id:'recovery_pool',title:'Sessão na piscina',description:'Após uma sequência pesada, o departamento físico oferece trabalho regenerativo especial.',choices:[
+    {label:'Fazer recuperação completa',action:'recovery_tech',effect:'+ condição física'},
+    {label:'Treinar com bola',action:'train_hard',effect:'chance de evolução; mais desgaste'}]},
+  {id:'charity_match',title:'Jogo beneficente',description:'Ídolos e atletas atuais se reúnem para um evento beneficente transmitido nacionalmente.',choices:[
+    {label:'Participar do evento',action:'charity_join',effect:'+ reputação e moral'},
+    {label:'Usar a folga para recuperar',action:'charity_rest',effect:'+ recuperação'}]},
+  {id:'analyst_room',title:'Sala de análise individual',description:'Um analista separa padrões de movimentação dos seus próximos adversários e convida você para uma sessão privada.',choices:[
+    {label:'Estudar os padrões',action:'video_learn',effect:'+ evolução e leitura'},
+    {label:'Rever suas melhores jogadas',action:'video_confidence',effect:'+ confiança'}]}
 ];
 
 // --- V8.7: eventos adicionais de seleção ---

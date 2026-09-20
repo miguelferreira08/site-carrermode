@@ -1,0 +1,25 @@
+Be The Legend V9.0 — relatório de validação
+
+PASS | node --check js/app.js
+PASS | node --check js/data.js
+PASS | HTML IDs únicos | 193 IDs; duplicados=[]
+PASS | IDs usados pelo JS existem no HTML | 179 refs; ausentes=[]
+PASS | CSS parse | 2412 tokens/rules; erros=0
+PASS | Assets locais referenciados pelo HTML | ausentes=[]
+PASS | SVGs válidos | 60 arquivos; inválidos=0
+PASS | Divisões inferiores cadastradas | {"Série B": {"format": true, "pool": 20, "unique": 20}, "EFL Championship": {"format": true, "pool": 24, "unique": 24}, "EFL League One": {"format": true, "pool": 24, "unique": 24}, "Ligue 2": {"format": true, "pool": 18, "unique": 18}, "2. Bundesliga": {"format": true, "pool": 18, "unique": 18}, "LALIGA HYPERMOTION": {"format": true, "pool": 22, "unique": 22}, "Liga Portugal 2": {"format": true, "pool": 18, "unique": 18}, "Serie B": {"format": true, "pool": 20, "unique": 20}}
+PASS | Pools iniciais por país incluem divisões inferiores | {"BR": {"top": 20, "lower": 20, "divisions": [2], "combined": 40}, "ENG": {"top": 21, "lower": 48, "divisions": [2, 3], "combined": 69}, "FR": {"top": 18, "lower": 18, "divisions": [2], "combined": 36}, "DE": {"top": 18, "lower": 18, "divisions": [2], "combined": 36}, "ES": {"top": 21, "lower": 22, "divisions": [2], "combined": 42}, "PT": {"top": 18, "lower": 18, "divisions": [2], "combined": 36}, "IT": {"top": 20, "lower": 20, "divisions": [2], "combined": 40}}
+PASS | IDs de eventos sem duplicação | {'career': 24, 'incident': 13, 'national': 11}; duplicados=0
+PASS | Todas as decisões de eventos têm handler | 78 ações; faltando=[]
+PASS | Cenários interativos de partida | 30 cenários únicos
+PASS | Variação de cenários visuais de partida | 7 temas detectados
+PASS | Hall da Fama salva múltiplas carreiras e evita duplicata | {"count": 2, "names": ["B", "A"], "saved": true}
+PASS | Limite de 100 G/A | {"x": {"goals": 2, "assists": 0}, "total": 100}
+PASS | Patrocínios grandes exigem GER + clube grande | {"low": ["Mizuno", "Umbro"], "mid": ["New Balance", "Under Armour", "Mizuno", "Umbro"], "elite": ["Nike", "adidas", "PUMA", "New Balance", "Under Armour", "Mizuno", "Umbro"], "highSmallClub": ["Under Armour", "Mizuno", "Umbro"]}
+PASS | Limite de 3 novos sorteios de clube inicial
+PASS | Sorteio inicial usa clubes de divisões inferiores do país
+PASS | Editor facial reconstruído e face final preservada
+PASS | Centralização facial na carreira
+INFO | Chromium visual E2E | o Chromium do ambiente bloqueia localhost/file:// por política administrativa (ERR_BLOCKED_BY_ADMINISTRATOR); por isso a validação visual automatizada completa não pode ser executada aqui.
+PASS | Pacote Windows ZIP | testzip=None após empacotamento final
+PASS | Pacote FLAT ZIP | testzip=None após empacotamento final

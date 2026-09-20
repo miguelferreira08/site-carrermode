@@ -7094,3 +7094,921 @@ img{background:transparent}
   border-color:rgba(255,255,255,.06)!important;
   box-shadow:none!important;
 }
+
+/* ===== V9.0 — menu de jogo, Hall da Fama, estúdio facial e cenas dinâmicas ===== */
+#home.hero {
+  display: block;
+  min-height: calc(100vh - 76px);
+  padding: 34px 22px 46px;
+}
+
+#home .hero-shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 760px);
+  justify-content: center;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 48px 42px 42px;
+  overflow: hidden;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 50% -18%, rgba(81, 116, 255, .16), transparent 42%),
+    linear-gradient(180deg, rgba(14, 22, 39, .97), rgba(9, 15, 28, .98));
+}
+
+#home .hero-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+}
+
+#home .hero-content .lead {
+  max-width: 720px;
+  margin-inline: auto;
+  line-height: 1.6;
+}
+
+#home .hero-kicker {
+  justify-content: center;
+}
+
+#home .hero-football-icons {
+  justify-content: center;
+  max-width: 720px;
+}
+
+#home .game-menu-actions {
+  width: min(620px, 100%);
+  margin: 8px auto 0;
+  display: grid;
+  gap: 10px;
+}
+
+#home .game-menu-entry {
+  width: 100%;
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  text-align: left;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  background: linear-gradient(90deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+  transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+#home .game-menu-entry:hover,
+#home .game-menu-entry.active {
+  transform: translateX(5px);
+  border-color: rgba(66, 232, 141, .38);
+  background: linear-gradient(90deg, rgba(66,232,141,.14), rgba(255,255,255,.025));
+  box-shadow: 0 16px 34px rgba(0,0,0,.2), inset 3px 0 0 var(--green);
+}
+
+#home .game-menu-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(66,232,141,.1);
+  border: 1px solid rgba(66,232,141,.22);
+  color: var(--green);
+  font-weight: 900;
+}
+
+#home .game-menu-entry b {
+  display: block;
+  font-size: 15px;
+}
+
+#home .game-menu-entry small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+#home .game-menu-entry em {
+  color: var(--muted);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: .08em;
+}
+
+#home .hero-stats {
+  width: min(640px, 100%);
+  margin: 8px auto 0;
+}
+
+#home .hero-visual {
+  display: none !important;
+}
+
+#home .hero-save-note {
+  justify-content: center;
+}
+
+#home .hero-ticker {
+  width: min(1120px, 100%);
+  margin: 18px auto 0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.home-hall {
+  width: min(1120px, 100%);
+  margin: 24px auto 0 !important;
+  padding: 22px !important;
+  border-radius: 24px !important;
+  background:
+    radial-gradient(circle at 50% 0, rgba(66,232,141,.07), transparent 42%),
+    linear-gradient(180deg, rgba(13,21,37,.97), rgba(8,14,27,.98)) !important;
+}
+
+.home-hall .section-title {
+  margin-bottom: 16px;
+}
+
+.saved-careers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 420px));
+  justify-content: center;
+  gap: 16px;
+}
+
+.saved-career-card {
+  position: relative;
+  min-height: 190px;
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  grid-template-areas:
+    "face info"
+    "numbers numbers";
+  gap: 14px 16px;
+  align-items: center;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.085);
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.018)),
+    radial-gradient(circle at 0 0, rgba(66,232,141,.09), transparent 46%);
+  box-shadow: 0 18px 40px rgba(0,0,0,.18);
+}
+
+.saved-career-card::after {
+  content: "";
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  right: -70px;
+  top: -70px;
+  border: 1px solid rgba(255,255,255,.04);
+  border-radius: 50%;
+  box-shadow: 0 0 0 28px rgba(255,255,255,.012), 0 0 0 56px rgba(255,255,255,.008);
+  pointer-events: none;
+}
+
+.saved-career-rank {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  justify-items: end;
+  z-index: 2;
+}
+
+.saved-career-rank small {
+  font-size: 8px;
+  letter-spacing: .12em;
+  color: var(--muted);
+}
+
+.saved-career-rank strong {
+  font-size: 22px;
+  color: var(--green);
+}
+
+.saved-career-face {
+  grid-area: face;
+  position: relative;
+  width: 92px;
+  height: 112px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(66,232,141,.18);
+  background: linear-gradient(160deg, rgba(31,54,66,.78), rgba(6,13,20,.96));
+}
+
+.saved-career-face .player-face.compact {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0 !important;
+  transform: translate(-50%, -45%) scale(.67) !important;
+  transform-origin: center center !important;
+}
+
+.saved-career-info {
+  grid-area: info;
+  min-width: 0;
+  align-self: center;
+  padding-right: 58px;
+}
+
+.saved-career-kicker {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--green);
+  font-size: 8px;
+  letter-spacing: .14em;
+}
+
+.saved-career-info h4 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.saved-career-info p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.saved-career-clubs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.saved-career-clubs span {
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.05);
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.saved-career-numbers {
+  grid-area: numbers;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.saved-career-numbers div {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 8px 5px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.045);
+}
+
+.saved-career-numbers strong {
+  font-size: 15px;
+}
+
+.saved-career-numbers small {
+  font-size: 7px;
+  letter-spacing: .08em;
+  color: var(--muted);
+}
+
+.hall-empty {
+  grid-column: 1 / -1;
+  min-height: 150px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 5px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.hall-empty > span {
+  font-size: 30px;
+  color: var(--green);
+}
+
+.hall-empty strong {
+  color: var(--text);
+}
+
+/* Estúdio facial compacto inspirado em editores de personagem de jogos */
+.appearance-builder {
+  grid-template-columns: 290px minmax(0, 1fr) !important;
+  align-items: stretch !important;
+  gap: 24px !important;
+  padding: 20px !important;
+}
+
+.appearance-preview-wrap {
+  min-height: 390px;
+  align-content: center;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.06);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(66,232,141,.1), transparent 40%),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+}
+
+.appearance-preview {
+  width: 200px !important;
+  height: 236px !important;
+  margin: 8px 0 10px !important;
+  overflow: hidden;
+}
+
+.appearance-preview .player-face {
+  position: relative;
+  transform: scale(1.18) !important;
+  transform-origin: center 20% !important;
+}
+
+.appearance-studio {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 14px;
+}
+
+.appearance-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 5px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.055);
+}
+
+.appearance-tabs button {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.appearance-tabs button span {
+  font-size: 16px;
+}
+
+.appearance-tabs button.active {
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(66,232,141,.15), rgba(66,232,141,.07));
+  box-shadow: inset 0 0 0 1px rgba(66,232,141,.24);
+}
+
+.appearance-panel {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.appearance-group {
+  padding: 14px !important;
+  border-radius: 18px !important;
+}
+
+.appearance-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.appearance-group-head small {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.appearance-group-options {
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)) !important;
+  gap: 9px !important;
+}
+
+.appearance-chip.preset-card {
+  min-height: 84px;
+  display: grid;
+  grid-template-rows: 46px auto;
+  place-items: center;
+  gap: 5px;
+  padding: 8px;
+}
+
+.appearance-chip.preset-card b {
+  font-size: 9px;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.preset-visual {
+  position: relative;
+  width: 52px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(255,255,255,.035);
+}
+
+.hair-preset::before {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  left: 11px;
+  top: 13px;
+  border-radius: 48% 48% 42% 42%;
+  background: #bd8060;
+}
+
+.hair-preset i {
+  position: absolute;
+  left: 10px;
+  top: 4px;
+  width: 32px;
+  height: 20px;
+  border-radius: 50% 50% 25% 25%;
+  background: #1b1714;
+}
+
+.hair-preset.hair-short i { height: 14px; top: 9px; }
+.hair-preset.hair-curly i { width: 38px; left: 7px; height: 21px; box-shadow: -4px 4px 0 -1px #1b1714, 4px 4px 0 -1px #1b1714; }
+.hair-preset.hair-afro i { width: 42px; height: 30px; left: 5px; top: -1px; border-radius: 50%; }
+.hair-preset.hair-mohawk i { width: 13px; height: 29px; left: 20px; top: -1px; clip-path: polygon(50% 0,100% 100%,0 100%); }
+.hair-preset.hair-long i { width: 38px; height: 35px; left: 7px; top: 2px; border-radius: 45% 45% 35% 35%; }
+
+.beard-preset::before {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 31px;
+  left: 11px;
+  top: 7px;
+  border-radius: 48%;
+  background: #bd8060;
+}
+
+.beard-preset i {
+  position: absolute;
+  left: 16px;
+  top: 24px;
+  width: 20px;
+  height: 12px;
+  border-radius: 5px 5px 50% 50%;
+  background: #1b1714;
+}
+
+.beard-preset.beard-stubble i { opacity: .35; height: 9px; }
+.beard-preset.beard-goatee i { width: 10px; left: 21px; height: 14px; }
+.beard-preset.beard-full i { width: 26px; left: 13px; height: 17px; top: 21px; }
+.beard-preset.beard-mustache i { height: 5px; top: 24px; border-radius: 50%; }
+
+.skin-preset {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background: var(--preset-skin);
+  box-shadow: inset 0 -7px 14px rgba(0,0,0,.13);
+}
+
+.color-preset {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--preset-color);
+  border: 2px solid rgba(255,255,255,.18);
+}
+
+.switch-preset {
+  color: var(--green);
+  font-size: 22px;
+  font-weight: 900;
+}
+
+/* Centralização do rosto na carreira e no card final */
+.profile-card {
+  grid-template-columns: 104px 1fr auto !important;
+}
+
+.avatar.face-avatar {
+  position: relative !important;
+  width: 96px !important;
+  height: 112px !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+.face-avatar .player-face.compact {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  margin: 0 !important;
+  transform: translate(-50%, -45%) scale(.67) !important;
+  transform-origin: center center !important;
+}
+
+.legacy-face-avatar {
+  position: relative !important;
+  width: 118px !important;
+  height: 136px !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+.legacy-face-avatar .player-face.compact {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  margin: 0 !important;
+  transform: translate(-50%, -44%) scale(.82) !important;
+  transform-origin: center center !important;
+}
+
+/* Seleção nacional com mais respiro */
+.national-card {
+  display: flex !important;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px !important;
+}
+
+.national-card .section-title {
+  margin-bottom: 0 !important;
+}
+
+.national-team-line {
+  min-height: 76px;
+  padding: 14px !important;
+  gap: 14px !important;
+  align-items: center;
+}
+
+.national-team-line strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.national-trust-meter {
+  margin: 0 !important;
+}
+
+.national-card .mini-stat-row {
+  gap: 10px !important;
+  margin: 0 !important;
+}
+
+.national-card .mini-stat-row > div {
+  min-height: 68px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 3px;
+}
+
+.national-role-line {
+  min-height: 48px;
+  padding: 11px 13px !important;
+  margin: 0 !important;
+}
+
+.national-card #national-action {
+  min-height: 48px;
+  margin-top: 0 !important;
+}
+
+/* Cenas visuais para eventos de carreira */
+#event-modal .modal-card {
+  width: min(720px, 94vw);
+}
+
+#event-description {
+  max-width: 650px;
+  margin: 0 auto 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+#event-choices {
+  display: grid;
+  gap: 12px;
+}
+
+.event-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.career-event-scene {
+  position: relative;
+  height: 156px;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.075);
+  background: linear-gradient(180deg, #17293a, #0b131e 64%, #091017);
+  box-shadow: inset 0 -35px 60px rgba(0,0,0,.28);
+}
+
+.career-event-scene small {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  z-index: 5;
+  font-size: 8px;
+  letter-spacing: .14em;
+  color: rgba(255,255,255,.65);
+}
+
+.scene-sky {
+  position: absolute;
+  inset: 0;
+}
+
+.scene-sky i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.48);
+  filter: blur(.2px);
+  animation: eventParticle 3.8s ease-in-out infinite;
+}
+
+.scene-sky i:nth-child(1) { left: 18%; top: 24%; }
+.scene-sky i:nth-child(2) { right: 22%; top: 32%; animation-delay: -.8s; }
+.scene-sky i:nth-child(3) { left: 47%; top: 16%; animation-delay: -1.7s; }
+
+.scene-focus {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 74px;
+  height: 74px;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  border-radius: 24px;
+  color: #fff;
+  font-size: 30px;
+  font-weight: 900;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 16px 40px rgba(0,0,0,.25), 0 0 36px rgba(66,232,141,.08);
+  animation: eventFocus 2.8s ease-in-out infinite;
+}
+
+.scene-floor {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 0;
+  height: 48px;
+  perspective: 180px;
+}
+
+.scene-floor span {
+  position: absolute;
+  left: 50%;
+  bottom: -14px;
+  width: 1px;
+  height: 72px;
+  background: rgba(255,255,255,.08);
+  transform-origin: bottom;
+}
+
+.scene-floor span:nth-child(1) { transform: rotate(64deg); }
+.scene-floor span:nth-child(2) { transform: rotate(90deg); }
+.scene-floor span:nth-child(3) { transform: rotate(116deg); }
+
+.scene-sponsor { background: radial-gradient(circle at 50% 35%, rgba(242,201,76,.2), transparent 35%), linear-gradient(180deg,#201a13,#0e0b09); }
+.scene-sponsor .scene-focus { color:#f2c94c; box-shadow:0 0 50px rgba(242,201,76,.16); }
+.scene-national { background: radial-gradient(circle at 50% 20%, rgba(55,214,123,.18), transparent 42%), linear-gradient(180deg,#0c2d28,#07140f); }
+.scene-medical { background: radial-gradient(circle at 50% 25%, rgba(86,204,242,.17), transparent 42%), linear-gradient(180deg,#102838,#08131b); }
+.scene-transfer { background: radial-gradient(circle at 50% 25%, rgba(86,112,255,.17), transparent 42%), linear-gradient(180deg,#161a38,#0a0c1c); }
+.scene-training { background: linear-gradient(180deg,#183126,#0a1610 65%,#071008); }
+.scene-media { background: radial-gradient(circle at 25% 30%, rgba(255,255,255,.18), transparent 12%), radial-gradient(circle at 75% 25%, rgba(255,255,255,.12), transparent 12%), linear-gradient(180deg,#2b202d,#100c13); }
+.scene-crowd { background: radial-gradient(circle at 50% 12%, rgba(242,201,76,.12), transparent 28%), linear-gradient(180deg,#29231b,#100d09); }
+.scene-locker { background: linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px), linear-gradient(180deg,#252833,#11131b); background-size:42px 100%,auto; }
+.scene-travel { background: radial-gradient(circle at 75% 22%,rgba(255,255,255,.16),transparent 18%),linear-gradient(180deg,#17344b,#0a1722); }
+
+.scene-result-badge {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(5,10,16,.78);
+  backdrop-filter: blur(8px);
+  animation: sceneResultIn .35s ease both;
+}
+
+.scene-result-badge b {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #082515;
+  background: var(--green);
+  font-size: 22px;
+}
+
+.scene-result-badge span {
+  max-width: 480px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+@keyframes eventParticle { 0%,100%{opacity:.25;transform:translateY(0) scale(.8)} 50%{opacity:.85;transform:translateY(-9px) scale(1.15)} }
+@keyframes eventFocus { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-54%) scale(1.05)} }
+@keyframes sceneResultIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:none} }
+
+/* Cenários variados para decisões em campo */
+#match-decision-modal .decision-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+#match-decision-modal .decision-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  opacity: .88;
+}
+
+#match-decision-modal .decision-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(5,9,15,.12), rgba(5,9,15,.76));
+}
+
+.decision-card.scene-night::before { background: radial-gradient(circle at 50% 0,rgba(96,120,255,.2),transparent 34%), linear-gradient(180deg,#111c36,#07111d); }
+.decision-card.scene-floodlights::before { background: radial-gradient(circle at 14% 0,rgba(255,255,255,.27),transparent 18%),radial-gradient(circle at 86% 0,rgba(255,255,255,.23),transparent 18%),linear-gradient(180deg,#13263b,#07131d); }
+.decision-card.scene-sunset::before { background: radial-gradient(circle at 50% 0,rgba(255,166,85,.24),transparent 36%),linear-gradient(180deg,#3a2330,#101626 60%,#08101b); }
+.decision-card.scene-derby::before { background: radial-gradient(circle at 20% 10%,rgba(255,79,105,.18),transparent 28%),radial-gradient(circle at 80% 10%,rgba(66,232,141,.15),transparent 28%),linear-gradient(180deg,#241724,#0a101b); }
+.decision-card.scene-fog::before { background: linear-gradient(180deg,rgba(210,225,235,.13),transparent 38%),linear-gradient(180deg,#26343d,#101820); }
+.decision-card.scene-finale::before { background: radial-gradient(circle at 50% 0,rgba(242,201,76,.22),transparent 36%),linear-gradient(180deg,#2b2415,#0d1118); }
+.decision-card.scene-rain::before { background: linear-gradient(115deg,transparent 0 46%,rgba(160,205,235,.08) 47% 49%,transparent 50% 100%),linear-gradient(180deg,#15293a,#09131d); background-size:22px 28px,auto; animation:rainMove .6s linear infinite; }
+
+@keyframes rainMove { to{background-position:-22px 28px,0 0} }
+
+#match-decision-modal .decision-visual {
+  margin-top: 8px;
+}
+
+#match-decision-modal .visual-stage {
+  min-height: 230px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.055), inset 0 -50px 80px rgba(0,0,0,.18);
+}
+
+#match-decision-modal .visual-choice {
+  min-height: 78px;
+  backdrop-filter: blur(7px);
+}
+
+#match-decision-modal .visual-choice > span {
+  font-size: 20px;
+}
+
+/* Club initial draw */
+#reroll-clubs:disabled {
+  opacity: .46;
+  cursor: not-allowed;
+}
+
+.club-option small:first-of-type {
+  color: var(--green);
+}
+
+/* Maintain comfortable image spacing */
+.competition-item,
+.summary-honour,
+.season-honour-tile,
+.legacy-major-item,
+.legacy-honours-preview > div {
+  overflow: hidden;
+}
+
+.honour-art,
+.competition-item .honour-art {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
+}
+
+.honour-art img,
+.competition-item .honour-art img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+@media (max-width: 760px) {
+  #home .hero-shell {
+    padding: 32px 18px 28px;
+  }
+
+  #home .game-menu-entry {
+    grid-template-columns: 42px 1fr;
+  }
+
+  #home .game-menu-entry em {
+    display: none;
+  }
+
+  .saved-careers-list {
+    grid-template-columns: 1fr;
+  }
+
+  .saved-career-card {
+    grid-template-columns: 84px 1fr;
+  }
+
+  .saved-career-face {
+    width: 82px;
+    height: 102px;
+  }
+
+  .saved-career-numbers {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .appearance-builder {
+    grid-template-columns: 1fr !important;
+  }
+
+  .appearance-preview-wrap {
+    min-height: 330px;
+  }
+
+  .appearance-group-options {
+    grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  }
+
+  .event-choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-card {
+    grid-template-columns: 90px 1fr !important;
+  }
+
+  .profile-card .rating-stack {
+    grid-column: 1 / -1;
+  }
+}
+
+/* V9.0.1 face centering hardening */
+.appearance-preview {
+  position: relative !important;
+  display: block !important;
+}
+
+.appearance-preview .player-face {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  margin: 0 !important;
+  transform: translate(-50%, -44%) scale(1.12) !important;
+  transform-origin: center center !important;
+}
