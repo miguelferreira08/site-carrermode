@@ -495,3 +495,23 @@ body{transition:background .35s ease,color .25s ease}
 .legacy-rank-explain{margin-top:16px;padding:13px 14px;border:1px solid color-mix(in srgb,var(--green) 30%,var(--border));border-radius:12px;background:color-mix(in srgb,var(--green) 5%,var(--panel))}
 .legacy-rank-explain strong{display:block;color:var(--green);font-size:12px;margin-bottom:5px}
 .legacy-rank-explain p{margin:0!important;color:var(--muted)!important;font-size:10px!important;line-height:1.55!important}
+
+
+/* V8.1 visual boost */
+@keyframes btlRise{0%{opacity:0;transform:translateY(16px) scale(.985)}100%{opacity:1;transform:none}}
+@keyframes btlFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes btlGlow{0%,100%{box-shadow:0 0 0 rgba(66,232,141,0)}50%{box-shadow:0 0 24px rgba(66,232,141,.14)}}
+@keyframes btlSweep{0%{background-position:0% 50%}100%{background-position:100% 50%}}
+.panel,.offer,.legacy-major-item,.legacy-honours-preview>div,.legacy-club-chip,.summary-status,.mini-profile,.hero-card,.form-card,.story-card,.competition-item,.decision-card,.visual-choice{animation:btlRise .45s ease both}
+.panel:hover,.offer:hover,.legacy-major-item:hover,.legacy-club-chip:hover,.summary-status:hover,.visual-choice:hover{transform:translateY(-2px);transition:transform .2s ease, box-shadow .2s ease;box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.hero .eyebrow,.hero h1,.hero p,.hero-actions,.hero-highlights li{animation:btlRise .5s ease both}
+.hero-football-icons>*{animation:btlFloat 4.5s ease-in-out infinite}
+.hero-football-icons>*:nth-child(2n){animation-duration:5.5s}
+.hero-football-icons>*:nth-child(3n){animation-duration:6.2s}
+.summary-status.with-art,.legacy-major-item,.offer .offer-main,.competition-item{background-image:linear-gradient(90deg,rgba(255,255,255,.02),rgba(255,255,255,.06),rgba(255,255,255,.02));background-size:220% 220%;animation:btlRise .45s ease both,btlSweep 7s linear infinite}
+.honour-art,.celebration-icon img{animation:btlGlow 2.8s ease-in-out infinite}
+.visual-choice{position:relative;overflow:hidden}
+.visual-choice::after{content:"";position:absolute;inset:-120% auto auto -20%;width:38%;height:300%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);transform:rotate(24deg);animation:btlSweep 5s linear infinite}
+.summary-actions button,.offer-actions button,.top-actions button,#nav button{transition:transform .18s ease, box-shadow .18s ease}
+.summary-actions button:hover,.offer-actions button:hover,.top-actions button:hover,#nav button:hover{transform:translateY(-1px) scale(1.02)}
+.legacy-rank-note::before{content:"★ ";color:var(--green)}
