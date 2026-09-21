@@ -1,0 +1,59 @@
+BE THE LEGEND V9.8 — NATIONS LEAGUE, SORTEIO DA COPA E ÍDOLOS
+Data de validação: 2026-09-21
+
+IMPLEMENTAÇÕES
+1. UEFA Nations League
+- Agenda internacional da UEFA inclui Nations League nas edições iniciadas em anos pares apropriados.
+- Formato 2026/27: Ligas A/B/C com 6 jogos de grupo; Liga D com 4; adversários repetidos em casa e fora.
+- Liga A: quartas de final em ida e volta, semifinal, disputa de 3º lugar e final.
+- Promoção/rebaixamento simplificados dentro do modo carreira.
+- Transição futura conhecida: a partir de 2028/29 o jogo usa três ligas (A/B/C), seis partidas contra cinco adversários na fase de liga, acompanhando a mudança aprovada pela UEFA em 2026.
+
+2. Sorteio da Copa do Mundo
+- Modal próprio de sorteio antes da primeira partida da Copa.
+- Animação revela 48 seleções, pote a pote, nos 12 grupos A–L.
+- Bandeiras por imagem ao lado de cada seleção, com fallback para emoji se a imagem externa falhar.
+- 4 potes de 12.
+- Em 2026: México A1, Canadá B1 e EUA D1.
+- Regra de confederação: no máximo 1 por grupo, exceto UEFA (1 a 2 por grupo).
+- Separação de cabeças de chave em caminhos opostos aproximada para os quatro mais fortes.
+
+3. Sistema de ídolos
+- Seleção obrigatória de ídolo na criação de uma nova carreira.
+- 30 opções, incluindo todos os nomes solicitados: Pelé, Neymar, Ronaldo Fenômeno, Ronaldinho, Kaká, Romário, Cristiano Ronaldo, Messi, Dybala, Hazard, Neuer, Suárez, Vini Jr., Raphinha, Rodrygo, Mbappé, Gerd Müller, Adriano, Zidane, Cruyff, Maradona, Zico e Iniesta.
+- Preview do ídolo na criação e exibição no perfil.
+- Interações narrativas ao longo da carreira: análise de vídeo, mensagens, treino especial, conselho de carreira, seleção e Copa do Mundo.
+- Escolhas afetam moral, reputação, desenvolvimento, potencial, mercado e confiança na seleção.
+
+TESTES AUTOMATIZADOS DE LÓGICA
+- 31/31 testes aprovados.
+- 30 ídolos disponíveis; nomes principais solicitados encontrados.
+- Nations League 2026/27 presente e com 6 jogos na Liga A.
+- Mesmos três adversários enfrentados em casa/fora no formato 2026/27.
+- Quartas de final da Nations League testadas em duas mãos e por placar agregado.
+- Perdedor da semifinal encaminhado à disputa de 3º lugar.
+- Modelo 2028/29 testado com três ligas e 5 adversários na fase de liga.
+- 100 sorteios completos de Copa simulados: 12 grupos x 4 em todos.
+- Anfitriões 2026 confirmados em A1/B1/D1 em todos os sorteios.
+- Nenhuma duplicidade de confederação não-UEFA encontrada nos 100 sorteios.
+- Todos os grupos tiveram 1–2 seleções UEFA nos 100 sorteios.
+- 48/48 entradas do sorteio geram marcação de imagem de bandeira.
+- Simulação é interrompida para apresentar o sorteio antes da primeira partida da Copa.
+- Confirmação do sorteio libera a continuação da Copa.
+- Evento de ídolo gerado e vinculado ao ídolo escolhido.
+
+VALIDAÇÃO ESTRUTURAL
+- js/app.js: node --check aprovado.
+- js/data.js: node --check aprovado.
+- index.html: parsing aprovado; 273 IDs e nenhum ID duplicado.
+- css/style.css: chaves balanceadas.
+- Referências de cache atualizadas para ?v=9.8.
+- 30 arquivos MP3 da versão anterior preservados.
+
+LIMITAÇÃO DO AMBIENTE DE TESTE
+O Chromium disponível nesta sessão bloqueia por política administrativa inclusive páginas locais (ERR_BLOCKED_BY_ADMINISTRATOR). Por isso não foi possível executar um teste visual end-to-end real no navegador. A lógica JavaScript foi carregada integralmente em um ambiente VM com stubs de APIs do navegador, além dos testes estruturais e de simulação acima.
+
+REFERÊNCIAS DE FORMATO CONSULTADAS
+- UEFA, Nations League 2026/27: 4 grupos de 4 em A/B/C; Liga D com grupos de 3; jogos em casa e fora; quartas da Liga A em duas mãos; Final Four.
+- UEFA, decisão de 2026: Nations League passa para três ligas de 18 a partir de 2028/29; grupos de seis; seis jogos contra cinco adversários.
+- FIFA, Sorteio Final 2026: 4 potes de 12; México A1, Canadá B1, EUA D1; restrições por confederação e 1–2 seleções UEFA por grupo.

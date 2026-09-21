@@ -1,0 +1,23 @@
+BE THE LEGEND V9.7 — SELEÇÕES, COPA E HALL DA FAMA
+
+Correções implementadas
+1. Eliminatórias e torneios continentais usam somente adversários da mesma confederação da seleção do jogador. Amistosos continuam podendo cruzar continentes.
+2. Copa do Mundo: a classificação no mata-mata agora depende exclusivamente do placar da seleção (e de pênaltis em caso de empate), nunca do sucesso/fracasso da decisão individual.
+3. Calendário de seleções em ciclo 2026-2030 e repetição de quatro anos, com regras próprias por CONMEBOL, UEFA, Concacaf, AFC, CAF e OFC.
+4. Sorteio da Copa: 48 seleções, 4 potes de 12 por força, 12 grupos de 4, máximo de uma seleção por confederação em cada grupo (exceto UEFA, 1-2), cotas de classificação por confederação e repescagem intercontinental diversificada.
+5. Hall da Fama: contagem total e contagem agrupada por título corrigidas, incluindo migração de cards salvos antigos e layout sem sobreposição.
+
+Testes executados
+- node --check js/app.js: OK
+- node --check js/data.js: OK
+- CSS: chaves balanceadas: OK
+- HTML: 259 IDs, nenhum ID duplicado: OK
+- 30 arquivos MP3 presentes: OK
+- 1.400 sorteios simulados da Copa (Brasil, Argentina, França, EUA, Japão, Marrocos e Nova Zelândia): todos com 48 times/12 grupos e restrições de confederação válidas.
+- Eliminatórias: 100 adversários simulados para cada uma das 6 confederações; nenhum confronto fora da confederação: OK
+- Ciclo do Brasil: 2026 Copa; 2027 Eliminatórias; 2028 Copa América; 2029 Eliminatórias; 2030 Copa: OK
+- Mata-mata da Copa: teste 2x1 com decisão individual independente -> seleção avançou para a fase seguinte: OK
+- Hall da Fama: teste de agrupamento 3x LaLiga + 2x Champions + 1x FA Cup -> total 6: OK
+
+Observação de ambiente
+O Chromium headless disponível neste ambiente não concluiu a inicialização gráfica (DBus/sandbox do contêiner). Por isso a validação visual automatizada completa não foi usada; foram feitos testes de sintaxe, estrutura e lógica isolada.

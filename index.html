@@ -10,11 +10,12 @@
   <link rel="preconnect" href="https://www.thesportsdb.com" crossorigin>
   <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+  <link rel="preconnect" href="https://flagcdn.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.5">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.5">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=9.5">
-  <link rel="stylesheet" href="css/style.css?v=9.5">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.9">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.9">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=9.9">
+  <link rel="stylesheet" href="css/style.css?v=9.9">
 </head>
 <body>
   <header class="topbar">
@@ -209,6 +210,14 @@
           <small class="field-help">A entrada é limitada a dois dígitos: somente 1 a 99.</small>
         </label>
 
+        <label class="idol-picker-field">Ídolo da carreira
+          <select id="idol" required>
+            <option value="">Escolha seu ídolo</option>
+          </select>
+          <small class="field-help">Seu ídolo poderá aparecer em mensagens, conselhos, treinos e momentos decisivos ao longo da carreira.</small>
+        </label>
+        <div id="idol-preview" class="idol-preview full"><span class="idol-preview-empty">Escolha quem vai inspirar sua trajetória.</span></div>
+
         <div class="club-picker full">
           <div class="club-picker-head">
             <div><p class="eyebrow">CLUBE INICIAL</p><h3>Escolha entre os três sorteados</h3></div>
@@ -276,6 +285,7 @@
               <span><b id="p-country"></b></span>
               <span class="birth-chip"><small>🎂</small><b id="p-birthdate"></b></span>
               <span id="p-sponsor-chip" class="sponsor-profile-chip hidden"><small>Patrocínio</small><b id="p-sponsor"></b></span>
+              <span id="p-idol-chip" class="idol-profile-chip hidden"><small>Ídolo</small><b id="p-idol"></b></span>
             </div>
           </div>
           <div class="rating-stack">
@@ -416,6 +426,32 @@
     </div>
   </div>
 
+
+  <div id="world-cup-draw-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="world-cup-draw-title">
+    <div class="modal-card world-cup-draw-card">
+      <div class="wc-draw-heading">
+        <div>
+          <p class="eyebrow" id="world-cup-draw-year">COPA DO MUNDO</p>
+          <h2 id="world-cup-draw-title">Sorteio da fase de grupos</h2>
+          <p id="world-cup-draw-copy">48 seleções · 12 grupos · 4 potes.</p>
+          <div id="world-cup-hosts" class="world-cup-hosts"></div>
+        </div>
+        <div class="wc-draw-trophy" aria-hidden="true">🏆</div>
+      </div>
+      <div class="wc-draw-rule-strip"><span>4 potes</span><span>12 grupos</span><span>1 seleção por confederação*</span><span>UEFA: 1–2 por grupo</span></div>
+      <div id="world-cup-draw-pots" class="wc-draw-pots"></div>
+      <div class="wc-draw-stage">
+        <div class="wc-draw-stage-head"><strong>GRUPOS A–L</strong><span id="world-cup-draw-progress">Pronto para começar</span></div>
+        <div id="world-cup-draw-groups" class="wc-draw-groups"></div>
+      </div>
+      <small class="wc-draw-note">* Exceto UEFA, que pode ter até duas seleções no mesmo grupo. Em 2026, os anfitriões ocupam as posições fixas previstas no sorteio oficial.</small>
+      <div class="wc-draw-actions">
+        <button id="world-cup-draw-start" class="primary" type="button">Iniciar sorteio</button>
+        <button id="world-cup-draw-skip" class="secondary hidden" type="button">Concluir imediatamente</button>
+        <button id="world-cup-draw-continue" class="primary hidden" type="button">Ir para a Copa →</button>
+      </div>
+    </div>
+  </div>
 
   <div id="match-decision-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
     <div class="modal-card decision-card">
@@ -655,7 +691,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=9.5"></script>
-  <script src="js/app.js?v=9.5"></script>
+  <script src="js/data.js?v=9.9"></script>
+  <script src="js/app.js?v=9.9"></script>
 </body>
 </html>

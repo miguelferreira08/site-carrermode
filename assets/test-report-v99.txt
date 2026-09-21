@@ -1,0 +1,29 @@
+BE THE LEGEND V9.9 — SEDES DA COPA + TEMAS DE COMPETIÇÃO
+
+Implementado
+- Copa 2026: Canadá, México e Estados Unidos como sedes confirmadas.
+- Copa 2030: Marrocos, Portugal e Espanha como sedes principais; Argentina, Paraguai e Uruguai como sedes dos jogos do centenário. As seis seleções entram automaticamente no campo de 48.
+- Copa 2034: Arábia Saudita como sede confirmada.
+- Copa 2038 em diante: sede simulada de forma determinística pelo modo carreira, com rotação entre confederações e classificação automática do(s) anfitrião(ões) simulados.
+- A sede aparece no card da seleção durante ano de Copa e na cerimônia de sorteio, com bandeiras.
+- Os anfitriões principais entram no Pote 1. As posições fixas A1/B1/D1 continuam exclusivas de 2026, porque são as posições oficialmente confirmadas nessa edição.
+- Situações de partida agora recebem um tema visual da COMPETIÇÃO, sem alterar o tema geral do clube/página.
+- FIFA World Cup e amistosos usam as cores da seleção do jogador; Brasil = verde/amarelo/azul.
+- Temas específicos para todas as 99 competições atualmente cadastradas no projeto (ligas, copas, continentais e competições de seleções).
+
+Testes
+- node --check js/app.js: OK
+- node --check js/data.js: OK
+- HTML parse: OK
+- CSS parse (tinycss2): 0 erros
+- 800 sorteios testados (100 por edição em 2026, 2030, 2034, 2038, 2042, 2046, 2050 e 2054): 0 falhas
+- 48 seleções / 12 grupos de 4: OK
+- anfitriões automáticos presentes no campo: OK
+- restrição de confederação dos grupos: OK
+- mínimo de 1 e máximo de 2 seleções UEFA por grupo: OK
+- auditoria de 99 competições: 99 com tema específico, 0 caindo em tema genérico
+- Brasil na Copa: #009739 / #ffdf00 / #012169: OK
+- cache busting index.html atualizado para ?v=9.9: OK
+
+Observação de ambiente
+- Chromium está instalado, mas o ambiente de execução bloqueou a navegação para localhost por política administrativa (ERR_BLOCKED_BY_ADMINISTRATOR). Por isso o teste visual end-to-end via browser não pôde ser executado aqui; as validações de lógica, sintaxe, HTML e CSS passaram.
