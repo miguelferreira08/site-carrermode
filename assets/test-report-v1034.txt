@@ -1,0 +1,28 @@
+BE THE LEGEND — V10.3.4 FINAL
+Relatório de validação
+Data: 2026-09-21
+
+Correção final desta revisão
+- Layout das decisões/interações em telas móveis refeito em fluxo vertical real.
+- Em viewport <= 620 px, as 3 opções deixam qualquer posicionamento absoluto legado e passam para flex-column.
+- Modal móvel recebe largura segura, rolagem vertical e padding adaptativo.
+- Textos longos quebram linha sem ampliar o viewport.
+- Hover/focus não desloca os cards em telas estreitas.
+
+Teste visual automatizado (Chromium headless, CSS real do projeto)
+- 390 px: 3 escolhas, sobreposição 0 px / 0 px; todas dentro do viewport.
+- 360 px: 3 escolhas, sobreposição 0 px / 0 px; todas dentro do viewport.
+- 320 px: 3 escolhas, sobreposição 0 px / 0 px; todas dentro do viewport.
+- Nenhum erro de página no harness visual.
+
+Validações estruturais
+- js/app.js: sintaxe OK
+- js/data.js: sintaxe OK
+- js/auth.js: sintaxe OK
+- js/google-auth-config.js: sintaxe OK
+- CSS: 0 erros de parsing
+- HTML: 328 IDs; 0 IDs duplicados
+- Referências locais de scripts/styles no index: todas encontradas
+- Áudio: 30 arquivos de música presentes em assets/audio/tracks
+
+Esta versão preserva as implementações da V10.3.4 previamente fechadas: Copa, potes/grupos, decisões contínuas, pênaltis, interações da seleção, cenografia, progressão, pausa, escudos/bandeiras, carta ICON e Hall da Fama.

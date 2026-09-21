@@ -22,6 +22,8 @@ let appearanceStudioTab = 'hair';
 let careerAppearanceTab = 'hair';
 let careerAppearanceDraft = null;
 let nextEventCache = null;
+const INTERACTION_FREQUENCY = 0.85; // ~15% menos interrupções ao longo da temporada
+let pausedCareerOverlay = null;
 let pendingSeasonCelebration = null;
 let pendingPlayerProfile = null;
 let attributeDraft = null;
@@ -446,8 +448,27 @@ const WORLD_CUP_2026_OFFICIAL_POT_CODES=[
   ['CA','MX','US','ES','AR','FR','ENG','BR','PT','NL','BE','DE'],
   ['HR','MA','CO','UY','CH','JP','SN','IR','KR','EC','AT','AU'],
   ['NO','PA','EG','DZ','SCO','PY','TN','CI','UZ','QA','SA','ZA'],
-  ['JO','CV','GH','CW','HT','NZ']
+  ['JO','CV','GH','CW','HT','NZ','CZ','BA','TR','SE','IQ','CD']
 ];
+// Grupos oficiais da Copa do Mundo de 2026. A ordem interna é por pote (1→4),
+// para que a cerimônia e os quatro painéis de potes continuem coerentes.
+const WORLD_CUP_2026_OFFICIAL_GROUP_CODES=[
+  ['MX','KR','ZA','CZ'],
+  ['CA','CH','QA','BA'],
+  ['BR','MA','SCO','HT'],
+  ['US','AU','PY','TR'],
+  ['DE','EC','CI','CW'],
+  ['NL','JP','TN','SE'],
+  ['BE','IR','EG','NZ'],
+  ['ES','UY','SA','CV'],
+  ['FR','SN','NO','IQ'],
+  ['AR','AT','DZ','JO'],
+  ['PT','CO','UZ','CD'],
+  ['ENG','HR','PA','GH']
+];
+function worldCup2026OfficialGroups(){
+  return WORLD_CUP_2026_OFFICIAL_GROUP_CODES.map(group=>group.map(code=>countryByCode(code)).filter(Boolean));
+}
 function worldCupRankingScore(team,year=2026){
   const base=nationalTeamStrength(team.code,team.name);
   if(Number(year)===2026){
@@ -536,29 +557,31 @@ function drawWorldCupGroups(field,year=state.season?.year||2026){
 }
 function createWorldCupTournament(p,preferredOpponents=[],year=state.season?.year||2026){
   const player=worldCupTeamFromPlayer(p);
-  const preferred=(preferredOpponents||[]).map(x=>typeof x==='string'?countryByCode(x):x).filter(Boolean).filter(x=>x.code!==player.code).slice(0,3);
   let groups;
-  if(preferred.length===3){
-    // Migração de uma Copa já iniciada em saves anteriores: preserva os três
-    // adversários já sorteados para não alterar uma campanha em andamento.
-    const field=worldCupQualifiedField(p,preferred.map(x=>x.code),year);
-    const rest=shuffle(field.filter(t=>t.code!==player.code&&!preferred.some(x=>x.code===t.code)));
-    groups=[[player,...preferred]];
-    for(let i=0;i<11;i++)groups.push(rest.slice(i*4,i*4+4));
+  // 2026 reproduz exatamente o sorteio oficial. Não há re-sorteio nesta edição.
+  if(Number(year)===2026){
+    groups=worldCup2026OfficialGroups();
   }else{
-    groups=drawWorldCupGroups(worldCupQualifiedField(p,[],year),year);
+    const preferred=(preferredOpponents||[]).map(x=>typeof x==='string'?countryByCode(x):x).filter(Boolean).filter(x=>x.code!==player.code).slice(0,3);
+    if(preferred.length===3){
+      const field=worldCupQualifiedField(p,preferred.map(x=>x.code),year);
+      const rest=shuffle(field.filter(t=>t.code!==player.code&&!preferred.some(x=>x.code===t.code)));
+      groups=[[player,...preferred]];
+      for(let i=0;i<11;i++)groups.push(rest.slice(i*4,i*4+4));
+    }else{
+      groups=drawWorldCupGroups(worldCupQualifiedField(p,[],year),year);
+    }
+    if(!Array.isArray(groups)||groups.length!==12||groups.some(g=>!Array.isArray(g)||g.length!==4)){
+      groups=drawWorldCupGroups(worldCupQualifiedField(p,[],year),year);
+    }
   }
-  // Segurança adicional para migrações: se a montagem antiga ficar incompleta,
-  // refaz o sorteio inteiro com as regras atuais.
-  if(!Array.isArray(groups)||groups.length!==12||groups.some(g=>!Array.isArray(g)||g.length!==4)){
-    groups=drawWorldCupGroups(worldCupQualifiedField(p,[],year),year);
-  }
-  const playerGroupIndex=Math.max(0,groups.findIndex(g=>g.some(t=>t.code===player.code)));
-  const groupOpponents=groups[playerGroupIndex].filter(t=>t.code!==player.code).map(t=>({code:t.code,name:t.name}));
+  const playerGroupIndex=groups.findIndex(g=>g.some(t=>t.code===player.code));
+  const groupOpponents=playerGroupIndex>=0?groups[playerGroupIndex].filter(t=>t.code!==player.code).map(t=>({code:t.code,name:t.name})):[];
   return {
     groups:groups.map(g=>g.map(t=>({code:t.code,name:t.name}))),
     playerGroupIndex,
-    groupOpponents
+    groupOpponents,
+    official2026:Number(year)===2026
   };
 }
 function pickWorldCupOpponent(playerCode,usedCodes=[],stage='group',sourceTeams=null){
@@ -626,20 +649,21 @@ function simulateOtherWorldCupKnockoutMatches(teams){
 }
 function createWorldCupState(p,year,leagueMatches=34){
   const draw=createWorldCupTournament(p,[],year),used=draw.groupOpponents.map(x=>x.code),hostInfo=worldCupHostInfo(year);
-  return {year,formatVersion:4,hostInfo,active:!!p.calledUp,started:false,drawPresented:false,finished:false,qualified:null,stage:'group',groupIndex:0,points:0,wins:0,draws:0,losses:0,gf:0,ga:0,groups:draw.groups,playerGroupIndex:draw.playerGroupIndex,groupOpponents:draw.groupOpponents,playerGroupResults:[],groupTables:null,thirdPlaceTable:null,groupPosition:null,thirdPlaceRank:null,knockoutStages:[...WORLD_CUP_KNOCKOUT_STAGES],knockoutIndex:0,currentOpponent:null,remainingTeams:null,thirdPlaceOpponent:null,usedOpponents:[...used],startLeagueRound:Math.max(5,Math.round(leagueMatches*.42)),champion:false,runnerUp:false,thirdPlace:false,fourthPlace:false,eliminated:false};
+  const participant=draw.playerGroupIndex>=0;
+  return {year,formatVersion:5,hostInfo,active:!!p.calledUp&&participant,participant,started:false,drawPresented:false,finished:!participant&&Number(year)===2026,qualified:participant?null:false,stage:'group',groupIndex:0,points:0,wins:0,draws:0,losses:0,gf:0,ga:0,groups:draw.groups,playerGroupIndex:draw.playerGroupIndex,groupOpponents:draw.groupOpponents,playerGroupResults:[],groupTables:null,thirdPlaceTable:null,groupPosition:null,thirdPlaceRank:null,knockoutStages:[...WORLD_CUP_KNOCKOUT_STAGES],knockoutIndex:0,currentOpponent:null,remainingTeams:null,thirdPlaceOpponent:null,usedOpponents:[...used],startLeagueRound:Math.max(5,Math.round(leagueMatches*.42)),champion:false,runnerUp:false,thirdPlace:false,fourthPlace:false,eliminated:!participant&&Number(year)===2026};
 }
 function upgradeWorldCupState(wc,p,leagueMatches=34){
   if(!wc)return createWorldCupState(p,state.season?.year||2026,leagueMatches);
   const oldStages=Array.isArray(wc.knockoutStages)?wc.knockoutStages:[],oldFormat=!oldStages.includes('Fase de 32');
-  wc.formatVersion=4;wc.hostInfo=worldCupHostInfo(wc.year||state.season?.year||2026);wc.knockoutStages=[...WORLD_CUP_KNOCKOUT_STAGES];wc.drawPresented=wc.drawPresented===undefined?!!wc.started:!!wc.drawPresented;wc.playerGroupResults=Array.isArray(wc.playerGroupResults)?wc.playerGroupResults:[];wc.runnerUp=!!wc.runnerUp;wc.thirdPlace=!!wc.thirdPlace;wc.fourthPlace=!!wc.fourthPlace;
-  if(!Array.isArray(wc.groups)||wc.groups.length!==12){const draw=createWorldCupTournament(p,wc.groupOpponents||[],wc.year||state.season?.year||2026);wc.groups=draw.groups;wc.playerGroupIndex=draw.playerGroupIndex;wc.groupOpponents=draw.groupOpponents;}
+  wc.formatVersion=5;wc.hostInfo=worldCupHostInfo(wc.year||state.season?.year||2026);wc.knockoutStages=[...WORLD_CUP_KNOCKOUT_STAGES];wc.drawPresented=wc.drawPresented===undefined?!!wc.started:!!wc.drawPresented;wc.playerGroupResults=Array.isArray(wc.playerGroupResults)?wc.playerGroupResults:[];wc.runnerUp=!!wc.runnerUp;wc.thirdPlace=!!wc.thirdPlace;wc.fourthPlace=!!wc.fourthPlace;
+  if((Number(wc.year||state.season?.year)===2026&&!wc.started)||!Array.isArray(wc.groups)||wc.groups.length!==12){const draw=createWorldCupTournament(p,wc.groupOpponents||[],wc.year||state.season?.year||2026);wc.groups=draw.groups;wc.playerGroupIndex=draw.playerGroupIndex;wc.groupOpponents=draw.groupOpponents;wc.participant=draw.playerGroupIndex>=0;if(Number(wc.year||state.season?.year)===2026&&!wc.participant){wc.active=false;wc.finished=true;wc.qualified=false;wc.eliminated=true;}}
   if(oldFormat&&wc.stage==='knockout'&&(wc.knockoutIndex||0)>0)wc.knockoutIndex=Math.min((wc.knockoutIndex||0)+1,WORLD_CUP_KNOCKOUT_STAGES.length-1);
   wc.usedOpponents=Array.isArray(wc.usedOpponents)?wc.usedOpponents:(wc.groupOpponents||[]).map(x=>x.code).filter(Boolean);return wc;
 }
 function ensureWorldCupState(s=state.season,p=state.player){
   if(!s||!p||!isWorldCupYear(s.year))return null;
   if(!s.worldCup)s.worldCup=createWorldCupState(p,s.year,s.league?.schedule?.length||34);else upgradeWorldCupState(s.worldCup,p,s.league?.schedule?.length||34);
-  if(p.calledUp&&!s.worldCup.finished)s.worldCup.active=true;
+  if(p.calledUp&&!s.worldCup.finished&&s.worldCup.participant!==false)s.worldCup.active=true;
   return s.worldCup;
 }
 function worldCupReady(s=state.season,p=state.player){
@@ -662,14 +686,18 @@ function renderWorldCupDrawBoard(wc,revealed=48){
   grid.innerHTML=WORLD_CUP_GROUP_LABELS.map((label,g)=>`<article class="wc-draw-group ${g===wc.playerGroupIndex?'player-group':''}"><header><b>GRUPO ${label}</b>${g===wc.playerGroupIndex?'<span>SEU GRUPO</span>':''}</header><div>${[0,1,2,3].map(pot=>{const team=wc.groups?.[g]?.[pot],shown=team&&visible.has(`${g}:${pot}`);return `<div class="wc-draw-team ${shown?'revealed':'empty'}"><small>${pot+1}</small>${shown?`${nationalFlagImage(team.code,team.name)}<strong>${esc(team.name)}</strong><em>${confederation(team.code)}</em>`:'<span class="wc-draw-ball">●</span><strong>Aguardando...</strong>'}</div>`;}).join('')}</div></article>`).join('');
 }
 function renderWorldCupPots(wc){
-  const box=$('#world-cup-draw-pots');if(!box||!wc)return;const pots=[0,1,2,3].map(pot=>wc.groups.map(g=>g[pot]).filter(Boolean));
-  box.innerHTML=pots.map((teams,i)=>`<details ${i===0?'open':''}><summary>Pote ${i+1} <span>${teams.length} seleções</span></summary><div>${teams.map(t=>`<span>${nationalFlagImage(t.code,t.name)}${esc(t.name)}</span>`).join('')}</div></details>`).join('');
+  const box=$('#world-cup-draw-pots');if(!box||!wc)return;
+  const field=(wc.groups||[]).flat();
+  const pots=Number(wc.year)===2026
+    ? WORLD_CUP_2026_OFFICIAL_POT_CODES.map(codes=>codes.map(code=>field.find(t=>t.code===code)||countryByCode(code)).filter(Boolean))
+    : worldCupPots(field,wc.year||state.season?.year||2026);
+  box.innerHTML=pots.map((teams,i)=>`<section class="wc-pot-panel"><header><b>Pote ${i+1}</b><span>${teams.length} seleções</span></header><div class="wc-pot-team-list">${teams.map(t=>`<span class="wc-pot-team">${nationalFlagImage(t.code,t.name)}<b>${esc(t.name)}</b></span>`).join('')}</div></section>`).join('');
 }
 function openWorldCupDraw(){
   const p=state.player,s=state.season,wc=ensureWorldCupState(s,p);if(!wc||wc.drawPresented)return false;const modal=$('#world-cup-draw-modal');if(!modal)return false;
   const host=worldCupHostInfo(s.year);wc.hostInfo=host;
   $('#world-cup-draw-year').textContent=`COPA DO MUNDO · ${s.year}`;
-  $('#world-cup-draw-copy').textContent=Number(s.year)===2026?'48 seleções · 12 grupos · 4 potes. México (A1), Canadá (B1) e Estados Unidos (D1) têm posições de anfitriões. Os potes seguem o Ranking Mundial Masculino da FIFA usado no sorteio oficial e as restrições de confederação.':host.simulated?'48 seleções · 12 grupos · 4 potes. Esta edição usa uma sede futura simulada pelo modo carreira; o sorteio mantém os critérios esportivos e as restrições de confederação.':'48 seleções · 12 grupos · 4 potes. As sedes confirmadas entram automaticamente no torneio; o sorteio respeita força, separação por confederação e o limite de duas seleções UEFA por grupo.';
+  $('#world-cup-draw-copy').textContent=Number(s.year)===2026?'48 seleções · 12 grupos · 4 potes. Esta edição reproduz os potes e os grupos oficiais da Copa do Mundo de 2026. México está no Grupo A, Canadá no B e Estados Unidos no D.':host.simulated?'48 seleções · 12 grupos · 4 potes. Esta edição usa uma sede futura simulada pelo modo carreira; o sorteio mantém os critérios esportivos e as restrições de confederação.':'48 seleções · 12 grupos · 4 potes. As sedes confirmadas entram automaticamente no torneio; o sorteio respeita força, separação por confederação e o limite de duas seleções UEFA por grupo.';
   const hostsBox=$('#world-cup-hosts');if(hostsBox)hostsBox.innerHTML=worldCupHostMarkup(s.year);
   renderWorldCupPots(wc);renderWorldCupDrawBoard(wc,0);$('#world-cup-draw-progress').textContent='Pronto para começar';$('#world-cup-draw-start').classList.remove('hidden');$('#world-cup-draw-skip').classList.add('hidden');$('#world-cup-draw-continue').classList.add('hidden');modal.classList.remove('hidden');return true;
 }
@@ -678,7 +706,7 @@ function finishWorldCupDrawAnimation(){
 }
 function startWorldCupDrawAnimation(){
   const wc=state.season?.worldCup;if(!wc)return;let revealed=0,seq=worldCupDrawSequence(wc);$('#world-cup-draw-start').classList.add('hidden');$('#world-cup-draw-skip').classList.remove('hidden');if(worldCupDrawTimer)clearInterval(worldCupDrawTimer);
-  worldCupDrawTimer=setInterval(()=>{revealed++;renderWorldCupDrawBoard(wc,revealed);const current=seq[Math.max(0,revealed-1)];$('#world-cup-draw-progress').textContent=current?`Pote ${current.pot+1} · ${current.team.name} → Grupo ${WORLD_CUP_GROUP_LABELS[current.group]}`:'Sorteando...';if(revealed>=seq.length)finishWorldCupDrawAnimation();},320);
+  worldCupDrawTimer=setInterval(()=>{revealed++;renderWorldCupDrawBoard(wc,revealed);const current=seq[Math.max(0,revealed-1)];$('#world-cup-draw-progress').textContent=current?`Pote ${current.pot+1} · ${current.team.name} → Grupo ${WORLD_CUP_GROUP_LABELS[current.group]}`:'Sorteando...';if(revealed>=seq.length)finishWorldCupDrawAnimation();},520);
 }
 function confirmWorldCupDraw(){
   const wc=state.season?.worldCup;if(!wc)return;finishWorldCupDrawAnimation();wc.drawPresented=true;save();$('#world-cup-draw-modal').classList.add('hidden');toast(`${state.player.nationality} ficou no Grupo ${WORLD_CUP_GROUP_LABELS[wc.playerGroupIndex]}.`);if(resumeAfterWorldCupDraw){resumeAfterWorldCupDraw=false;setTimeout(continueSeasonSimulation,180);}else render();
@@ -704,7 +732,7 @@ function addNationalTrophy(name='FIFA World Cup'){
   const p=state.player;p.trophies=p.trophies||[];if(p.trophies.some(t=>t.year===state.season.year&&t.name===name))return;
   p.trophies.push({year:state.season.year,name,club:p.nationality,type:'national'});p.titles=p.trophies.length;state.news.push(`${p.name} é campeão da ${name} com a seleção de ${p.nationality}!`);if(!state.simulatingSeason)showCelebrationForHonour(name,`Campeão: ${name}`,`${p.name} conquista o maior título de seleções.`);
 }
-function processWorldCupResult(event,pf,pa){
+function processWorldCupResult(event,pf,pa,forcedPenaltyOutcome=null){
   const p=state.player,s=state.season,wc=ensureWorldCupState(s,p);
   if(!wc||!event.worldCup)return null;
   const playerCode=p.nationalityCode||worldCupTeamFromPlayer(p).code;
@@ -744,10 +772,13 @@ function processWorldCupResult(event,pf,pa){
   else if(scoreFor<scoreAgainst)advanced=false;
   else{
     decidedOnPenalties=true;
-    const strengths=eventStrengths(event),model=matchModel(strengths.home,strengths.away,eventHomeAdvantage(event)),oursHome=event.home===p.nationality;
-    const ourWin=oursHome?model.homeWin:model.awayWin,oppWin=oursHome?model.awayWin:model.homeWin;
-    advanced=Math.random()<(ourWin/(ourWin+oppWin||1));
-    state.news.push(`${p.nationality} ${advanced?'avança':'é superado'} após prorrogação e pênaltis na ${wc.stage==='third-place'?'disputa de 3º lugar':wc.knockoutStages[wc.knockoutIndex]}.`);
+    if(typeof forcedPenaltyOutcome!=='boolean'){
+      state.pendingPenaltyShootout={scope:'worldcup',competition:'FIFA World Cup',stage:wc.stage==='third-place'?'Disputa de 3º lugar':wc.knockoutStages[wc.knockoutIndex],team:p.nationality,home:event.home,away:event.away,event:{...event},scoreFor,scoreAgainst};
+      wc.lastMatchResolution={stage:wc.stage==='third-place'?'third-place':wc.knockoutStages[wc.knockoutIndex],pendingPenalties:true,scoreFor,scoreAgainst,decidedOnPenalties:true};
+      return wc.lastMatchResolution;
+    }
+    advanced=forcedPenaltyOutcome;
+    state.news.push(`${p.nationality} ${advanced?'avança':'é superado'} nos pênaltis na ${wc.stage==='third-place'?'disputa de 3º lugar':wc.knockoutStages[wc.knockoutIndex]}.`);
   }
 
   if(wc.stage==='third-place'){
@@ -1012,7 +1043,7 @@ const TROPHY_ART=[
 
   {test:/Bola de Ouro|Ballon d/i,urls:['https://www.thesportsdb.com/images/media/honour/trophy/octewt1650480648.png','assets/trophies/ballon-dor.svg'],kind:'real-trophy'},
   {test:/Chuteira de Ouro|European Golden Shoe/i,urls:['assets/trophies/golden-shoe-transparent.png','https://www.365scores.com/pt-br/news/magazine/wp-content/uploads/2025/05/Chuteira-Ouro.jpg','assets/trophies/golden-shoe.svg'],kind:'real-trophy'},
-  {test:/Melhor Jogador Jovem|Kopa Trophy/i,urls:['https://en.dragoparis.com/media/wysiwyg/blog/savoir-faire/trophee-sportif-kopa-ballon-d-or.jpg','assets/trophies/golden-boy.svg'],kind:'real-trophy'},
+  {test:/Melhor Jogador Jovem|Kopa Trophy/i,urls:['assets/trophies/golden-boy.svg'],kind:'real-trophy'},
   // There is no single physical "Team of the Season" cup; this remains a season-XI visual, not a fake trophy.
   {test:/Time da Temporada/i,urls:['assets/trophies/tots.svg'],kind:'award-visual'}
 ];
@@ -2175,14 +2206,25 @@ function resolvePenaltyShootout(index){
   const pending=state.pendingPenaltyShootout;if(!pending)return; const option=buildShootoutScenario(pending).options[index];
   const p=state.player; const attrs=p.attributes||{}; const skill=p.position==='Goleiro'?((attrs.defense||p.overall||70)+(attrs.physical||70)*.16):((attrs.finishing||p.overall||70)+(attrs.dribbling||70)*.12+(attrs.passing||70)*.08);
   const chance=clamp(option.chance + (skill-74)/180 + (p.reputation||0)/700, .35, .92);
-  const success=Math.random()<chance; const teamWin=success ? Math.random()<.78 : Math.random()<.34;
-  const comp=pending.scope==='cup'?state.season.cup:state.season.continental?.knockout;
-  if(teamWin){ state.news.push(`${p.name} participa da disputa por pênaltis e ${state.player.position==='Goleiro'?'ajuda com sua leitura':'converte sua cobrança'} para classificar o ${pending.team}.`); if(comp)advanceKnockout(comp); }
-  else{ if(comp){ comp.active=false; comp.eliminated=true; } state.news.push(`${pending.team} cai nos pênaltis em ${pending.competition}.`); }
-  if(pending.scope==='continental'&&state.season.continental?.knockout===comp&&!comp.active){ state.season.continental.active=false; state.season.continental.won=!!comp.won; state.season.continental.eliminated=!!comp.eliminated; }
-  state.pendingPenaltyShootout=null; save(); render();
+  const success=Math.random()<chance;
+  // A cobrança do jogador influencia, mas nunca decide sozinha uma disputa de cinco pênaltis.
+  // Se ele converte/defende, a equipe fica favorita; se erra/falha, ainda pode vencer.
+  const teamWin=success ? Math.random()<.78 : Math.random()<.34;
+  if(pending.scope==='worldcup'){
+    const event=pending.event||{type:'national',worldCup:true,competition:'FIFA World Cup',stage:pending.stage,home:pending.home,away:pending.away,opponent:pending.home===p.nationality?pending.away:pending.home,opponentCode:codeForCountryName(pending.home===p.nationality?pending.away:pending.home)};
+    state.pendingPenaltyShootout=null;
+    processWorldCupResult(event,pending.scoreFor??0,pending.scoreAgainst??0,teamWin);
+    state.news.push(`${p.name} ${success?(p.position==='Goleiro'?'faz sua parte na disputa':'converte sua cobrança'):(p.position==='Goleiro'?'não consegue a defesa na sua tentativa':'desperdiça sua cobrança')}, mas ${p.nationality} ${teamWin?'vence':'perde'} a disputa de pênaltis.`);
+  }else{
+    const comp=pending.scope==='cup'?state.season.cup:state.season.continental?.knockout;
+    if(teamWin){ state.news.push(`${p.name} participa da disputa por pênaltis e ${p.position==='Goleiro'?'ajuda com sua leitura':'converte sua cobrança'} para classificar o ${pending.team}.`); if(comp)advanceKnockout(comp); }
+    else{ if(comp){ comp.active=false; comp.eliminated=true; } state.news.push(`${pending.team} cai nos pênaltis em ${pending.competition}.`); }
+    if(pending.scope==='continental'&&state.season.continental?.knockout===comp&&!comp.active){ state.season.continental.active=false; state.season.continental.won=!!comp.won; state.season.continental.eliminated=!!comp.eliminated; }
+    state.pendingPenaltyShootout=null;
+  }
+  save(); render();
   $('#decision-visual').classList.add('hidden');$('#decision-choices').classList.add('hidden');$('#decision-result').classList.remove('hidden');
-  $('#decision-result').innerHTML=`<strong>${teamWin?'Seu time vence nos pênaltis!':'Seu time perde nos pênaltis.'}</strong><span>${success?(state.player.position==='Goleiro'?'Você escolhe bem e entra no lance decisivo.':'Você executa a cobrança com personalidade.'):(state.player.position==='Goleiro'?'A leitura não encontra a defesa decisiva.':'A cobrança não sai como o planejado.')}</span>`;
+  $('#decision-result').innerHTML=`<strong>${teamWin?'Sua equipe vence nos pênaltis!':'Sua equipe perde nos pênaltis.'}</strong><span>${success?(p.position==='Goleiro'?'Você acerta a leitura e ajuda a equipe.':'Você converte sua cobrança com personalidade.'):(p.position==='Goleiro'?'Sua leitura não gera a defesa, mas a disputa continua com os companheiros.':'Você perde sua cobrança, mas os companheiros ainda podem salvar a disputa.')}</span>`;
   $('#decision-continue').classList.remove('hidden');
   playMatchVisualFX('penalty',teamWin?'success':'miss','shootout');
 }
@@ -2444,7 +2486,7 @@ function pickFreshNationalEvent(worldCupOnly=false){
 function maybeTriggerNationalEvent(lastEvent){
   const p=state.player,s=state.season;if(!p?.calledUp||!s||state.pendingEvent||lastEvent?.type!=='national')return false;
   const wcState=lastEvent?.worldCup?ensureWorldCupState(s,p):null;if(lastEvent?.worldCup&&wcState?.finished)return false;const locked=!!lastEvent?.worldCup,gap=locked?1:2;if((s.nationalGamesPlayed||0)-(s.lastNationalEventAt||0)<gap)return false;
-  if(Math.random()>(locked?.42:.26))return false;
+  if(Math.random()>((locked?.42:.26)*INTERACTION_FREQUENCY))return false;
   // Com a Copa em andamento, somente eventos explicitamente relacionados ao
   // torneio podem interromper a sequência de partidas da seleção.
   const event=pickFreshNationalEvent(locked);if(!event)return false;state.pendingEvent={...event,type:'national',worldCupContext:locked};s.lastNationalEventAt=s.nationalGamesPlayed||0;state.resumeSeasonAfterEvent=true;save();openPendingEvent();return true;
@@ -2460,7 +2502,7 @@ function sponsorOfferEvent(){
 }
 function maybeTriggerSponsorEvent(){
   const p=state.player,s=state.season;if(!p||!s||state.pendingEvent||worldCupTournamentLockActive(s,p)||s.sponsorEventDone||s.clubGames<7)return false;
-  const rep=p.reputation||10,ovr=p.overall||68,cStrength=p.clubStrength||clubStrength(p.club,p.clubCountry);const eligible=SPONSOR_BRANDS.some(b=>ovr>=b.minOverall&&cStrength>=b.minClubStrength&&rep>=b.minReputation);if(!eligible)return false;const chance=clamp(.018+(rep-10)*.0012+(ovr-72)*.0018,.02,.18);
+  const rep=p.reputation||10,ovr=p.overall||68,cStrength=p.clubStrength||clubStrength(p.club,p.clubCountry);const eligible=SPONSOR_BRANDS.some(b=>ovr>=b.minOverall&&cStrength>=b.minClubStrength&&rep>=b.minReputation);if(!eligible)return false;const chance=clamp((.018+(rep-10)*.0012+(ovr-72)*.0018)*INTERACTION_FREQUENCY,.017,.153);
   if(Math.random()>chance)return false;const event=sponsorOfferEvent();if(!event)return false;state.pendingEvent=event;s.sponsorEventDone=true;s.lastSponsorEventAt=s.clubGames;state.resumeSeasonAfterEvent=true;save();openPendingEvent();return true;
 }
 function idolInteractionEligible(p=state.player,s=state.season){
@@ -2491,12 +2533,12 @@ function idolInteractionEvent(){
 }
 function maybeTriggerIdolInteraction(){
   const p=state.player,s=state.season;if(!idolInteractionEligible(p,s)||state.pendingEvent||worldCupTournamentLockActive(s,p)||(s.idolInteractionCount||0)>=3)return false;
-  if(s.totalGames-(s.lastIdolInteractionAt||-20)<6)return false;const chance=(s.idolInteractionCount||0)===0?.18:(s.idolInteractionCount||0)===1?.11:.07;if(Math.random()>chance)return false;
+  if(s.totalGames-(s.lastIdolInteractionAt||-20)<6)return false;const chance=((s.idolInteractionCount||0)===0?.18:(s.idolInteractionCount||0)===1?.11:.07)*INTERACTION_FREQUENCY;if(Math.random()>chance)return false;
   const event=idolInteractionEvent();if(!event)return false;state.pendingEvent=event;s.idolInteractionCount=(s.idolInteractionCount||0)+1;s.lastIdolInteractionAt=s.totalGames;state.resumeSeasonAfterEvent=true;save();openPendingEvent();return true;
 }
 function maybeTriggerCareerEvent(){
   const s=state.season;
-  if(!s||state.pendingEvent||worldCupTournamentLockActive(s,state.player)||s.totalGames-(s.lastCareerEventAt||0)<5||Math.random()>.19)return false;
+  if(!s||state.pendingEvent||worldCupTournamentLockActive(s,state.player)||s.totalGames-(s.lastCareerEventAt||0)<5||Math.random()>(.19*INTERACTION_FREQUENCY))return false;
   const incidentPool=typeof INCIDENT_EVENTS!=='undefined'?INCIDENT_EVENTS:[];
   const useIncident=incidentPool.length&&Math.random()<.52;
   const pool=useIncident?incidentPool:CAREER_EVENTS;
@@ -2574,18 +2616,33 @@ function eventObjectMarkup(token,index){
   const glyph=EVENT_PROP_GLYPHS[token]||'◆';
   return `<span class="scene-object obj-${token} obj-index-${index}" data-prop="${esc(token)}" aria-hidden="true"><span class="scene-object-glyph">${glyph}</span><i></i><b></b><em></em></span>`;
 }
+function sponsorWordmark(brand=''){const safe=esc(String(brand||'MARCA').toUpperCase());return `<span class="sponsor-transparent-logo sponsor-logo-${normalizeKey(brand)}" aria-label="${safe}">${safe}</span>`;}
 function eventSceneMarkup(e){
   const m=eventSceneMeta(e),sceneClass=String(m.scene).replace(/[^a-z0-9-]/gi,'-').toLowerCase();
-  return `<div class="career-event-scene scene-event-${sceneClass} scene-theme-${m.theme}" data-scene="${esc(m.scene)}"><div class="scene-ambient"><i></i><i></i><i></i><i></i></div><div class="scene-world">${(m.props||[]).map(eventObjectMarkup).join('')}</div><div class="scene-depth"><span></span><span></span><span></span></div><div class="scene-focus">${m.icon}</div><small>${esc(m.label)}</small></div>`;
+  const hash=[...(e.id||e.title||m.scene)].reduce((n,ch,i)=>n+ch.charCodeAt(0)*(i+3),17);const layout=hash%12;
+  const shift=(hash%19)-9,tilt=(hash%13)-6,scale=(92+(hash%17))/100;
+  const hero=e.type==='sponsor'?sponsorWordmark(e.sponsorBrand):e.type==='idol'?`<span class="scene-person-card"><b>★</b><small>${esc(e.idolName||'Ídolo')}</small></span>`:'';
+  return `<div class="career-event-scene scene-event-${sceneClass} scene-theme-${m.theme} event-layout-${layout}" data-scene="${esc(m.scene)}" style="--event-shift:${shift}px;--event-tilt:${tilt}deg;--event-scale:${scale}"><div class="scene-ambient"><i></i><i></i><i></i><i></i></div><div class="scene-architecture"><span></span><span></span><span></span><span></span></div>${hero}<div class="scene-world">${(m.props||[]).map(eventObjectMarkup).join('')}</div><div class="scene-depth"><span></span><span></span><span></span></div><div class="scene-focus">${m.icon}</div><small>${esc(m.label)}</small></div>`;
 }
 function playCareerEventResolution(e,message){
   const scene=$('#event-modal .career-event-scene');if(!scene)return;scene.classList.add('resolved');const badge=document.createElement('div');badge.className='scene-result-badge';badge.innerHTML=`<b>✓</b><span>${message}</span>`;scene.appendChild(badge);
 }
+function syncPausedOverlayButton(){const btn=$('#resume-career-overlay');if(!btn)return;btn.classList.toggle('hidden',!pausedCareerOverlay);btn.textContent=pausedCareerOverlay?`Retomar ${pausedCareerOverlay==='decision'?'decisão':'interação'} ▶`:'Retomar ▶';}
+function pauseCareerOverlay(kind){
+  pausedCareerOverlay=kind;state.simulatingSeason=false;
+  if(kind==='decision')$('#match-decision-modal')?.classList.add('hidden');else $('#event-modal')?.classList.add('hidden');
+  syncPausedOverlayButton();showView('career');render();toast('Carreira pausada. Consulte seus dados e retome quando quiser.');
+}
+function resumePausedCareerOverlay(){
+  const kind=pausedCareerOverlay;if(!kind)return;pausedCareerOverlay=null;syncPausedOverlayButton();showView('career');
+  if(kind==='decision'&&state.pendingMatchDecision)$('#match-decision-modal')?.classList.remove('hidden');
+  else if(kind==='event'&&state.pendingEvent)$('#event-modal')?.classList.remove('hidden');
+}
 function openPendingEvent(){
   const e=state.pendingEvent;if(!e)return;const modal=$('#event-modal');
   modal.classList.toggle('sponsor-event-active',e.type==='sponsor');modal.classList.toggle('national-event-active',e.type==='national');modal.classList.toggle('idol-event-active',e.type==='idol');
-  $('#event-title').textContent=e.title;$('#event-description').textContent=e.description;
-  $('#event-choices').innerHTML=eventSceneMarkup(e)+(e.type==='sponsor'?`<div class="sponsor-brand-banner ${e.sponsorTone||''}"><span>PARCERIA</span><strong>${e.sponsorBrand||'Marca esportiva'}</strong><small>${money(e.sponsorValue||0)} / temporada</small></div>`:'')+`<div class="event-choice-grid">${e.choices.map((c,i)=>`<button class="event-choice visual-event-choice" data-choice="${i}"><span>${eventChoiceIcon(c.action)}</span><strong>${c.label}</strong><small>${c.effect}</small></button>`).join('')}</div>`;
+  const eyebrow=$('#event-eyebrow');if(eyebrow)eyebrow.textContent=e.type==='national'?'INTERAÇÃO DA SELEÇÃO':e.type==='idol'?'INTERAÇÃO COM ÍDOLO':e.type==='sponsor'?'PATROCÍNIO':'EVENTO DE CARREIRA';$('#event-title').textContent=e.title;$('#event-description').textContent=e.description;
+  $('#event-choices').innerHTML=eventSceneMarkup(e)+(e.type==='sponsor'?`<div class="sponsor-brand-banner ${e.sponsorTone||''}">${sponsorWordmark(e.sponsorBrand)}<span>PARCERIA</span><strong>${e.sponsorBrand||'Marca esportiva'}</strong><small>${money(e.sponsorValue||0)} / temporada</small></div>`:'')+`<div class="event-choice-grid">${e.choices.map((c,i)=>`<button class="event-choice visual-event-choice" data-choice="${i}"><span>${eventChoiceIcon(c.action)}</span><strong>${c.label}</strong><small>${c.effect}</small></button>`).join('')}</div>`;
   $$('#event-choices .event-choice').forEach(b=>b.addEventListener('click',()=>resolveCareerEvent(+b.dataset.choice)));modal.classList.remove('hidden');
 }
 function resolveCareerEvent(index){
@@ -2784,6 +2841,14 @@ function renderAccountPanel(){
   const contactName=$('#contact-name'),contactEmail=$('#contact-email');if(contactName&&!contactName.value)contactName.value=account.nickname||'';if(contactEmail&&!contactEmail.value)contactEmail.value=account.email||account.contactEmail||'';
 }
 
+function nextMatchTeamMarkup(name,event){
+  if(event?.type==='national'){
+    const code=name===state.player?.nationality?state.player?.nationalityCode:(event.opponent===name?event.opponentCode:codeForCountryName(name));
+    return `<span class="next-team-visual national" title="${esc(name)}" aria-label="${esc(name)}">${nationalFlagImage(code,name)}</span>`;
+  }
+  return `<span class="next-team-visual club" data-next-club="${esc(name)}" title="${esc(name)}" aria-label="${esc(name)}"><span class="crest-shell"><img class="club-badge-img hidden" alt="${esc(name)}"><span class="crest-fallback">⚽</span></span></span>`;
+}
+function hydrateNextMatchBadges(){document.querySelectorAll('[data-next-club]').forEach(el=>hydrateBadge(el.querySelector('img'),el.dataset.nextClub,el.querySelector('.crest-fallback')));}
 function render(){
   renderHomeHub();renderAccountPanel();
   document.body.classList.toggle('home-screen',!!$('#home')?.classList.contains('active'));
@@ -2804,7 +2869,7 @@ function render(){
     $('#finish-season').disabled=!s.closed||p.retired;$('#finish-season').textContent=s.closed?'Avançar para próxima temporada →':'Simule a temporada primeiro';
     nextEventCache=!s.closed?chooseNextEvent():null;
     if(nextEventCache){
-      $('#home-team').textContent=nextEventCache.home;$('#away-team').textContent=nextEventCache.away;$('#match-title').textContent=`${nextEventCache.home} x ${nextEventCache.away}`;$('#match-competition').textContent=nextEventCache.competition;$('#match-context').textContent=nextEventCache.type==='league'?`Rodada ${nextEventCache.round} de ${s.league.schedule.length}`:nextEventCache.stage||`Temporada ${s.year}`;
+      $('#home-team').innerHTML=nextMatchTeamMarkup(nextEventCache.home,nextEventCache);$('#away-team').innerHTML=nextMatchTeamMarkup(nextEventCache.away,nextEventCache);$('#match-title').textContent=`${nextEventCache.competition}`;$('#match-competition').textContent=nextEventCache.competition;$('#match-context').textContent=nextEventCache.type==='league'?`Rodada ${nextEventCache.round} de ${s.league.schedule.length}`:nextEventCache.stage||`Temporada ${s.year}`;setTimeout(hydrateNextMatchBadges,0);
       $('#favorite-line').textContent='';$('#favorite-percent').textContent='';$('#favorite-meter-fill').style.width='0%';$('#strength-line').textContent='';
       $('#simulate-btn').disabled=p.retired;$('#simulate-btn').textContent='Simular temporada →';
     }else{
@@ -2814,7 +2879,7 @@ function render(){
   }else{
     $('#season-year').textContent='—';$('#s-games').textContent='0';$('#s-goals').textContent='0';$('#s-assists').textContent='0';$('#s-rating').textContent='—';$('#league-round-label').textContent='Carreira encerrada';$('#league-points').textContent='';$('#league-progress-bar').style.width='100%';$('#season-progress').textContent='Aposentado';$('#finish-season').disabled=true;$('#finish-season').textContent='Carreira encerrada';$('#competitions-list').innerHTML='<div class="competition-item"><strong>👟 Carreira concluída</strong><small>Veja o histórico completo na aba Estatísticas.</small></div>';$('#match-title').textContent='Carreira encerrada';$('#home-team').textContent='';$('#away-team').textContent='';$('#match-competition').textContent='';$('#match-context').textContent='';$('#favorite-line').textContent='';$('#favorite-percent').textContent='';$('#favorite-meter-fill').style.width='0%';$('#strength-line').textContent='';$('#simulate-btn').disabled=true;$('#simulate-btn').textContent='Aposentado';
   }
-  $('#national-country').textContent=`Seleção de ${p.nationality}`;$('#national-flag').textContent=countryFlag(p.nationalityCode);
+  $('#national-country').textContent=`Seleção de ${p.nationality}`;$('#national-flag').innerHTML=nationalFlagImage(p.nationalityCode,p.nationality);
   const wcStatus=s&&isWorldCupYear(s.year)?ensureWorldCupState(s,p):null;
   const calendarStatus=s?nationalCalendarStatusText(s,p):'';
   const wcOngoing=!!(wcStatus&&wcStatus.active&&!wcStatus.finished);
@@ -2825,11 +2890,11 @@ function render(){
       ?((!wcStatus.drawPresented?'◆ Sorteio da Copa pendente':wcStatus.started?'◆ Seleção priorizada no calendário':'◆ Convocado para a Copa · torneio entra no meio da temporada')+wcHostNote)
       :(calendarStatus==='Datas FIFA concluídas'?(wcStatus?.champion?'★ Campeão do Mundo · calendário de seleções concluído':'✓ Calendário da seleção concluído'):`${p.nationalCaptain?'★ Capitão':'● Convocado'} · ${calendarStatus}`))
     :(wcStatus&&!wcStatus.finished?`Copa se aproxima · desempenho no clube pode render convocação${wcHostNote}`:'Suba GER + desempenho para receber convocação');
-  const trust=clamp(p.nationalTrust||0,0,100);$('#national-trust-fill').style.width=`${trust}%`;$('#national-trust-label').textContent=`${trust}%`;$('#nt-games').textContent=p.nationalTeamGames;$('#nt-goals').textContent=p.nationalTeamGoals;$('#national-role').textContent=nationalRoleForPlayer(p);const nationalAction=$('#national-action'),interactionCount=s?.nationalInteractionCount||0,interactionLimit=nationalInteractionLimit(s);nationalAction.disabled=!p.calledUp||p.retired||!s||interactionCount>=interactionLimit;nationalAction.textContent=!p.calledUp?'Aguardando convocação':interactionCount>=interactionLimit?'Conversas concluídas':(isWorldCupYear(s?.year)?`Falar com a seleção · ${interactionCount+1}/${interactionLimit}`:'Conversar com a seleção');
+  const trust=clamp(p.nationalTrust||0,0,100);$('#national-trust-fill').style.width=`${trust}%`;$('#national-trust-label').textContent=`${trust}%`;$('#nt-games').textContent=p.nationalTeamGames;$('#nt-goals').textContent=p.nationalTeamGoals;$('#national-role').textContent=nationalRoleForPlayer(p);const nationalAction=$('#national-action');if(nationalAction){nationalAction.classList.add('hidden');nationalAction.disabled=true;}
   const newsIcon=n=>/les[aã]o|tratamento|fora/i.test(n)?'✚':/campe[aã]o|t[ií]tulo|trof[eé]u/i.test(n)?'★':/sele[cç][aã]o|convoca/i.test(n)?'◉':/proposta|mercado|clube/i.test(n)?'↗':'●';
   $('#news').innerHTML=(state.news.slice(-4).reverse().map(n=>`<div class="news-item compact"><span class="news-icon">${newsIcon(n)}</span><div><strong>${n}</strong></div></div>`).join('')||'<div class="empty-visual">○<span>Sem notícias</span></div>');
   renderSavedCareers();
-  animateSeasonDashboard();renderHistory();renderOffers();renderHonours();renderMarketTier();if(state.pendingEvent)openPendingEvent();
+  animateSeasonDashboard();syncPausedOverlayButton();renderHistory();renderOffers();renderHonours();renderMarketTier();if(state.pendingEvent)openPendingEvent();
 }
 function renderHistory(){
   if(!state.created)return;const current=state.season&&!state.season.closed?state.season:{clubGames:0,clubGoals:0,clubAssists:0};const totals=state.history.reduce((a,h)=>({games:a.games+h.games,goals:a.goals+h.goals,assists:a.assists+h.assists}),{games:current.clubGames||0,goals:current.clubGoals||0,assists:current.clubAssists||0});
@@ -3283,45 +3348,15 @@ $('#player-form').addEventListener('submit',e=>{
 $('#world-cup-draw-start')?.addEventListener('click',startWorldCupDrawAnimation);
 $('#world-cup-draw-skip')?.addEventListener('click',finishWorldCupDrawAnimation);
 $('#world-cup-draw-continue')?.addEventListener('click',confirmWorldCupDraw);
-$('#national-action').addEventListener('click',openNationalInteraction);
 $('#national-modal-close').addEventListener('click',()=>$('#national-modal').classList.add('hidden'));
 $('#legacy-club-sign').addEventListener('click',signLegacyClub);
-$('#legacy-close').addEventListener('click',()=>{if(state.player){state.player.legacyCardSeen=true;save();}$('#career-legacy-modal').classList.add('hidden');});
+$('#legacy-close').addEventListener('click',()=>{if(state.player){state.player.legacyCardSeen=true;save();}$('#career-legacy-modal').classList.add('hidden');showView('home');render();});
 $('#legacy-view-stats').addEventListener('click',()=>{if(state.player){state.player.legacyCardSeen=true;save();}$('#career-legacy-modal').classList.add('hidden');showView('stats');});
 $('#legacy-save').addEventListener('click',saveCareerToHall);
 
-function openNationalInteraction(){
-  const p=state.player,s=state.season;if(!p?.calledUp){toast('Você ainda precisa ser convocado para interagir com a seleção.');return;}
-  if(p.retired||!s)return;const limit=nationalInteractionLimit(s);if((s.nationalInteractionCount||0)>=limit){toast('Você já concluiu as conversas disponíveis com a seleção nesta temporada.');return;}
-  const wc=isWorldCupYear(s.year);
-  $('#national-modal-title').textContent=`${p.nationality} · ${wc?'Ano de Copa':'Data FIFA'} · ${nationalRoleForPlayer(p)}`;
-  $('#national-modal-copy').textContent=wc?`Confiança: ${p.nationalTrust||0}/100. Em ano de Copa você pode ter até ${limit} conversas especiais com a comissão.`:`Confiança na seleção: ${p.nationalTrust||0}/100. Escolha como conduzir sua relação com a comissão técnica.`;
-  const choices=wc?[
-    {label:'Treinar pênaltis',effect:'+ confiança; assume responsabilidade em jogos grandes.',action:'wc_penalties'},
-    {label:'Pedir papel de protagonista',effect:'+ confiança e reputação; + pressão.',action:'wc_star'},
-    {label:'Blindar o grupo',effect:'+ moral e entrosamento na Copa.',action:'wc_group'},
-    {label:'Estudar os rivais',effect:'+ preparação e desenvolvimento.',action:'wc_scout'}
-  ]:[
-    {label:'Pedir mais minutos',effect:'Aumenta confiança, mas também a cobrança.',action:'minutes'},
-    {label:'Focar no entrosamento',effect:'Melhora confiança e moral com baixo risco.',action:'chemistry'},
-    {label:'Assumir liderança',effect:'Busca protagonismo e pode aproximar a braçadeira.',action:'leadership'}
-  ];
-  $('#national-modal-choices').innerHTML=choices.map((c,i)=>`<button class="event-choice national-choice visual-event-choice" data-national-choice="${i}"><span>${['↗','◎','★','◈'][i]||'◆'}</span><strong>${c.label}</strong><small>${c.effect}</small></button>`).join('');
-  $$('.national-choice').forEach(b=>b.addEventListener('click',()=>resolveNationalInteraction(choices[+b.dataset.nationalChoice].action)));
-  $('#national-modal').classList.remove('hidden');
-}
-function resolveNationalInteraction(action){
-  const p=state.player,s=state.season;if(!p||!s)return;let msg='Conversa concluída.';
-  if(action==='minutes'){p.nationalTrust=clamp((p.nationalTrust||0)+4,0,100);p.pressure=(p.pressure||0)+1;msg='Você pede mais espaço e entra no radar para ter mais protagonismo.';}
-  if(action==='chemistry'){p.nationalTrust=clamp((p.nationalTrust||0)+3,0,100);p.morale=clamp(p.morale+3,40,100);msg='A postura coletiva melhora seu entrosamento com o grupo.';}
-  if(action==='leadership'){p.nationalTrust=clamp((p.nationalTrust||0)+5,0,100);p.reputation=clamp((p.reputation||0)+2,0,100);msg='Você assume mais responsabilidade dentro da seleção.';}
-  if(action==='wc_penalties'){p.nationalTrust=clamp((p.nationalTrust||0)+5,0,100);p.pressure=(p.pressure||0)+2;msg='Você entra na lista de cobradores para os momentos decisivos da Copa.';}
-  if(action==='wc_star'){p.nationalTrust=clamp((p.nationalTrust||0)+6,0,100);p.reputation=clamp((p.reputation||0)+3,0,100);p.pressure=(p.pressure||0)+2;msg='A comissão entende que você quer ser protagonista na Copa.';}
-  if(action==='wc_group'){p.nationalTrust=clamp((p.nationalTrust||0)+4,0,100);p.morale=clamp(p.morale+5,40,100);msg='Sua postura fortalece o ambiente e o entrosamento do grupo.';}
-  if(action==='wc_scout'){p.nationalTrust=clamp((p.nationalTrust||0)+4,0,100);p.developmentBoost=(p.developmentBoost||0)+1;msg='Você estuda os adversários e chega mais preparado aos jogos da Copa.';}
-  if(!p.nationalCaptain&&(p.nationalTeamGames||0)>=18&&(p.nationalTrust||0)>=82&&(p.reputation||0)>=45&&p.age>=25){p.nationalCaptain=true;msg+=' A comissão entrega a braçadeira de capitão a você.';}
-  s.nationalInteractionCount=(s.nationalInteractionCount||0)+1;p.lastNationalInteractionYear=s.year;state.news.push(`Seleção de ${p.nationality}: ${msg}`);$('#national-modal').classList.add('hidden');save();render();toast(msg);
-}
+// As interações com a seleção agora são iniciadas automaticamente pela comissão técnica
+// após convocações e partidas internacionais; não existe mais ação manual do jogador.
+
 function careerTotals(){
   const p=state.player;return (state.history||[]).reduce((a,h)=>({games:a.games+(h.games||0),goals:a.goals+(h.goals||0),assists:a.assists+(h.assists||0)}),{games:0,goals:0,assists:0});
 }
@@ -3479,7 +3514,7 @@ function finalizeLeague(){
 }
 // Limites de GER para o começo da carreira. O POT pode continuar acima desses
 // valores; o limite controla apenas quanto GER o jogador pode atingir em cada temporada.
-const EARLY_CAREER_OVERALL_CAPS = [72,76,80,83,86,88,90,92,93,94,95,96,97,98,98,99,99,99];
+const EARLY_CAREER_OVERALL_CAPS = [74,80,85,89,92,94,95,96,97,97,98,98,98,99,99,99,99,99];
 function currentCareerSeasonNumber(){
   if(state.season?.year && typeof START_YEAR!=='undefined') return Math.max(1,state.season.year-START_YEAR+1);
   return Math.max(1,(state.history?.length||0)+1);
@@ -3510,21 +3545,21 @@ function developmentResult(avg){
   const seasonNo=currentCareerSeasonNumber(),potentialGap=Math.max(0,(p.potential||p.overall)-p.overall);
 
   // Progressão deliberadamente mais lenta: 90+ é elite, 95+ é geracional e 99 é raro.
-  let base=avg>=8.85?3:avg>=8.35?2:avg>=7.45?1:avg<5.8?-2:avg<6.1?-1:0;
-  if(devAge<=21&&p.overall<=70&&avg>=6.30)base=Math.max(base,potentialGap>=12?4:2);
+  let base=avg>=8.45?4:avg>=7.85?3:avg>=7.15?2:avg>=6.55?1:avg<5.7?-2:avg<6.0?-1:0;
+  if(devAge<=21&&p.overall<=74&&avg>=6.20)base=Math.max(base,potentialGap>=12?5:3);
   if(age<=23&&p.overall<82&&potentialGap>=8&&(s.clubGames||0)>=10){
-    if(avg>=6.75)base=Math.max(base,p.overall<=76?4:3);
-    else if(avg>=6.35)base=Math.max(base,3);
-    else if(avg>=6.05)base=Math.max(base,2);
-    else if(avg>=5.80)base=Math.max(base,1);
+    if(avg>=6.65)base=Math.max(base,p.overall<=76?5:4);
+    else if(avg>=6.20)base=Math.max(base,4);
+    else if(avg>=5.95)base=Math.max(base,3);
+    else if(avg>=5.70)base=Math.max(base,2);
     const role=ensureClubRoleState(p);if((role.correctDecisions||0)>=2&&avg>=6.65)base=Math.max(base,Math.min(4,2+Math.floor(role.correctDecisions/2)));
   }
   if(seasonNo<=5&&age<=23&&p.overall<=72&&potentialGap>=12&&avg>=6.20)base=Math.max(base,3);
   if(avg>=8.15&&rate>=contributionTarget*1.35&&p.overall<90)base=Math.min(4,base+1);
 
   if(base>0){
-    let cap=devAge<=22?4:devAge<=25?3:devAge<=29?2:devAge<=32?1:devAge<=36?(avg>=8.65?1:0):0;
-    if(p.overall>=88)cap=Math.min(cap,1);
+    let cap=devAge<=22?5:devAge<=25?4:devAge<=29?3:devAge<=32?2:devAge<=36?(avg>=7.9?1:0):0;
+    if(p.overall>=94)cap=Math.min(cap,1);else if(p.overall>=90)cap=Math.min(cap,2);
     base=Math.min(base,cap);
     if(base>0&&!eliteOverallAdvanceAllowed(p,avg,rate,contributionTarget,roleSkill,primaryValue,attacking))base=0;
   }
@@ -3537,8 +3572,8 @@ function developmentResult(avg){
   }
 
   const trainingBoost=clamp(p.developmentBoost||0,0,1);p.developmentBoost=0;
-  if(age<37&&base>0&&trainingBoost&&p.overall<90)base=Math.min(base+trainingBoost,devAge<=22?4:3);
-  base=clamp(base,-5,4);
+  if(age<37&&base>0&&trainingBoost&&p.overall<90)base=Math.min(base+trainingBoost,devAge<=22?5:4);
+  base=clamp(base,-5,5);
 
   // POT pode crescer, porém 95-99 não é mais um caminho automático de boas temporadas.
   let potentialDelta=age>=37?-1:(avg>=8.75?1:avg>=7.65&&p.potential<92?1:avg<5.9&&age<=29?-1:0);
@@ -3842,7 +3877,9 @@ function renderDecisionChoices(scenario){
     visual.className=`decision-visual ${typeClass}`;
     const label=scenario.prompt|| (scenario.visual==='penalty'?'Escolha o tipo de cobrança':scenario.visual==='goal'?'Escolha a finalização':scenario.visual==='chance'?'Escolha como atacar o lance':'Escolha sua leitura no lance');
     const inner=scenario.options.map((o,i)=>`<button class="visual-choice ${slotClasses[i]||''}" data-decision-option="${i}"><span>${o.type==='assist'?'🤝':o.type==='defense'?'🛡️':o.type==='control'?'⏱️':'⚽'}</span><strong>${o.label}</strong><small>${o.effect}</small></button>`).join('');
-    visual.innerHTML=`<div class="decision-visual-label">${label}</div><div class="visual-stage">${inner}</div>`;
+    const sceneHash=[...(scenario.id||scenario.title||scenario.visual)].reduce((n,ch,i)=>n+ch.charCodeAt(0)*(i+5),29);const variant=sceneHash%12;visual.style.setProperty('--decision-shift',`${(sceneHash%23)-11}px`);visual.style.setProperty('--decision-tilt',`${(sceneHash%15)-7}deg`);visual.style.setProperty('--decision-scale',`${(90+(sceneHash%19))/100}`);
+    visual.classList.add(`decision-layout-${variant}`,`decision-scenario-${String(scenario.id||'generic').replace(/[^a-z0-9-]/gi,'-').toLowerCase()}`);
+    visual.innerHTML=`<div class="decision-visual-label">${label}</div><div class="decision-scene-architecture"><i></i><i></i><i></i><i></i></div><div class="visual-stage">${inner}</div>`;
     choiceBox.classList.add('hidden');
     visual.querySelectorAll('[data-decision-option]').forEach(b=>b.addEventListener('click',()=>state.pendingPenaltyShootout?resolvePenaltyShootout(+b.dataset.decisionOption):resolveMatchDecision(+b.dataset.decisionOption)));
     return;
@@ -4078,9 +4115,14 @@ function continueSeasonSimulation(){
     const target=s.decisionTargets[s.decisionIndex];
     const healthy=(p.injuryGames||0)<=0;
     const appearanceRole=event.type==='national'?'start':healthy?clubAppearanceRole(event,p):'unused';
-    const wc=isWorldCupYear(s.year),nationalLimit=wc?4:2,nationalDecision=event.type==='national'&&healthy&&(s.nationalDecisionCount||0)<nationalLimit&&Math.random()<(wc ? .86 : .58);
+    const wc=isWorldCupYear(s.year),nationalLimit=wc?99:2;
+    // Copa do Mundo: toda partida do jogador recebe uma situação de decisão.
+    const nationalDecision=event.type==='national'&&healthy&&(event.worldCup||((s.nationalDecisionCount||0)<nationalLimit&&Math.random()<(.58*INTERACTION_FREQUENCY)));
     if(nationalDecision){openMatchDecision(event);save();render();return;}
-    if(event.type!=='national'&&healthy&&appearanceRole!=='unused'&&target!==undefined&&s.clubGames+1>=target){openMatchDecision(event);save();render();return;}
+    if(event.type!=='national'&&healthy&&appearanceRole!=='unused'&&target!==undefined&&s.clubGames+1>=target){
+      if(Math.random()<=INTERACTION_FREQUENCY){openMatchDecision(event);save();render();return;}
+      s.decisionIndex=(s.decisionIndex||0)+1; // cerca de 15% das situações são puladas para dar ritmo à temporada
+    }
     simulateMatchCore(event);safety++;
     if(event.worldCup&&maybePresentWorldCupOutcome())return;
     if(state.pendingPenaltyShootout){state.simulatingSeason=false;openPenaltyShootoutDecision();save();render();return;}
@@ -4105,6 +4147,9 @@ function showSeasonSummary(){
   $('#summary-decisions').innerHTML=(s.decisionLogs||[]).map((d,i)=>`<div><strong>${i+1}. ${d.match}</strong><span>${d.choice} · ${d.outcome}</span></div>`).join('');$('#summary-offers').innerHTML=state.offers.length?state.offers.map(o=>`<div class="summary-offer"><strong>${o.club}</strong><span>${o.countryName} · Força ${o.strength} · ${money(o.value)}</span></div>`).join(''):'<p class="muted">Nenhuma proposta devido à aposentadoria.</p>';$('#season-summary-modal').classList.remove('hidden');
 }
 $('#decision-continue').addEventListener('click',()=>{if(state.pendingPenaltyShootout){openPenaltyShootoutDecision();return;}$('#match-decision-modal').classList.add('hidden');continueSeasonSimulation();});
+$('#pause-decision')?.addEventListener('click',()=>pauseCareerOverlay('decision'));
+$('#pause-event')?.addEventListener('click',()=>pauseCareerOverlay('event'));
+$('#resume-career-overlay')?.addEventListener('click',resumePausedCareerOverlay);
 $('#summary-market').addEventListener('click',()=>{$('#season-summary-modal').classList.add('hidden');if(state.player?.retired&&pendingCareerCard){pendingCareerCard=false;showCareerLegacyCard();return;}showView('market');showPendingSeasonCelebration();});
 $('#summary-close').addEventListener('click',()=>{$('#season-summary-modal').classList.add('hidden');if(state.player?.retired&&pendingCareerCard){pendingCareerCard=false;showCareerLegacyCard();return;}showPendingSeasonCelebration();});
 

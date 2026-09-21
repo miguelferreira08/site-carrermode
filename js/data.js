@@ -2707,37 +2707,37 @@ const CAREER_EVENTS = [
 
 // --- V8.7: eventos adicionais de seleção ---
 const NATIONAL_TEAM_EVENTS = [
-  {id:'nt_camp_intensity',title:'Concentração da seleção',description:'A comissão abriu a preparação com uma sessão extra antes da próxima data internacional.',choices:[
+  {id:'nt_camp_intensity',title:'Concentração da seleção',description:'A comissão técnica chama você após o treino e oferece uma sessão extra antes da próxima data internacional.',choices:[
     {label:'Fazer a sessão completa',action:'nt_camp_train',effect:'+ confiança na seleção e preparação'},
     {label:'Preservar o físico',action:'nt_camp_rest',effect:'+ moral e recuperação'}]},
-  {id:'nt_penalty_order',title:'Lista de cobradores',description:'Nos treinos, a comissão define os cobradores de pênaltis para jogos decisivos.',choices:[
+  {id:'nt_penalty_order',title:'Lista de cobradores',description:'O treinador de bolas paradas procura você e comunica que está revendo a ordem dos cobradores para jogos decisivos.',choices:[
     {label:'Pedir uma cobrança',action:'nt_penalty_take',effect:'+ protagonismo; + pressão'},
     {label:'Apoiar a ordem atual',action:'nt_penalty_support',effect:'+ entrosamento e confiança'}]},
-  {id:'nt_press_room',title:'Coletiva da seleção',description:'A imprensa quer uma frase sobre a expectativa para a próxima sequência internacional.',choices:[
+  {id:'nt_press_room',title:'Coletiva da seleção',description:'O assessor da seleção procura você e informa que a comissão quer definir quem falará na próxima coletiva.',choices:[
     {label:'Assumir ambição',action:'nt_press_ambitious',effect:'+ reputação; + cobrança'},
     {label:'Blindar o grupo',action:'nt_press_calm',effect:'+ moral e estabilidade'}]},
-  {id:'nt_tactical_role',title:'Função tática na seleção',description:'O treinador quer testar você em uma função diferente da que exerce no clube.',choices:[
+  {id:'nt_tactical_role',title:'Função tática na seleção',description:'O treinador chama você para uma conversa individual e propõe uma função diferente da que exerce no clube.',choices:[
     {label:'Aceitar a mudança',action:'nt_tactical_adapt',effect:'+ confiança e repertório'},
     {label:'Defender sua função natural',action:'nt_tactical_stay',effect:'+ conforto; menor ganho de confiança'}]},
-  {id:'nt_leadership',title:'Reunião de líderes',description:'O grupo se reúne antes de uma partida grande e a comissão pede que algumas referências falem.',choices:[
+  {id:'nt_leadership',title:'Reunião de líderes',description:'A comissão chama você para a reunião de líderes antes de uma partida grande e pede uma participação no encontro.',choices:[
     {label:'Falar ao grupo',action:'nt_leader_speech',effect:'+ liderança e confiança'},
     {label:'Liderar pelo exemplo',action:'nt_leader_example',effect:'+ moral e estabilidade'}]},
-  {id:'nt_rivalry',title:'Clássico internacional',description:'O adversário provoca durante a semana e a torcida aumenta a pressão sobre a seleção.',choices:[
+  {id:'nt_rivalry',title:'Clássico internacional',description:'A comissão conversa com você sobre as provocações do adversário e pede uma postura para proteger o foco do grupo.',choices:[
     {label:'Responder em campo',action:'nt_rival_focus',effect:'+ foco e confiança'},
     {label:'Responder à imprensa',action:'nt_rival_media',effect:'+ reputação; + pressão'}]},
   {id:'wc_arrival',title:'Chegada à Copa do Mundo',description:'A seleção desembarca para a Copa e o ambiente muda completamente: hotel fechado, imprensa e torcida em volta do grupo.',worldCupOnly:true,choices:[
     {label:'Entrar no clima da Copa',action:'wc_arrival_embrace',effect:'+ moral e confiança'},
     {label:'Manter rotina normal',action:'wc_arrival_focus',effect:'+ estabilidade e preparação'}]},
-  {id:'wc_penalties',title:'Treino de pênaltis da Copa',description:'A comissão dedica a sessão aos pênaltis. O treinador pergunta quem quer assumir responsabilidade.',worldCupOnly:true,choices:[
+  {id:'wc_penalties',title:'Treino de pênaltis da Copa',description:'O treinador chama você durante a sessão de pênaltis e pergunta se está pronto para assumir uma cobrança em um jogo decisivo.',worldCupOnly:true,choices:[
     {label:'Ser um dos cobradores',action:'wc_penalty_duty',effect:'+ confiança; + pressão'},
     {label:'Focar no jogo corrido',action:'wc_penalty_skip',effect:'+ preparação e moral'}]},
   {id:'wc_family',title:'Dia de visita na Copa',description:'A comissão libera algumas horas para receber familiares antes da próxima partida.',worldCupOnly:true,choices:[
     {label:'Receber a família',action:'wc_family_visit',effect:'+ moral e leveza'},
     {label:'Continuar concentrado',action:'wc_family_focus',effect:'+ foco e confiança'}]},
-  {id:'wc_knockout',title:'Véspera de mata-mata',description:'A seleção se prepara para uma partida eliminatória. O treinador pede uma postura clara do grupo.',worldCupOnly:true,choices:[
+  {id:'wc_knockout',title:'Véspera de mata-mata',description:'Na véspera do mata-mata, o treinador chama você à sala de vídeo e pede uma postura clara para a preparação.',worldCupOnly:true,choices:[
     {label:'Estudar o adversário',action:'wc_video_study',effect:'+ preparação e confiança'},
     {label:'Confiar no instinto',action:'wc_instinct',effect:'+ moral; maior risco'}]},
-  {id:'wc_captain_room',title:'Conversa antes de entrar em campo',description:'No túnel, a tensão é máxima. A comissão abre espaço para uma última palavra antes do jogo.',worldCupOnly:true,choices:[
+  {id:'wc_captain_room',title:'Conversa antes de entrar em campo',description:'No túnel, um membro da comissão se aproxima de você e pede uma última palavra ao grupo antes do jogo.',worldCupOnly:true,choices:[
     {label:'Puxar o discurso',action:'wc_tunnel_speech',effect:'+ liderança e confiança'},
     {label:'Manter o grupo calmo',action:'wc_tunnel_calm',effect:'+ moral e controle'}]}
 ];

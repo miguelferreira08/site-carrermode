@@ -15,7 +15,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=10.3">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=10.3">
   <link rel="shortcut icon" href="assets/favicon.ico?v=10.3">
-  <link rel="stylesheet" href="css/style.css?v=10.3.3">
+  <link rel="stylesheet" href="css/style.css?v=10.3.4">
 </head>
 <body>
   <div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-title">
@@ -103,7 +103,7 @@
       <button data-view="legacy">Meu Legado</button>
       <button data-view="contact">Contato</button>
     </nav>
-    <div class="top-actions">
+    <div class="top-actions"><button id="resume-career-overlay" class="resume-career-overlay hidden" type="button">Retomar ▶</button>
       <button id="account-top-chip" class="account-top-chip" data-view="legacy" type="button"><span>★</span><b id="account-top-nickname">Legado</b></button>
       <div id="mini-profile" class="mini-profile hidden"></div>
       <button id="reset-career" class="ghost hidden" type="button">Nova carreira</button>
@@ -429,7 +429,7 @@
             <div><strong id="nt-goals">0</strong><small>Gols</small></div>
           </div>
           <div class="national-role-line"><span>Função</span><strong id="national-role">Fora do grupo</strong></div>
-          <button id="national-action" class="secondary full" type="button">Conversar com a seleção</button>
+          <div class="selection-contact-note"><span>✉</span><small>A comissão entra em contato automaticamente durante convocações e Datas FIFA.</small></div><button id="national-action" class="secondary full hidden" type="button">Interação automática</button>
         </article>
 
         <article class="panel news-card">
@@ -571,6 +571,7 @@
 
   <div id="match-decision-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
     <div class="modal-card decision-card">
+      <button id="pause-decision" class="overlay-pause-btn" type="button">Ⅱ Pausar</button>
       <p class="eyebrow" id="decision-competition">MOMENTO DECISIVO</p>
       <h2 id="decision-title"></h2>
       <p id="decision-match" class="spotlight-favorite"></p>
@@ -600,7 +601,8 @@
 
   <div id="event-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
-      <p class="eyebrow">EVENTO DE CARREIRA</p>
+      <button id="pause-event" class="overlay-pause-btn" type="button">Ⅱ Pausar</button>
+      <p class="eyebrow" id="event-eyebrow">EVENTO DE CARREIRA</p>
       <h2 id="event-title"></h2>
       <p id="event-description"></p>
       <div id="event-choices" class="event-choices"></div>
@@ -815,9 +817,9 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/google-auth-config.js?v=10.3.3"></script>
-  <script src="js/auth.js?v=10.3.3"></script>
-  <script src="js/data.js?v=10.3.3"></script>
-  <script src="js/app.js?v=10.3.3"></script>
+  <script src="js/google-auth-config.js?v=10.3.4"></script>
+  <script src="js/auth.js?v=10.3.4"></script>
+  <script src="js/data.js?v=10.3.4"></script>
+  <script src="js/app.js?v=10.3.4"></script>
 </body>
 </html>
