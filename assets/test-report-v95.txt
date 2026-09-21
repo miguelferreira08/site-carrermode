@@ -1,0 +1,11 @@
+BE THE LEGEND V9.5 — TESTES ESTÁTICOS
+
+JavaScript: validar com `node --check js/app.js` e `node --check js/data.js`.
+HTML: IDs únicos e elementos dos novos modais presentes.
+Trilha sonora: 30 faixas catalogadas / 30 MP3s locais; faltantes=[]; extras=[].
+Faixas por FIFA: {14: 3, 15: 3, 16: 3, 17: 3, 18: 3, 19: 3, 20: 3, 21: 3, 22: 3, 23: 3}.
+Playlist: ordem persistente + clique para tocar + setas para reordenar.
+Facial: editor durante carreira ativa com salvar/cancelar.
+Hall da Fama: limpeza única na migração V9.5 + contagem por nome de título.
+Seleções: força própria por seleção; Copa em campo neutro; Copa do Mundo priorizada no calendário com 3 jogos de grupo e mata-mata em caso de classificação.
+Sport Recife: fonte estática oficial priorizada e imagem exibida com fundo transparente.

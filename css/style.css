@@ -9280,3 +9280,36 @@ body.home-screen main{
 .soundtrack-track-actions button:hover{color:var(--green);border-color:rgba(66,232,141,.28)}
 .soundtrack-track-actions .soundtrack-remove-file{width:27px;padding:0;color:#ff7b83}
 @media(max-width:620px){.soundtrack-track-actions{min-width:88px}.soundtrack-track-actions em{display:none}.soundtrack-track-actions button{padding:0 6px}}
+
+/* V9.5 — playlist ordenável, editor de facial e Hall da Fama detalhado */
+.edit-appearance-btn{margin-top:10px}
+.career-appearance-card{width:min(930px,94vw);max-height:92vh;overflow:auto}
+.career-appearance-layout{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:18px;align-items:start;margin:16px 0}
+.career-appearance-preview-wrap{display:grid;gap:10px;place-items:center;padding:18px;border-radius:18px;background:linear-gradient(145deg,rgba(66,232,141,.08),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.07)}
+.career-appearance-preview-wrap .appearance-preview{width:210px;min-height:280px}
+.career-appearance-preview-wrap small{font-size:9px;line-height:1.5;color:var(--muted);text-align:center}
+.career-appearance-actions{display:flex;justify-content:flex-end;gap:9px}
+.career-appearance-actions button{min-width:140px}
+
+.soundtrack-queue-wrap{margin:0 0 14px;padding:12px;border-radius:16px;border:1px solid rgba(66,232,141,.13);background:rgba(66,232,141,.025)}
+.soundtrack-queue-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:9px}
+.soundtrack-queue-head>div{display:grid;gap:2px}.soundtrack-queue-head small{font-size:7px;letter-spacing:.12em;color:var(--green);font-weight:900}.soundtrack-queue-head strong{font-size:12px}.soundtrack-queue-head>span{font-size:8px;color:var(--muted)}
+.soundtrack-queue{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-height:280px;overflow:auto;padding-right:3px}
+.soundtrack-queue-item{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:8px;min-height:48px;padding:7px 8px;border:1px solid rgba(255,255,255,.055);border-radius:11px;background:rgba(255,255,255,.02);cursor:pointer;transition:.15s ease}
+.soundtrack-queue-item:hover,.soundtrack-queue-item:focus-visible{border-color:rgba(66,232,141,.28);background:rgba(66,232,141,.05);outline:none}.soundtrack-queue-item.playing{border-color:rgba(66,232,141,.42);box-shadow:inset 3px 0 0 var(--green)}
+.soundtrack-queue-item>b{font-size:9px;color:var(--green);text-align:center}.soundtrack-queue-item>span{display:grid;min-width:0}.soundtrack-queue-item strong{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.soundtrack-queue-item small{font-size:7px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soundtrack-queue-item>div{display:flex;gap:4px}.soundtrack-queue-item button{width:27px;height:27px;padding:0;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}.soundtrack-queue-item button:hover:not(:disabled){border-color:rgba(66,232,141,.32);color:var(--green)}.soundtrack-queue-item button:disabled{opacity:.22;cursor:default}
+.soundtrack-queue-empty{grid-column:1/-1;padding:16px;text-align:center;color:var(--muted);font-size:9px;border:1px dashed rgba(255,255,255,.08);border-radius:10px}
+.soundtrack-track.playing{box-shadow:inset 3px 0 0 var(--green);border-color:rgba(66,232,141,.36)}
+
+.saved-career-title-breakdown{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:5px;margin-top:1px}
+.saved-career-title-breakdown span{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:999px;background:rgba(242,201,76,.07);border:1px solid rgba(242,201,76,.12);font-size:7px;color:#e8dfbb;line-height:1.2}
+.saved-career-title-breakdown b{font-size:8px;color:#f2c94c}
+.club-badge-img{background:transparent!important;object-fit:contain!important}
+
+@media(max-width:760px){
+  .career-appearance-layout{grid-template-columns:1fr}.career-appearance-preview-wrap .appearance-preview{width:180px;min-height:230px}.career-appearance-actions{display:grid;grid-template-columns:1fr 1fr}.career-appearance-actions button{min-width:0}
+  .soundtrack-queue{grid-template-columns:1fr}.soundtrack-queue-head{align-items:flex-start;flex-direction:column;gap:4px}
+  .saved-career-title-breakdown{grid-column:1/-1}
+}
+.saved-career-title-breakdown.detail{grid-column:1/-1;margin:0 0 8px;width:100%}

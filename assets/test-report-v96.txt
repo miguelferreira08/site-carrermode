@@ -1,0 +1,29 @@
+BE THE LEGEND V9.6 — COPA DO MUNDO 48 SELEÇÕES
+
+Formato implementado:
+- 48 seleções.
+- 12 grupos de 4.
+- 3 partidas por seleção na fase de grupos.
+- 1º e 2º de cada grupo avançam (24 seleções).
+- 8 melhores terceiros avançam, comparados por pontos, saldo, gols, fair play e força/ranking como desempate final do simulador.
+- 32 classificados no mata-mata.
+- Fase de 32 -> Oitavas -> Quartas -> Semifinal -> Final.
+- Perdedor da semifinal disputa o 3º lugar.
+- Campeão/finalista pode disputar 8 partidas.
+
+Simulação:
+- Os 12 grupos completos são simulados.
+- O grupo do jogador usa os resultados reais das 3 partidas jogadas no modo carreira.
+- Jogos restantes dos grupos são simulados por força das seleções em campo neutro.
+- Mata-mata mantém um conjunto real de classificados e reduz 32 -> 16 -> 8 -> 4 -> 2.
+- Empates no mata-mata são resolvidos por prorrogação/pênaltis pelo modelo de força.
+- Copa segue tendo prioridade no calendário durante a temporada de ano de Copa.
+
+Compatibilidade:
+- Saves V9.5 continuam sendo lidos pelo mesmo STORAGE_KEY.
+- Estados antigos de Copa recebem atualização automática para as novas fases.
+
+Testes executados:
+- node --check em js/app.js e js/data.js: OK.
+- Harness de Copa: 12 grupos, 48 equipes únicas, 8 melhores terceiros, 32 classificados, caminho completo ao título e disputa de 3º lugar: OK.
+- 30 MP3s da trilha sonora preservados: OK.

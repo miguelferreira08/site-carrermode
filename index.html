@@ -11,10 +11,10 @@
   <link rel="preconnect" href="https://commons.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.2">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.2">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=9.2">
-  <link rel="stylesheet" href="css/style.css?v=9.2">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.5">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.5">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=9.5">
+  <link rel="stylesheet" href="css/style.css?v=9.5">
 </head>
 <body>
   <header class="topbar">
@@ -287,6 +287,7 @@
             <div><strong id="p-club"></strong><small id="p-league"></small></div>
           </div>
           <div class="value-line"><span>Valor de mercado</span><strong id="p-value"></strong></div>
+          <button id="edit-appearance" class="secondary full edit-appearance-btn" type="button">Editar facial</button>
           <button id="retire-career" class="retire-career danger full hidden" type="button">Encerrar carreira e se aposentar</button>
         </article>
 
@@ -542,6 +543,20 @@
   </div>
 
 
+  <div id="career-appearance-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="career-appearance-title">
+    <div class="modal-card career-appearance-card">
+      <div class="soundtrack-head">
+        <div><p class="eyebrow">VISUAL DO JOGADOR</p><h2 id="career-appearance-title">Editar facial</h2><p>Altere cabelo, barba e tom de pele sem reiniciar a temporada.</p></div>
+        <button id="career-appearance-close-x" class="icon-close" type="button" aria-label="Fechar">×</button>
+      </div>
+      <div class="career-appearance-layout">
+        <div class="career-appearance-preview-wrap"><div id="career-appearance-preview" class="appearance-preview"></div><small>A mudança é aplicada imediatamente à carreira atual.</small></div>
+        <div id="career-appearance-studio" class="appearance-studio"></div>
+      </div>
+      <div class="career-appearance-actions"><button id="career-appearance-cancel" class="secondary" type="button">Cancelar</button><button id="career-appearance-save" class="primary" type="button">Salvar facial</button></div>
+    </div>
+  </div>
+
   <div id="saved-career-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="saved-career-name">
     <div class="modal-card saved-career-detail-card">
       <div class="saved-career-detail-head">
@@ -622,7 +637,11 @@
         <input id="soundtrack-bulk-file-input" type="file" accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav,.flac" multiple hidden>
         <input id="soundtrack-file-input" type="file" accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav,.flac" hidden>
       </div>
-      <div class="soundtrack-local-help"><b>30 faixas completas já incluídas</b><span>As músicas enviadas por você já estão dentro do projeto em <code>assets/audio/tracks/</code>. O botão de importação continua disponível caso queira substituir alguma faixa depois.</span></div>
+      <div class="soundtrack-local-help"><b>30 faixas completas já incluídas</b><span>As músicas enviadas por você já estão dentro do projeto em <code>assets/audio/tracks/</code>. Clique em qualquer música para ouvi-la imediatamente. Com <b>Embaralhar</b> desligado, a sequência abaixo define a ordem da trilha.</span></div>
+      <section class="soundtrack-queue-wrap">
+        <div class="soundtrack-queue-head"><div><small>MINHA PLAYLIST</small><strong>Ordem de reprodução</strong></div><span>Use ↑ e ↓ para organizar</span></div>
+        <div id="soundtrack-queue" class="soundtrack-queue"></div>
+      </section>
       <div id="soundtrack-list" class="soundtrack-list"></div>
       <p class="soundtrack-license-note">Este pacote usa os arquivos de áudio fornecidos por você. Ao publicar o site, confirme que possui os direitos ou autorizações necessários para disponibilizá-los aos visitantes.</p>
       <button id="soundtrack-close" class="primary full" type="button">Salvar e voltar</button>
@@ -636,7 +655,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=9.2"></script>
-  <script src="js/app.js?v=9.2"></script>
+  <script src="js/data.js?v=9.5"></script>
+  <script src="js/app.js?v=9.5"></script>
 </body>
 </html>
