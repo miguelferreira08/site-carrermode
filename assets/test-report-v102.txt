@@ -1,0 +1,21 @@
+BE THE LEGEND V10.2 — RELATÓRIO DE TESTES
+
+[OK] JavaScript: app.js sem erros de sintaxe (node --check)
+[OK] JavaScript: data.js sem erros de sintaxe (node --check)
+[OK] HTML: 280 IDs, nenhum duplicado
+[OK] CSS: parser sem erros
+[OK] 30 músicas completas preservadas
+[OK] Novo botão de remoção presente em cada card do Hall da Fama
+[OK] Remoção também disponível dentro da visualização da carreira arquivada
+[OK] Remoção exige confirmação e não apaga a carreira ativa
+[OK] Se o card da carreira recém-encerrada for removido, ela pode ser salva novamente
+[OK] Progressão de GER/atributos da V10.1 preservada; esta atualização altera apenas a produção estatística
+
+TESTE MONTE CARLO — PRODUÇÃO DE UM CENTROAVANTE DE ELITE (GER 92)
+20.000 temporadas indicativas de 55 partidas, usando o mesmo modelo-base de produção:
+- V10.0: média 78,45 G/A; p95 89; p99 93; máximo observado 105
+- V10.1: média 41,19 G/A; p95 50; p99 53; máximo observado 60
+- V10.2: média 52,34 G/A; p95 61; p99 65; máximo observado 75
+- V10.2: 8,60% das temporadas chegaram a 60+ G/A; 0,06% chegaram a 70+ G/A
+
+Objetivo da V10.2: recuperar estatísticas fortes para craques sem retornar à inflação da V10.0. Temporadas históricas continuam possíveis, mas não viram padrão.

@@ -12,12 +12,87 @@
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://flagcdn.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=10.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=10.0">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=10.0">
-  <link rel="stylesheet" href="css/style.css?v=10.0">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=10.3">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=10.3">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=10.3">
+  <link rel="stylesheet" href="css/style.css?v=10.3">
 </head>
 <body>
+  <div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="auth-bg" aria-hidden="true"><span></span><span></span><span></span></div>
+    <section class="auth-card">
+      <header class="auth-brand">
+        <img src="assets/favicon.svg" alt="" class="auth-brand-mark">
+        <div><span>CAREER MODE</span><h1>Be The <strong>Legend</strong></h1><p>Entre para continuar construindo seu legado.</p></div>
+      </header>
+      <div id="auth-main-step">
+        <div class="auth-tabs" role="tablist">
+          <button id="auth-tab-login" type="button" class="active">Entrar</button>
+          <button id="auth-tab-create" type="button">Criar conta</button>
+        </div>
+        <form id="auth-login-form" class="auth-form">
+          <label>Nickname<input id="auth-login-nickname" maxlength="20" autocomplete="username" placeholder="Seu nickname" required></label>
+          <label>Senha<input id="auth-login-password" type="password" minlength="8" autocomplete="current-password" placeholder="Sua senha" required></label>
+          <button class="primary full" type="submit">Entrar</button>
+        </form>
+        <form id="auth-create-form" class="auth-form hidden">
+          <label>Escolha seu nickname<input id="auth-create-nickname" maxlength="20" autocomplete="username" placeholder="3 a 20 caracteres" required></label>
+          <label>Crie uma senha<input id="auth-create-password" type="password" minlength="8" autocomplete="new-password" placeholder="Mínimo de 8 caracteres" required></label>
+          <label>Confirme a senha<input id="auth-create-confirm" type="password" minlength="8" autocomplete="new-password" placeholder="Repita a senha" required></label>
+          <label class="auth-consent"><input id="auth-create-terms" type="checkbox" required><span>Li e aceito os <button type="button" data-legal-open="terms">Termos de Uso</button> e a <button type="button" data-legal-open="privacy">Política de Privacidade</button>.</span></label>
+          <button class="primary full" type="submit">Criar minha conta</button>
+        </form>
+        <div class="auth-divider"><span>ou</span></div>
+        <button id="auth-guest" class="auth-guest" type="button"><span>👤</span><b>Jogar como convidado</b><small>O progresso fica salvo neste dispositivo</small></button>
+        <div id="google-signin-wrap" class="google-signin-wrap">
+          <div id="google-signin-container"></div>
+          <button id="google-signin-unconfigured" class="google-fallback" type="button"><span class="google-g">G</span><b>Continuar com o Google</b></button>
+          <small id="google-config-note" class="auth-config-note hidden">O login Google precisa do Client ID do domínio publicado.</small>
+        </div>
+        <p id="auth-error" class="auth-error" aria-live="polite"></p>
+        <footer class="auth-footer">A sessão permanece ativa por <strong>7 dias</strong> neste dispositivo. <button type="button" data-legal-open="privacy">Privacidade</button> · <button type="button" data-legal-open="terms">Termos</button></footer>
+      </div>
+      <div id="auth-google-profile-step" class="auth-google-profile hidden">
+        <button id="auth-google-back" class="auth-back" type="button">← Voltar</button>
+        <span class="auth-step-kicker">PRIMEIRO ACESSO COM GOOGLE</span>
+        <h2>Escolha como será conhecido</h2>
+        <p>Seu nickname será exibido em Meu Legado. Você receberá também um ID único de 8 dígitos.</p>
+        <label>Nickname<input id="auth-google-nickname" maxlength="20" placeholder="Seu nickname"></label>
+        <label class="auth-consent"><input id="auth-google-terms" type="checkbox"><span>Li e aceito os <button type="button" data-legal-open="terms">Termos de Uso</button> e a <button type="button" data-legal-open="privacy">Política de Privacidade</button>.</span></label>
+        <button id="auth-google-finish" class="primary full" type="button">Criar conta com Google</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="terms-modal" class="modal-backdrop legal-modal hidden" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+    <article class="modal-card legal-card">
+      <div class="legal-head"><div><p class="eyebrow">BE THE LEGEND</p><h2 id="terms-title">Termos de Uso</h2><small>Última atualização: 21/09/2026</small></div><button class="icon-close" type="button" data-legal-close="terms">×</button></div>
+      <div class="legal-copy">
+        <h3>1. Uso do jogo</h3><p>Be The Legend é um simulador independente de carreira de futebol. Ao usar o site, você concorda em utilizá-lo de forma lícita e sem tentar prejudicar o serviço, outros usuários ou a infraestrutura do projeto.</p>
+        <h3>2. Conta e progresso</h3><p>Contas locais e convidados guardam o progresso no navegador deste dispositivo. O login com Google, quando configurado pelo desenvolvedor, identifica a conta, mas esta versão não promete sincronização automática do save entre dispositivos. Limpar dados do navegador pode remover saves locais.</p>
+        <h3>3. Nickname</h3><p>Não use nickname que se passe por outra pessoa, contenha conteúdo ilegal, abusivo ou que viole direitos de terceiros. O desenvolvedor poderá alterar regras de nickname em futuras versões.</p>
+        <h3>4. Conteúdo e marcas</h3><p>O projeto é independente e não é afiliado, patrocinado ou endossado pela FIFA, EA SPORTS, clubes, ligas ou atletas citados. Marcas e conteúdos de terceiros pertencem aos seus respectivos titulares.</p>
+        <h3>5. Disponibilidade e mudanças</h3><p>Recursos, balanceamento, calendário, dados e regras podem ser atualizados. Não há garantia de disponibilidade ininterrupta ou de compatibilidade eterna com saves de versões muito antigas.</p>
+        <h3>6. Contato</h3><p>Dúvidas, sugestões e solicitações podem ser enviadas para <strong>bethelegend.contact@gmail.com</strong> pela aba Contato.</p>
+      </div>
+      <button class="primary full" type="button" data-legal-close="terms">Entendi</button>
+    </article>
+  </div>
+
+  <div id="privacy-modal" class="modal-backdrop legal-modal hidden" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
+    <article class="modal-card legal-card">
+      <div class="legal-head"><div><p class="eyebrow">BE THE LEGEND</p><h2 id="privacy-title">Política de Privacidade</h2><small>Última atualização: 21/09/2026</small></div><button class="icon-close" type="button" data-legal-close="privacy">×</button></div>
+      <div class="legal-copy">
+        <h3>1. Dados armazenados neste dispositivo</h3><p>O jogo utiliza armazenamento local do navegador para manter conta, sessão, nickname, ID de 8 dígitos, preferências, carreira, Hall da Fama e configurações da trilha sonora. Músicas importadas podem ser armazenadas no IndexedDB do navegador.</p>
+        <h3>2. Sessão</h3><p>A sessão expira após 7 dias e exige nova autenticação. O convidado mantém uma identidade estável enquanto os dados deste navegador forem preservados.</p>
+        <h3>3. Login com Google</h3><p>Quando o recurso estiver configurado, o Google fornece ao site dados básicos da conta necessários para identificar o usuário, como identificador da conta, nome e e-mail. O Be The Legend não recebe sua senha do Google.</p>
+        <h3>4. Serviços externos</h3><p>O site pode carregar fontes, bandeiras, escudos e outros recursos de serviços de terceiros. Esses provedores podem receber dados técnicos comuns de uma requisição web, como endereço IP e informações do navegador, conforme suas próprias políticas.</p>
+        <h3>5. Contato</h3><p>A aba Contato prepara uma mensagem para <strong>bethelegend.contact@gmail.com</strong> e abre o aplicativo de e-mail do usuário. Nome, e-mail e solicitação só são enviados quando o próprio usuário conclui o envio em seu provedor de e-mail.</p>
+        <h3>6. Controle dos dados</h3><p>Você pode encerrar a sessão em Meu Legado. Dados locais também podem ser apagados pelas configurações do navegador. Para dúvidas de privacidade, utilize o e-mail de contato acima.</p>
+      </div>
+      <button class="primary full" type="button" data-legal-close="privacy">Entendi</button>
+    </article>
+  </div>
   <header class="topbar">
     <a class="logo" href="#" data-view="home">Be The <span>Legend</span></a>
     <nav id="nav">
@@ -25,8 +100,11 @@
       <button data-view="career">Carreira</button>
       <button data-view="stats">Estatísticas</button>
       <button data-view="market">Mercado</button>
+      <button data-view="legacy">Meu Legado</button>
+      <button data-view="contact">Contato</button>
     </nav>
     <div class="top-actions">
+      <button id="account-top-chip" class="account-top-chip" data-view="legacy" type="button"><span>★</span><b id="account-top-nickname">Legado</b></button>
       <div id="mini-profile" class="mini-profile hidden"></div>
       <button id="reset-career" class="ghost hidden" type="button">Nova carreira</button>
     </div>
@@ -68,15 +146,20 @@
               <span class="football-menu-copy"><b>Mercado</b><small>Propostas, destinos e status da carreira</small></span>
               <span class="football-menu-arrow">›</span>
             </button>
-            <button class="football-menu-option" id="home-hall-btn" type="button">
+            <button class="football-menu-option" id="home-hall-btn" data-view="legacy" type="button">
               <span class="football-menu-number">04</span>
-              <span class="football-menu-copy"><b>Hall da Fama</b><small>Rever carreiras que você decidiu preservar</small></span>
+              <span class="football-menu-copy"><b>Meu Legado</b><small>Conta, ID e Hall da Fama das suas carreiras</small></span>
               <span class="football-menu-arrow">★</span>
             </button>
             <button class="football-menu-option" id="soundtrack-btn" type="button">
               <span class="football-menu-number">05</span>
               <span class="football-menu-copy"><b>Som / Trilha sonora</b><small>Escolher músicas, volume e reprodução durante a gameplay</small></span>
               <span class="football-menu-arrow">♫</span>
+            </button>
+            <button class="football-menu-option" data-view="contact" type="button">
+              <span class="football-menu-number">06</span>
+              <span class="football-menu-copy"><b>Contato</b><small>Sugerir melhorias e novas ideias ao desenvolvedor</small></span>
+              <span class="football-menu-arrow">✉</span>
             </button>
           </nav>
 
@@ -106,14 +189,6 @@
         <div class="game-home-footer-strip" aria-hidden="true">
           <span>⚽ CARREIRA</span><i></i><span>🏆 TÍTULOS</span><i></i><span>🌍 SELEÇÃO</span><i></i><span>⇄ MERCADO</span><i></i><span>★ LEGADO</span>
         </div>
-
-        <section class="home-hall game-hall" id="home-hall-section">
-          <div class="section-title">
-            <div><span class="game-brand-kicker">LEGACY VAULT</span><h3>Hall da Fama</h3></div>
-            <span id="home-save-count">0 carreira(s) salva(s)</span>
-          </div>
-          <div id="saved-careers-list" class="saved-careers-list"></div>
-        </section>
       </div>
     </section>
 
@@ -401,6 +476,46 @@
       </article>
     </section>
 
+    <section id="legacy" class="view page legacy-page">
+      <div class="page-head"><p class="eyebrow">CONTA &amp; HISTÓRIA</p><h2>Meu Legado</h2><p>Sua identidade no Be The Legend e as carreiras que você escolheu eternizar.</p></div>
+      <article class="panel account-legacy-panel">
+        <div class="account-legacy-avatar"><span>★</span></div>
+        <div class="account-legacy-main"><small>JOGADOR</small><h3 id="legacy-account-nickname">—</h3><p id="legacy-account-email">—</p></div>
+        <div class="account-legacy-grid">
+          <div><small>ID BE THE LEGEND</small><strong id="legacy-account-id">00000000</strong></div>
+          <div><small>TIPO DE CONTA</small><strong id="legacy-account-method">—</strong></div>
+          <div><small>CONTA CRIADA</small><strong id="legacy-account-created">—</strong></div>
+          <div><small>PRÓXIMO LOGIN</small><strong id="legacy-account-session">—</strong></div>
+        </div>
+        <div class="account-legacy-actions"><button type="button" class="secondary" data-legal-open="terms">Termos</button><button type="button" class="secondary" data-legal-open="privacy">Privacidade</button><button id="legacy-logout" type="button" class="danger secondary">Sair da conta</button></div>
+      </article>
+      <section class="home-hall game-hall" id="home-hall-section">
+          <div class="section-title">
+            <div><span class="game-brand-kicker">LEGACY VAULT</span><h3>Hall da Fama</h3></div>
+            <span id="home-save-count">0 carreira(s) salva(s)</span>
+          </div>
+          <div id="saved-careers-list" class="saved-careers-list"></div>
+        </section>
+    </section>
+
+    <section id="contact" class="view page contact-page">
+      <div class="page-head"><p class="eyebrow">FALE COM O DESENVOLVEDOR</p><h2>Contato</h2><p>Encontrou uma ideia que deixaria o Be The Legend melhor? Envie sua sugestão diretamente para o desenvolvedor.</p></div>
+      <div class="contact-layout">
+        <article class="contact-intro">
+          <span class="contact-ball">✉</span><small>BE THE LEGEND · FEEDBACK</small><h3>Sua ideia pode entrar em campo.</h3><p>Descreva a melhoria ou adição com clareza. O formulário prepara o e-mail e abre o aplicativo de e-mail do seu dispositivo para você confirmar o envio.</p>
+          <div class="contact-destination"><span>DESTINO</span><strong>bethelegend.contact@gmail.com</strong></div>
+        </article>
+        <form id="contact-form" class="panel contact-form">
+          <label>Nome do jogador<input id="contact-name" maxlength="60" required placeholder="Seu nome"></label>
+          <label>E-mail do jogador<input id="contact-email" type="email" maxlength="120" required placeholder="voce@email.com"></label>
+          <label>E-mail do destinatário<input id="contact-recipient" value="bethelegend.contact@gmail.com" readonly aria-readonly="true"></label>
+          <label class="full">Sua solicitação<textarea id="contact-request" maxlength="1000" rows="9" required placeholder="Conte qual melhoria, correção ou nova função você gostaria de ver no jogo..."></textarea><span class="contact-counter"><b id="contact-count">0</b>/1000</span></label>
+          <button class="primary full" type="submit">Preparar e-mail →</button>
+          <small class="contact-disclaimer full">Nenhuma mensagem é enviada automaticamente: seu aplicativo de e-mail será aberto com os campos preenchidos para sua confirmação.</small>
+        </form>
+      </div>
+    </section>
+
     <section id="market" class="view page">
       <div class="page-head market-head"><p class="eyebrow">MERCADO</p><h2>Propostas de transferência</h2><div class="market-factors"><span>⚡ GER</span><span>🔥 forma</span><span>🌍 reputação</span></div></div>
       <div id="market-tier" class="panel market-tier"></div>
@@ -648,7 +763,7 @@
           </table>
         </div>
       </section>
-      <button id="saved-career-close" class="primary full" type="button">Fechar carreira arquivada</button>
+      <div class="saved-career-detail-actions"><button id="saved-career-delete-modal" class="danger secondary" type="button">Remover do Hall da Fama</button><button id="saved-career-close" class="primary" type="button">Fechar carreira arquivada</button></div>
     </div>
   </div>
 
@@ -700,7 +815,11 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=10.0"></script>
-  <script src="js/app.js?v=10.0"></script>
+  <script src="js/google-auth-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/google-auth-config.js?v=10.3"></script>
+  <script src="js/auth.js?v=10.3"></script>
+  <script src="js/data.js?v=10.3"></script>
+  <script src="js/app.js?v=10.3"></script>
 </body>
 </html>

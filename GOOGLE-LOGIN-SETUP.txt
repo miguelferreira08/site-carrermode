@@ -1,0 +1,22 @@
+BE THE LEGEND V10.3 — ATIVAÇÃO DO LOGIN COM GOOGLE
+
+O código do botão "Continuar com o Google" já está integrado com Google Identity Services.
+Para ele funcionar no seu domínio público, falta apenas criar o Client ID do seu próprio site:
+
+1. Acesse https://console.cloud.google.com/
+2. Crie ou selecione um projeto.
+3. Configure a tela de consentimento OAuth.
+4. Em APIs e serviços > Credenciais, crie um "ID do cliente OAuth" do tipo "Aplicativo da Web".
+5. Em "Origens JavaScript autorizadas", adicione o domínio final do jogo, por exemplo:
+   https://bethelegend.com.br
+   e, se usar www:
+   https://www.bethelegend.com.br
+6. Copie o Client ID terminado em .apps.googleusercontent.com.
+7. Abra js/google-auth-config.js e preencha:
+   window.BTL_GOOGLE_CLIENT_ID = 'SEU_CLIENT_ID.apps.googleusercontent.com';
+8. Publique novamente o site.
+
+IMPORTANTE
+- O Google exige um Client ID próprio do domínio; por isso ele não pode ser gerado automaticamente dentro deste ZIP.
+- Nesta versão, Google identifica a conta e mantém o save separado por conta neste navegador. O save ainda é local e NÃO é sincronizado automaticamente entre dispositivos.
+- Para sincronização real na nuvem, será necessário adicionar um backend/banco (por exemplo Firebase/Supabase) em uma etapa posterior.

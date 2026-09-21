@@ -1,13 +1,16 @@
 const $ = selector => document.querySelector(selector);
 const $$ = selector => document.querySelectorAll(selector);
-const STORAGE_KEY = 'beTheLegendV95';
+const STORAGE_KEY = window.BTLAuth?.getGameStorageKey?.() || 'beTheLegendV95';
 const HALL_RESET_KEY = 'beTheLegendV95HallReset';
+const HALL_RESET_V101_KEY = 'beTheLegendV101HallReset';
 const LEGACY_STORAGE_KEY = 'careerSimV7';
+const LEGACY_V103_CLAIM_KEY = 'beTheLegendV103LegacyClaimed';
+const LEGACY_V95_FOR_MIGRATION = window.BTLAuth?.getCurrentAccount?.() && !localStorage.getItem(LEGACY_V103_CLAIM_KEY) ? localStorage.getItem('beTheLegendV95') : null;
 const BADGE_KEY = 'beTheLegendBadgeCacheV95';
 const DRAFT_KEY = 'beTheLegendV92AttributeDraft';
 const PREVIOUS_DRAFT_KEY = 'beTheLegendV91AttributeDraft';
 
-let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem('beTheLegendV92') || localStorage.getItem('beTheLegendV91') || localStorage.getItem('beTheLegendV90') || localStorage.getItem('beTheLegendV89') || localStorage.getItem('beTheLegendV88') || localStorage.getItem('beTheLegendV87') || localStorage.getItem('beTheLegendV86') || localStorage.getItem('beTheLegendV85') || localStorage.getItem('beTheLegendV84') || localStorage.getItem('beTheLegendV83') || localStorage.getItem('beTheLegendV82') || localStorage.getItem('beTheLegendV81') || localStorage.getItem('beTheLegendV80') || localStorage.getItem('beTheLegendV79') || localStorage.getItem('beTheLegendV781') || localStorage.getItem('beTheLegendV78') || localStorage.getItem('beTheLegendV77') || localStorage.getItem('beTheLegendV76') || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || LEGACY_V95_FOR_MIGRATION || localStorage.getItem('beTheLegendV92') || localStorage.getItem('beTheLegendV91') || localStorage.getItem('beTheLegendV90') || localStorage.getItem('beTheLegendV89') || localStorage.getItem('beTheLegendV88') || localStorage.getItem('beTheLegendV87') || localStorage.getItem('beTheLegendV86') || localStorage.getItem('beTheLegendV85') || localStorage.getItem('beTheLegendV84') || localStorage.getItem('beTheLegendV83') || localStorage.getItem('beTheLegendV82') || localStorage.getItem('beTheLegendV81') || localStorage.getItem('beTheLegendV80') || localStorage.getItem('beTheLegendV79') || localStorage.getItem('beTheLegendV781') || localStorage.getItem('beTheLegendV78') || localStorage.getItem('beTheLegendV77') || localStorage.getItem('beTheLegendV76') || localStorage.getItem('careerSimV75') || localStorage.getItem('careerSimV72') || localStorage.getItem(LEGACY_STORAGE_KEY)) || {
   created:false, player:null, season:null, history:[], offers:[], news:[], pendingEvent:null, savedCareers:[]
 };
 let badgeCache = JSON.parse(localStorage.getItem(BADGE_KEY) || localStorage.getItem('beTheLegendBadgeCacheV92') || localStorage.getItem('beTheLegendBadgeCacheV91') || localStorage.getItem('beTheLegendBadgeCacheV90') || localStorage.getItem('beTheLegendBadgeCacheV89') || localStorage.getItem('beTheLegendBadgeCacheV88') || localStorage.getItem('beTheLegendBadgeCacheV87') || localStorage.getItem('beTheLegendBadgeCacheV86') || localStorage.getItem('beTheLegendBadgeCacheV85') || localStorage.getItem('beTheLegendBadgeCacheV84') || localStorage.getItem('beTheLegendBadgeCacheV83') || localStorage.getItem('beTheLegendBadgeCacheV82') || localStorage.getItem('beTheLegendBadgeCacheV81') || localStorage.getItem('beTheLegendBadgeCacheV80') || localStorage.getItem('beTheLegendBadgeCacheV79') || localStorage.getItem('beTheLegendBadgeCacheV781') || localStorage.getItem('beTheLegendBadgeCacheV78') || localStorage.getItem('beTheLegendBadgeCacheV77') || localStorage.getItem('beTheLegendBadgeCacheV76') || localStorage.getItem('careerSimBadgeCacheV75') || localStorage.getItem('careerSimBadgeCacheV72') || '{}');
@@ -27,7 +30,7 @@ let awardCeremonyQueue = [];
 let awardCeremonyAfter = null;
 let celebrationAfter = null;
 const MAX_MARKET_VALUE = 300000000;
-const MAX_SEASON_GA = 100;
+const MAX_SEASON_GA = 145;
 const MAX_CAREER_SEASONS = 18;
 const MIN_START_AGE = 17;
 const MAX_START_AGE = 22;
@@ -1283,17 +1286,42 @@ function finalizeCareerFromDraft(){
   state.season=createSeason(player,START_YEAR,undefined);
   pendingPlayerProfile=null;attributeDraft=null;clearDraftState();save();showView('career');toast(`Carreira iniciada! GER 68 · POT ${potential}`);
 }
+function attributeElitePointChance(current){
+  if(current<92)return 1;
+  if(current===92)return .82;
+  if(current===93)return .70;
+  if(current===94)return .56;
+  if(current===95)return .39;
+  if(current===96)return .24;
+  if(current===97)return .13;
+  if(current>=98)return .065;
+  return 1;
+}
+function gameplayAttributeCeiling(player,id){
+  const overall=player.overall||68,weights=positionAttributeWeights(player.position),importance=weights[id]||0;
+  let ceiling=overall<80?overall+6:overall<86?overall+5:overall<91?overall+4:overall<94?overall+3:overall<97?overall+2:99;
+  if(importance>=.22)ceiling+=1;
+  return clamp(ceiling,70,99);
+}
 function evolvePlayerAttributes(delta,avg){
   const p=state.player,a=normalizePlayerAttributes(p),dna=p.dnaAttributes||a;if(!delta)return;
   const weights=positionAttributeWeights(p.position);
   const bonusCeiling=Math.max(0,(p.potential||p.initialPotential||80)-(p.initialPotential||p.potential||80));
   if(delta>0){
     ['pace','finishing','dribbling','passing','defense','physical'].forEach(id=>{
-      const target=clamp((dna[id]||75)+Math.round(bonusCeiling*.55),35,99);const gap=Math.max(0,target-a[id]);
-      // Atributos mais importantes para a posição sobem mais depressa.
-      const roleMultiplier=.55+(weights[id]||.1)*2.4;
-      const gain=Math.max(1,Math.round(delta*roleMultiplier+Math.min(2,gap/18)+(avg>=8.0?1:0)));
-      a[id]=clamp(Math.min(target,a[id]+gain),35,99);
+      const importance=weights[id]||.08;
+      const naturalTarget=clamp((dna[id]||75)+Math.round(bonusCeiling*.42),35,99);
+      const target=Math.min(naturalTarget,gameplayAttributeCeiling(p,id));
+      const gap=Math.max(0,target-a[id]);if(gap<=0)return;
+      // A evolução deixa de conceder vários pontos garantidos em todos os atributos.
+      // Atributos centrais da posição recebem prioridade; 95-99 requerem sucessivos rolls raros.
+      let intended=Math.max(1,Math.min(2,Math.round(delta*(.42+importance*1.55)+(avg>=8.45?1:0))));
+      if(importance<.10&&Math.random()>.58)return;
+      for(let step=0;step<intended&&a[id]<target;step++){
+        const chance=attributeElitePointChance(a[id])*(step===0?1:.72);
+        if(Math.random()<=chance)a[id]=clamp(a[id]+1,35,99);
+        else if(a[id]>=94)break;
+      }
     });
   }else{
     ['pace','physical'].forEach(id=>a[id]=clamp(a[id]+delta,35,99));
@@ -1922,12 +1950,29 @@ function simulateScore(event){
   return {homeGoals:poisson(model.homeXg),awayGoals:poisson(model.awayXg),model};
 }
 function positionProfile(position){
-  return ({'Goleiro':{goal:.002,assist:.015,defensive:true},'Zagueiro':{goal:.055,assist:.04,defensive:true},'Lateral direito':{goal:.05,assist:.15,defensive:true},'Lateral esquerdo':{goal:.05,assist:.15,defensive:true},'Volante':{goal:.08,assist:.13,defensive:true},'Meia central':{goal:.14,assist:.25},'Meia ofensivo':{goal:.22,assist:.32},'Meia direita':{goal:.19,assist:.28},'Meia esquerda':{goal:.19,assist:.28},'Segundo atacante':{goal:.34,assist:.25},'Ponta direita':{goal:.31,assist:.27},'Ponta esquerda':{goal:.31,assist:.27},'Centroavante':{goal:.43,assist:.15}})[position]||{goal:.14,assist:.25};
+  // V10.3: atacantes de elite voltam a ter produção de superstar. O alvo de
+  // calibração é ~80 G/A em 55 jogos para um centroavante GER 92–95, com uma
+  // curva adicional para 96–99. Posições não ofensivas continuam bem abaixo disso.
+  return ({'Goleiro':{goal:.002,assist:.015,defensive:true},'Zagueiro':{goal:.055,assist:.040,defensive:true},'Lateral direito':{goal:.050,assist:.150,defensive:true},'Lateral esquerdo':{goal:.050,assist:.150,defensive:true},'Volante':{goal:.080,assist:.130,defensive:true},'Meia central':{goal:.140,assist:.250},'Meia ofensivo':{goal:.220,assist:.320},'Meia direita':{goal:.190,assist:.280},'Meia esquerda':{goal:.190,assist:.280},'Segundo atacante':{goal:.340,assist:.250},'Ponta direita':{goal:.310,assist:.270},'Ponta esquerda':{goal:.310,assist:.270},'Centroavante':{goal:.455,assist:.205}})[position]||{goal:.140,assist:.250};
+}
+function seasonProductionDamping(){
+  const s=state.season;if(!s)return 1;const ga=(s.goals||0)+(s.assists||0);
+  // O freio só aparece depois de uma temporada já histórica. 80 G/A não é
+  // artificialmente bloqueado; 110–130 continua possível, mas exige uma curva excepcional.
+  if(ga>=138)return .42;
+  if(ga>=128)return .58;
+  if(ga>=116)return .74;
+  if(ga>=104)return .88;
+  return 1;
+}
+function eliteProductionMultiplier(p=state.player){
+  if(!p)return 1;const o=Number(p.overall)||68;
+  if(o<=95)return 1;
+  // 96, 97, 98 e 99 recebem crescimento progressivo de produção.
+  return clamp(1+(o-95)*.055,1,1.22);
 }
 function agingPerformanceFactor(p=state.player){
   if(!p||p.age<37)return 1;
-  // O declínio começa aos 37 e cresce gradualmente. O GER/atributos também são
-  // tratados no fechamento da temporada; este fator afeta a produção em campo.
   return clamp(1-(p.age-36)*.025,.72,1);
 }
 function matchInjuryRisk(p=state.player,event=null){
@@ -1948,7 +1993,6 @@ function maybeSustainMatchInjury(event,perf){
   else{games=rnd(6,10);label='lesão mais séria';}
   p.injuryGames=games;p.injuryHistory=Array.isArray(p.injuryHistory)?p.injuryHistory:[];
   p.injuryHistory.push({year:s.year,age:p.age,games,label,competition:event?.competition||'Partida'});
-  // O risco extra de um retorno acelerado desaparece quando uma nova lesão ocorre.
   p.injuryRiskModifier=Math.max(0,(p.injuryRiskModifier||0)-.003);
   state.news.push(`${p.name} sofre ${label} em ${event?.competition||'uma partida'} e deve perder cerca de ${games} jogo(s).`);
   return {games,label,risk};
@@ -1961,17 +2005,22 @@ function simulatePlayerPerformance(teamGoals,oppGoals){
   const roleSkill=positionWeightedAttributeScore(p,a);
   const primaryId=primaryAttributeForPosition(p.position);
   const primaryValue=normalizedAttributeValue(primaryId,a[primaryId]);
-  const ageFactor=agingPerformanceFactor(p);const quality=clamp(((p.overall-60)/95+(roleSkill-68)/135+(primaryValue-68)/420)*ageFactor,0,.58);
+  const ageFactor=agingPerformanceFactor(p);
+  const quality=clamp(((p.overall-60)/95+(roleSkill-68)/135+(primaryValue-68)/420)*ageFactor,0,.60);
+  const elite=eliteProductionMultiplier(p),damping=seasonProductionDamping();
   let goals=0,assists=0;
   if(teamGoals>0){
     const goalBoost=clamp((attackSkill-75)/210,-.05,.12);
-    goals=Math.random()<profile.goal+quality+goalBoost?1:0;
-    if(goals&&teamGoals>1&&Math.random()<.10+quality/3+(a.finishing-75)/500)goals++;
+    const goalChance=clamp((profile.goal+quality+goalBoost)*elite*damping,.001,.96);
+    goals=Math.random()<goalChance?1:0;
+    if(goals&&teamGoals>1&&Math.random()<clamp((.110+quality/3+Math.max(0,a.finishing-75)/500)*elite*damping,.02,.75))goals++;
+    if(goals>1&&teamGoals>2&&Math.random()<clamp((.045+quality/7+Math.max(0,a.finishing-90)/650)*elite*damping,.01,.38))goals++;
     goals=Math.min(goals,teamGoals);
     const assistSlots=Math.max(0,teamGoals-goals);
     const assistBoost=clamp((creationSkill-75)/215,-.04,.12);
-    if(assistSlots>0&&Math.random()<profile.assist+quality*.58+assistBoost)assists=1;
-    if(assistSlots>1&&assists&&Math.random()<.08+quality/4+(a.passing-75)/520)assists++;
+    const assistChance=clamp((profile.assist+quality*.58+assistBoost)*elite*damping,.005,.86);
+    if(assistSlots>0&&Math.random()<assistChance)assists=1;
+    if(assistSlots>1&&assists&&Math.random()<clamp((.085+quality/4+Math.max(0,a.passing-75)/520)*elite*damping,.02,.58))assists++;
     assists=Math.min(assists,assistSlots);
   }
   const skillRating=(roleSkill-68)/70;
@@ -1987,7 +2036,7 @@ function applySeasonGaCap(perf){
 }
 function checkSeasonGaCap(){
   const s=state.season,p=state.player;if(!s||!p||s.gaCapReached)return;
-  if((s.goals||0)+(s.assists||0)>=MAX_SEASON_GA){s.gaCapReached=true;state.news.push(`${p.name} atingiu o limite de ${MAX_SEASON_GA} G/A registrado pelo simulador nesta temporada.`);}
+  if((s.goals||0)+(s.assists||0)>=MAX_SEASON_GA){s.gaCapReached=true;state.news.push(`${p.name} alcançou uma temporada fora da curva com ${MAX_SEASON_GA} G/A. O simulador aplica apenas um limite técnico a partir desse patamar.`);}
 }
 function simulateMatchCore(event){
   const p=state.player,s=state.season;const playerIsHome=event.type==='national'?event.home===p.nationality:event.home===p.club;
@@ -2478,7 +2527,7 @@ function resolveCareerEvent(index){
   if(action==='recover'){p.morale=clamp(p.morale+6,40,100);message='Você se sente mais recuperado para a sequência.';}
   if(action==='ambitious'){p.reputation+=4;p.pressure=(p.pressure||0)+1;message='Sua ambição repercutiu e sua reputação aumentou.';}
   if(action==='humble'){p.morale=clamp(p.morale+3,40,100);message='A resposta tranquila agradou ao vestiário.';}
-  if(action==='leadership'){p.reputation+=3;const seasonCap=currentSeasonOverallCap();if(Math.random()<.22&&p.overall<p.potential&&p.overall<seasonCap)p.overall++;message='Você assumiu mais responsabilidade no elenco.';}
+  if(action==='leadership'){p.reputation+=3;const seasonCap=currentSeasonOverallCap();if(p.overall<90&&Math.random()<.18&&p.overall<p.potential&&p.overall<seasonCap)p.overall++;else if(p.overall>=90)p.developmentBoost=Math.max(p.developmentBoost||0,1);message='Você assumiu mais responsabilidade no elenco.';}
   if(action==='learn'){if(p.age<=24)p.potential=clamp(p.potential+1,75,96);message='Você priorizou aprendizado e desenvolvimento.';}
   if(action==='market_push'){p.marketBonus=(p.marketBonus||0)+1;message='Seu empresário vai trabalhar por mais opções no mercado.';}
   if(action==='stability'){p.morale=clamp(p.morale+5,40,100);message='A estabilidade melhorou seu ambiente no clube atual.';}
@@ -2659,8 +2708,17 @@ function renderHomeHub(){
   if(fill)fill.style.width=`${clamp(12+seasons*5,12,100)}%`;if(label)label.textContent=p.retired?'Carreira concluída · legado preservado':`${seasons} temporada(s) concluída(s) · ${s?.league?.name||p.clubLeague||'temporada atual'}`;
 }
 
+function renderAccountPanel(){
+  const account=window.BTLAuth?.getCurrentAccount?.();if(!account)return;
+  const method=account.type==='google'?'Google':account.type==='guest'?'Convidado':'Conta local';
+  const fmt=iso=>{if(!iso)return '—';const d=new Date(iso);return Number.isNaN(d.getTime())?'—':d.toLocaleDateString('pt-BR');};
+  const nick=$('#legacy-account-nickname'),id=$('#legacy-account-id'),meth=$('#legacy-account-method'),email=$('#legacy-account-email'),created=$('#legacy-account-created'),session=$('#legacy-account-session'),top=$('#account-top-nickname');
+  if(nick)nick.textContent=account.nickname||'Jogador';if(id)id.textContent=String(account.id8||'').padStart(8,'0');if(meth)meth.textContent=method;if(email)email.textContent=account.email||account.contactEmail||'E-mail não vinculado';if(created)created.textContent=fmt(account.createdAt);if(session)session.textContent=fmt(window.BTLAuth?.getSession?.()?.expiresAt);if(top)top.textContent=account.nickname||'Legado';
+  const contactName=$('#contact-name'),contactEmail=$('#contact-email');if(contactName&&!contactName.value)contactName.value=account.nickname||'';if(contactEmail&&!contactEmail.value)contactEmail.value=account.email||account.contactEmail||'';
+}
+
 function render(){
-  renderHomeHub();
+  renderHomeHub();renderAccountPanel();
   document.body.classList.toggle('home-screen',!!$('#home')?.classList.contains('active'));
   const activeCareer=!!(state.created&&state.player&&!state.player.retired);document.body.classList.toggle('career-mode',activeCareer);const homeNav=$('#nav [data-view="home"]');if(homeNav)homeNav.classList.remove('hidden');
   const startLabel=$('#start-btn b'),startHint=$('#start-btn small');if(startLabel)startLabel.textContent=state.created?'Continuar carreira':'Nova carreira';if(startHint)startHint.textContent=state.created?'Voltar ao vestiário e seguir a temporada':'Criar jogador e iniciar sua trajetória';$$('.game-menu-entry[data-view="stats"],.game-menu-entry[data-view="market"],.football-menu-option[data-view="stats"],.football-menu-option[data-view="market"]').forEach(btn=>btn.disabled=!state.created);
@@ -2754,9 +2812,25 @@ function estimateIconAttributes(overall=80,position='Centroavante'){
   };
 }
 function buildCareerIconCardSnapshot(p=state.player){
-  if(!p)return null;const peak=Math.max(p.overall||0,...(state.history||[]).map(h=>Number(h.overall)||0)),attrs={...normalizePlayerAttributes(p)},boost=Math.max(0,peak-(p.overall||peak));
-  const prime={};['pace','finishing','passing','dribbling','defense','physical'].forEach(id=>prime[id]=clamp(Math.round((attrs[id]||peak)+boost*(id==='pace'||id==='physical'?1.25:1)),30,99));
-  return {overall:peak,position:p.position,positionCode:ICON_POSITION_CODES[p.position]||'MC',nationality:p.nationality,nationalityCode:p.nationalityCode||'',name:p.name,number:p.number||10,appearance:normalizeAppearance(p.appearance||{}),attributes:prime,weakFoot:attrs.weakFoot||4,createdYear:state.season?.year||null};
+  if(!p)return null;
+  const peak=Math.max(p.overall||0,...(state.history||[]).map(h=>Number(h.overall)||0));
+  const attrs={...normalizePlayerAttributes(p)},retirementRecovery=Math.max(0,peak-(p.overall||peak));
+  const trophies=(p.trophies||[]),awards=(p.awards||[]),career=careerTotals();
+  const major=trophies.filter(t=>/World Cup|Champions|Libertadores|Club World Cup|Copa do Mundo/i.test(t.name||'')).length;
+  let iconBonus=0;
+  if(peak>=88&&trophies.length>=4)iconBonus++;
+  if(peak>=90&&(awards.length>=2||major>=1))iconBonus++;
+  if(peak>=91&&major>=2)iconBonus++;
+  if(peak>=92&&((career.goals||0)+(career.assists||0)>=350||awards.some(a=>/Bola de Ouro|Ballon/i.test(a.name||''))))iconBonus++;
+  const iconOverall=clamp(peak+iconBonus,80,99);
+  const iconLift=Math.max(0,iconOverall-peak);
+  const prime={};
+  ['pace','finishing','passing','dribbling','defense','physical'].forEach(id=>{
+    const positionEstimate=estimateIconAttributes(iconOverall,p.position)[id];
+    const restored=(attrs[id]||peak)+retirementRecovery*(id==='pace'||id==='physical'?1.15:1)+iconLift*.75;
+    prime[id]=clamp(Math.round(Math.max(restored,positionEstimate-2)),30,99);
+  });
+  return {overall:iconOverall,careerPeak:peak,position:p.position,positionCode:ICON_POSITION_CODES[p.position]||'MC',nationality:p.nationality,nationalityCode:p.nationalityCode||'',name:p.name,number:p.number||10,appearance:normalizeAppearance(p.appearance||{}),attributes:prime,weakFoot:attrs.weakFoot||4,createdYear:state.season?.year||null};
 }
 function iconCardFromArchive(c={}){
   if(c.iconCard?.attributes)return c.iconCard;const overall=Number(c.peak||c.overall)||80,position=c.position||'Centroavante';
@@ -2807,6 +2881,21 @@ function saveCareerToHall(){
   const list=getSavedCareers().filter(x=>!(x.name===entry.name&&x.retiredAge===entry.retiredAge&&x.games===entry.games));
   list.unshift(entry);state.savedCareers=list.slice(0,12);p.hallSaved=true;save();renderSavedCareers();const btn=$('#legacy-save');if(btn){btn.disabled=true;btn.textContent='Carreira salva ✓';}toast('Carreira salva no Hall da Fama.');
 }
+function removeSavedCareer(index,{fromModal=false}={}){
+  const list=getSavedCareers(),c=list[index];if(!c)return;
+  const label=c.name||'esta carreira';
+  if(!confirm(`Remover ${label} do Hall da Fama? Esta ação não pode ser desfeita.`))return;
+  list.splice(index,1);state.savedCareers=list;
+  // Se o card removido pertence à carreira recém-encerrada, permita salvá-la novamente.
+  if(state.player?.retired&&state.player?.hallSaved&&c.name===state.player.name&&Number(c.retiredAge||0)===Number(state.player.retiredAge||state.player.age||0)){
+    state.player.hallSaved=false;
+    const saveBtn=$('#legacy-save');if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='Salvar carreira';}
+  }
+  save();
+  if(fromModal)closeSavedCareer();
+  renderSavedCareers();
+  toast('Carreira removida do Hall da Fama.');
+}
 function renderSavedCareers(){
   const box=$('#saved-careers-list'),count=$('#home-save-count'),list=getSavedCareers();
   if(count)count.textContent=`${list.length} carreira(s) salva(s)`;
@@ -2820,16 +2909,18 @@ function renderSavedCareers(){
     const breakdown=titleCounts.length
       ?`<div class="saved-career-title-breakdown">${titleCounts.map(([name,n])=>`<span><b>${n}×</b><em>${esc(name)}</em></span>`).join('')}</div>`
       :'<div class="saved-career-title-breakdown"><span><b>0×</b><em>títulos</em></span></div>';
-    return `<article class="saved-career-card" data-saved-career="${i}" role="button" tabindex="0" aria-label="Abrir carreira arquivada de ${esc(c.name||'jogador')}"><div class="saved-career-rank"><small>RANK HIST.</small><strong>#${esc(c.rank||'—')}</strong></div><div class="saved-career-face">${appearanceMarkup(c.appearance||DEFAULT_APPEARANCE,true,c.number||10)}</div><div class="saved-career-icon-mini">${iconCardMarkup(iconCardFromArchive(c),true)}</div><div class="saved-career-info"><span class="saved-career-kicker">CARREIRA ARQUIVADA</span><h4>${esc(c.name||'Jogador')}</h4><p>${esc(c.position||'Jogador')} · ${esc(c.nationality||'')}</p><div class="saved-career-clubs">${(c.clubs||[]).slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}${(c.clubs||[]).length>4?`<span>+${c.clubs.length-4}</span>`:''}</div>${breakdown}</div><div class="saved-career-numbers"><div><strong>${esc(c.peak||c.overall||'—')}</strong><small>AUGE</small></div><div><strong>${esc(totalTitles)}</strong><small>TÍTULOS</small></div><div><strong>${esc(c.goals||0)}</strong><small>GOLS</small></div><div><strong>${esc(c.assists||0)}</strong><small>ASSIST.</small></div></div><span class="saved-career-open-hint">Ver carreira ›</span></article>`;
+    return `<article class="saved-career-card" data-saved-career="${i}" role="button" tabindex="0" aria-label="Abrir carreira arquivada de ${esc(c.name||'jogador')}"><button class="saved-career-delete" type="button" data-delete-saved-career="${i}" aria-label="Remover ${esc(c.name||'jogador')} do Hall da Fama" title="Remover do Hall da Fama">×</button><div class="saved-career-rank"><small>RANK HIST.</small><strong>#${esc(c.rank||'—')}</strong></div><div class="saved-career-face">${appearanceMarkup(c.appearance||DEFAULT_APPEARANCE,true,c.number||10)}</div><div class="saved-career-icon-mini">${iconCardMarkup(iconCardFromArchive(c),true)}</div><div class="saved-career-info"><span class="saved-career-kicker">CARREIRA ARQUIVADA</span><h4>${esc(c.name||'Jogador')}</h4><p>${esc(c.position||'Jogador')} · ${esc(c.nationality||'')}</p><div class="saved-career-clubs">${(c.clubs||[]).slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}${(c.clubs||[]).length>4?`<span>+${c.clubs.length-4}</span>`:''}</div>${breakdown}</div><div class="saved-career-numbers"><div><strong>${esc(c.peak||c.overall||'—')}</strong><small>AUGE</small></div><div><strong>${esc(totalTitles)}</strong><small>TÍTULOS</small></div><div><strong>${esc(c.goals||0)}</strong><small>GOLS</small></div><div><strong>${esc(c.assists||0)}</strong><small>ASSIST.</small></div></div><span class="saved-career-open-hint">Ver carreira ›</span></article>`;
   }).join('');
+  $$('.saved-career-delete').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();removeSavedCareer(+btn.dataset.deleteSavedCareer);}));
   $$('.saved-career-card').forEach(card=>{
     const open=()=>openSavedCareer(+card.dataset.savedCareer);
-    card.addEventListener('click',open);
-    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+    card.addEventListener('click',e=>{if(e.target.closest('.saved-career-delete'))return;open();});
+    card.addEventListener('keydown',e=>{if(e.target.closest?.('.saved-career-delete'))return;if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
   });
 }
 function openSavedCareer(index){
   const c=getSavedCareers()[index],modal=$('#saved-career-modal');if(!c||!modal)return;
+  modal.dataset.savedCareerIndex=String(index);
   $('#saved-career-name').textContent=c.name||'Carreira salva';
   $('#saved-career-subtitle').textContent=`${c.position||'Jogador'} · ${c.nationality||'—'} · camisa ${c.number||10} · aposentado aos ${c.retiredAge||'—'} anos`;
   const face=$('#saved-career-detail-face');face.innerHTML=appearanceMarkup(c.appearance||DEFAULT_APPEARANCE,true,c.number||10);
@@ -2845,7 +2936,7 @@ function openSavedCareer(index){
   const iconCard=iconCardFromArchive(c);if($('#saved-career-icon-card'))$('#saved-career-icon-card').innerHTML=iconCardMarkup(iconCard,false);if($('#saved-icon-card-title'))$('#saved-icon-card-title').textContent=`ICON · ${c.name||'Lenda'}`;
   modal.classList.remove('hidden');observeSiteImages();
 }
-function closeSavedCareer(){ $('#saved-career-modal')?.classList.add('hidden'); }
+function closeSavedCareer(){ const modal=$('#saved-career-modal');if(modal){modal.classList.add('hidden');delete modal.dataset.savedCareerIndex;} }
 
 function legacyClubEligible(){
   const p=state.player,s=state.season;if(!p||p.retired||!s?.closed||p.age<35)return false;
@@ -3037,19 +3128,28 @@ function initSoundtrack(){
 }
 $$('[data-view]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();showView(el.dataset.view);}));
 
-// Hall da Fama e trilha sonora do menu principal.
-$('#home-hall-btn')?.addEventListener('click',()=>{
-  const hall=$('#home-hall-section');
-  if(hall)hall.scrollIntoView({behavior:'smooth',block:'start'});
-});
+// Meu Legado e trilha sonora do menu principal.
 $('#saved-career-close')?.addEventListener('click',closeSavedCareer);
 $('#saved-career-close-x')?.addEventListener('click',closeSavedCareer);
+$('#saved-career-delete-modal')?.addEventListener('click',()=>{const modal=$('#saved-career-modal'),index=Number(modal?.dataset.savedCareerIndex);if(Number.isInteger(index))removeSavedCareer(index,{fromModal:true});});
 $('#saved-career-modal')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeSavedCareer();});
 $('#edit-appearance')?.addEventListener('click',openCareerAppearanceEditor);
 $('#career-appearance-close-x')?.addEventListener('click',closeCareerAppearanceEditor);
 $('#career-appearance-cancel')?.addEventListener('click',closeCareerAppearanceEditor);
 $('#career-appearance-save')?.addEventListener('click',saveCareerAppearanceEditor);
 $('#career-appearance-modal')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeCareerAppearanceEditor();});
+
+$('#legacy-logout')?.addEventListener('click',()=>window.BTLAuth?.logout?.());
+$('#contact-request')?.addEventListener('input',e=>{const count=$('#contact-count');if(count)count.textContent=String((e.target.value||'').length);});
+$('#contact-form')?.addEventListener('submit',e=>{
+  e.preventDefault();const account=window.BTLAuth?.getCurrentAccount?.();
+  const name=$('#contact-name')?.value.trim()||account?.nickname||'';const email=$('#contact-email')?.value.trim()||'';const request=$('#contact-request')?.value.trim()||'';
+  if(!name||!email||!request){toast('Preencha nome, e-mail e solicitação.');return;}if(request.length>1000){toast('A solicitação deve ter no máximo 1000 caracteres.');return;}
+  window.BTLAuth?.updateContactEmail?.(email);
+  const subject=`Sugestão Be The Legend — ${account?.nickname||name}`;
+  const body=[`Nome do jogador: ${name}`,`Nickname: ${account?.nickname||'—'}`,`ID Be The Legend: ${account?.id8||'—'}`,`E-mail: ${email}`,'', 'Solicitação:',request].join('\n');
+  window.location.href=`mailto:bethelegend.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
 
 $('#soundtrack-btn')?.addEventListener('click',openSoundtrack);
 $('#soundtrack-close')?.addEventListener('click',closeSoundtrack);
@@ -3312,53 +3412,47 @@ function finalizeLeague(){
 }
 // Limites de GER para o começo da carreira. O POT pode continuar acima desses
 // valores; o limite controla apenas quanto GER o jogador pode atingir em cada temporada.
-const EARLY_CAREER_OVERALL_CAPS = [73, 78, 82, 87];
+const EARLY_CAREER_OVERALL_CAPS = [72,76,79,82,85,88,90,92,93,94,95,96,97,98,98,99,99,99];
 function currentCareerSeasonNumber(){
   if(state.season?.year && typeof START_YEAR!=='undefined') return Math.max(1,state.season.year-START_YEAR+1);
   return Math.max(1,(state.history?.length||0)+1);
 }
 function currentSeasonOverallCap(){
   const seasonNumber=currentCareerSeasonNumber();
-  return EARLY_CAREER_OVERALL_CAPS[seasonNumber-1] ?? 99;
+  return EARLY_CAREER_OVERALL_CAPS[Math.min(EARLY_CAREER_OVERALL_CAPS.length-1,seasonNumber-1)] ?? 99;
 }
-
+function eliteOverallAdvanceAllowed(p,avg,rate,contributionTarget,roleSkill,primaryValue,attacking){
+  const o=p.overall||68;if(o<90)return true;
+  const requirements={
+    90:{avg:7.75,skill:82,chance:.95},91:{avg:7.82,skill:83,chance:.92},92:{avg:7.92,skill:84,chance:.86},
+    93:{avg:8.05,skill:85,chance:.72},94:{avg:8.18,skill:87,chance:.58},95:{avg:8.32,skill:88,chance:.43},
+    96:{avg:8.47,skill:90,chance:.30},97:{avg:8.62,skill:91,chance:.18},98:{avg:8.78,skill:92,chance:.09}
+  };
+  const req=requirements[Math.min(98,o)]||requirements[98];
+  if(avg<req.avg||roleSkill<req.skill||primaryValue<Math.min(94,req.skill+2))return false;
+  if(attacking&&rate<contributionTarget*(o>=96?1.08:o>=93?.98:.88))return false;
+  return Math.random()<req.chance;
+}
 function developmentResult(avg){
   const p=state.player,s=state.season,age=p.age,gk=p.position==='Goleiro',devAge=gk?age-3:age;
   const games=Math.max(1,s?.clubGames||1),contributions=(s?.clubGoals||0)+(s?.clubAssists||0),rate=contributions/games;
   const attacking=!['Goleiro','Zagueiro','Lateral direito','Lateral esquerdo','Volante'].includes(p.position);
-  const contributionTarget=attacking?.48:.18;
+  const contributionTarget=attacking?.40:.14;
   const attrs=normalizePlayerAttributes(p),roleSkill=positionWeightedAttributeScore(p,attrs);
   const primaryId=primaryAttributeForPosition(p.position),primaryValue=normalizedAttributeValue(primaryId,attrs[primaryId]);
 
-  // Curva moderada de evolução. A intenção é que um jovem de bom rendimento siga
-  // algo próximo de 68 -> 72 -> 75 -> 78 -> 81, sem transformar toda temporada
-  // positiva em um salto enorme de overall.
-  let base=avg>=8.8?5:avg>=8.3?4:avg>=7.2?3:avg>=6.8?2:avg>=6.5?1:avg<5.8?-2:avg<6.1?-1:0;
-  if(devAge<=22&&p.overall<=69&&avg>=7.2)base=Math.max(base,4);
+  // Progressão deliberadamente mais lenta: 90+ é elite, 95+ é geracional e 99 é raro.
+  let base=avg>=8.85?3:avg>=8.35?2:avg>=7.45?1:avg<5.8?-2:avg<6.1?-1:0;
+  if(devAge<=21&&p.overall<=70&&avg>=7.25)base=Math.max(base,2);
+  if(avg>=8.15&&rate>=contributionTarget*1.35&&p.overall<90)base=Math.min(3,base+1);
 
-  // Produção acima do esperado ajuda, mas o bônus de performance é limitado a 1.
-  let performanceBonus=0;
-  if(avg>=7.3&&rate>=contributionTarget*1.25)performanceBonus=1;
-  if(avg>=8.2&&(primaryValue>=82||roleSkill>=84))performanceBonus=1;
-  base+=performanceBonus;
-
-  // A idade e o GER atual criam um teto de ganho por temporada. No começo da
-  // carreira o primeiro salto pode chegar a +4; depois a progressão típica fica
-  // em +3. Temporadas realmente excepcionais podem ultrapassar isso em 1 ponto.
   if(base>0){
-    let cap;
-    if(devAge<=22)cap=p.overall<72?4:3;
-    else if(devAge<=25)cap=3;
-    else if(devAge<=29)cap=2;
-    else if(devAge<=32)cap=1;
-    else if(devAge<=36)cap=avg>=8.6?1:0;
-    else cap=0;
-    if(avg>=8.8&&devAge<=29)cap+=1;
+    let cap=devAge<=22?3:devAge<=25?2:devAge<=29?2:devAge<=32?1:devAge<=36?(avg>=8.65?1:0):0;
+    if(p.overall>=88)cap=Math.min(cap,1);
     base=Math.min(base,cap);
+    if(base>0&&!eliteOverallAdvanceAllowed(p,avg,rate,contributionTarget,roleSkill,primaryValue,attacking))base=0;
   }
 
-  // Declínio físico: a partir dos 37 anos o GER passa a cair em todas as posições.
-  // Temporadas excelentes reduzem o ritmo da queda, mas não voltam a gerar crescimento.
   if(age>=37){
     if(age<=38)base=avg>=8.7?-1:-rnd(1,2);
     else if(age<=40)base=-rnd(1,2);
@@ -3366,30 +3460,23 @@ function developmentResult(avg){
     else base=-rnd(3,5);
   }
 
-  // Bônus de treino pode ajudar, mas não deve romper a curva de evolução.
   const trainingBoost=clamp(p.developmentBoost||0,0,1);p.developmentBoost=0;
-  if(age<37&&base>0&&trainingBoost){
-    const trainingCap=devAge<=22?(p.overall<72?4:3):devAge<=25?3:devAge<=29?2:1;
-    base=Math.min(base+trainingBoost,trainingCap+(avg>=8.8&&devAge<=29?1:0));
-  }
-  base=clamp(base,-5,5);
+  if(age<37&&base>0&&trainingBoost&&p.overall<90)base=Math.min(base+trainingBoost,devAge<=22?3:2);
+  base=clamp(base,-5,3);
 
-  // O potencial segue dinâmico, porém agora se move de forma mais gradual.
-  let potentialDelta=age>=37?-1:(avg>=8.8?3:avg>=8.2?2:avg>=7.2?1:avg<5.9&&age<=29?-1:0);
-  if(avg>=8.3&&rate>=contributionTarget*1.40)potentialDelta=Math.min(3,potentialDelta+1);
-  if(avg>=8.6&&primaryValue>=85&&roleSkill>=84)potentialDelta=Math.min(3,potentialDelta+1);
+  // POT pode crescer, porém 95-99 não é mais um caminho automático de boas temporadas.
+  let potentialDelta=age>=37?-1:(avg>=8.75?1:avg>=7.65&&p.potential<92?1:avg<5.9&&age<=29?-1:0);
+  if(p.potential>=94&&potentialDelta>0){
+    const potChance=p.potential===94?.55:p.potential===95?.38:p.potential===96?.24:p.potential===97?.13:p.potential>=98?.06:.7;
+    if(avg<8.35||Math.random()>potChance)potentialDelta=0;
+  }
   p.potential=clamp(p.potential+potentialDelta,Math.max(68,p.overall),99);
 
-  // Se o desempenho justificaria evolução mas o POT estiver apenas um pouco
-  // abaixo, ele pode se ajustar suavemente em vez de bloquear a carreira de vez.
-  if(base>0&&p.overall+base>p.potential&&avg>=7.4){
-    const needed=p.overall+base-p.potential;
-    const ceilingBoost=clamp(needed,1,2);
-    p.potential=clamp(p.potential+ceilingBoost,p.overall,99);
+  if(base>0&&p.overall+base>p.potential&&avg>=8.15&&p.potential<95){
+    p.potential=clamp(p.potential+1,p.overall,95);
   }
 
-  const before=p.overall;
-  const seasonOverallCap=currentSeasonOverallCap();
+  const before=p.overall,seasonOverallCap=currentSeasonOverallCap();
   if(base>0)p.overall=Math.min(seasonOverallCap,99,Math.min(p.potential,p.overall+base));
   else p.overall=clamp(p.overall+base,45,Math.min(99,seasonOverallCap));
   if(age>=37)p.potential=Math.max(p.overall,p.potential);
@@ -3953,6 +4040,16 @@ function applyV95Migrations(){
   }
 }
 
+function applyV101Migrations(){
+  // Pedido do usuário: limpar somente os cards já arquivados no Hall da Fama.
+  // A carreira ativa, histórico da carreira atual e demais preferências são preservados.
+  if(!localStorage.getItem(HALL_RESET_V101_KEY)){
+    state.savedCareers=[];
+    if(state.player)state.player.hallSaved=false;
+    localStorage.setItem(HALL_RESET_V101_KEY,'1');
+  }
+}
+
 function normalizePersistentState(){
   state.savedCareers=Array.isArray(state.savedCareers)?state.savedCareers:[];
   if(!state.player){renderSavedCareers();return;}
@@ -4033,4 +4130,4 @@ function normalizePersistentState(){
   });
 }
 
-preloadTrophyImages();populateCreationFields();setupBirthdateLimits();renderAppearanceStudio();updateAppearancePreview();applyV95Migrations();normalizePersistentState();sanitizeAwardsEligibility();save();initSoundtrack();render();observeSiteImages();if(state.pendingEvent)openPendingEvent();if(state.pendingPenaltyShootout)setTimeout(openPenaltyShootoutDecision,120);if(state.player?.retired&&!state.player.legacyCardSeen)setTimeout(showCareerLegacyCard,100);
+preloadTrophyImages();populateCreationFields();setupBirthdateLimits();renderAppearanceStudio();updateAppearancePreview();applyV95Migrations();applyV101Migrations();normalizePersistentState();sanitizeAwardsEligibility();save();if(LEGACY_V95_FOR_MIGRATION)localStorage.setItem(LEGACY_V103_CLAIM_KEY,'1');initSoundtrack();render();observeSiteImages();if(state.pendingEvent)openPendingEvent();if(state.pendingPenaltyShootout)setTimeout(openPenaltyShootoutDecision,120);if(state.player?.retired&&!state.player.legacyCardSeen)setTimeout(showCareerLegacyCard,100);

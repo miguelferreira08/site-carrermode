@@ -1,0 +1,59 @@
+BE THE LEGEND V10.3 — RELATÓRIO DE TESTES
+
+ESTRUTURA
+[OK] js/app.js: node --check sem erros
+[OK] js/auth.js: node --check sem erros
+[OK] js/data.js: node --check sem erros
+[OK] HTML: 324 IDs, nenhum duplicado
+[OK] Referências JS → HTML: 296 IDs usados, nenhum ausente
+[OK] CSS: 0 erros no parser tinycss2 e chaves balanceadas
+[OK] 30 arquivos MP3 preservados
+
+CONTAS / LOGIN
+[OK] Tela de autenticação exibida quando não há sessão válida
+[OK] Conta local com nickname + senha (PBKDF2/SHA-256 no Web Crypto)
+[OK] ID público de 8 dígitos
+[OK] Convidado persistente no mesmo navegador
+[OK] Sessão com expiração fixa em 7 dias
+[OK] Saves passam a usar chave separada por conta
+[OK] Migração do save V10.2/V95 para a primeira conta autenticada
+[OK] Núcleo do auth testado em ambiente Node com localStorage simulado
+[OK] Integração Google Identity Services pronta para Client ID do domínio
+[ATENÇÃO] O Client ID do Google não pode ser pré-preenchido: deve ser criado pelo proprietário do domínio no Google Cloud e colocado em js/google-auth-config.js
+[ATENÇÃO] Saves continuam locais; Google identifica a conta, mas não sincroniza a carreira entre dispositivos nesta versão
+
+MEU LEGADO
+[OK] Hall da Fama removido da home e transferido para a aba Meu Legado
+[OK] Exibição de nickname, ID, tipo de conta, data de criação e próxima autenticação
+[OK] Hall da Fama permanece com abertura e remoção individual de cards
+[OK] Botão de logout disponível
+[OK] Links para Termos de Uso e Política de Privacidade
+
+CONTATO
+[OK] Nova aba Contato com tema visual do menu inicial
+[OK] Nome e e-mail do jogador
+[OK] Destinatário travado em bethelegend.contact@gmail.com
+[OK] Solicitação limitada a 1000 caracteres com contador
+[OK] Envio prepara mailto: e abre o aplicativo de e-mail do dispositivo para confirmação do usuário
+
+BALANCEAMENTO ESTATÍSTICO — CALIBRAÇÃO INDICATIVA
+20.000/12.000 temporadas simuladas em testes auxiliares de 55 jogos com o mesmo modelo-base de produção de elite.
+O ambiente de partida real varia por força do clube, quantidade de gols da equipe, lesões, idade e calendário.
+
+Centroavante GER 92: ~79,3 G/A
+Centroavante GER 93: ~80,0 G/A
+Centroavante GER 94: ~80,4 G/A
+Centroavante GER 95: ~80,6 G/A
+Média GER 92–95: ~80,1 G/A
+
+Acima de 95, a curva aumenta progressivamente:
+GER 96: ~82,5 G/A
+GER 97: ~84,3 G/A
+GER 98: ~86,3 G/A
+GER 99: ~88,0 G/A
+
+Temporadas de 100+ G/A continuam possíveis, mas não são o resultado médio.
+O balanceamento de progressão de GER/atributos da V10.1/V10.2 foi preservado.
+
+TESTE VISUAL AUTOMATIZADO
+[INCONCLUSIVO] Chromium headless do ambiente não concluiu a inicialização (timeout/DBus). Por isso, a validação visual automática não foi marcada como aprovada.
