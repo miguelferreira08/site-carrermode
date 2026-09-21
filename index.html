@@ -618,9 +618,13 @@
         <label><input id="soundtrack-shuffle" type="checkbox" checked> Embaralhar</label>
         <button id="soundtrack-select-all" class="secondary" type="button">Selecionar todas</button>
         <button id="soundtrack-clear" class="secondary" type="button">Limpar seleção</button>
+        <button id="soundtrack-import-all" class="secondary soundtrack-import-all" type="button">＋ Importar MP3s completos</button>
+        <input id="soundtrack-bulk-file-input" type="file" accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav,.flac" multiple hidden>
+        <input id="soundtrack-file-input" type="file" accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav,.flac" hidden>
       </div>
+      <div class="soundtrack-local-help"><b>30 faixas completas já incluídas</b><span>As músicas enviadas por você já estão dentro do projeto em <code>assets/audio/tracks/</code>. O botão de importação continua disponível caso queira substituir alguma faixa depois.</span></div>
       <div id="soundtrack-list" class="soundtrack-list"></div>
-      <p class="soundtrack-license-note">A reprodução usa prévias oficiais disponibilizadas pelo catálogo do iTunes quando disponíveis. Para tocar faixas completas, use arquivos de áudio que você tenha direito de utilizar em <code>assets/audio/</code>.</p>
+      <p class="soundtrack-license-note">Este pacote usa os arquivos de áudio fornecidos por você. Ao publicar o site, confirme que possui os direitos ou autorizações necessários para disponibilizá-los aos visitantes.</p>
       <button id="soundtrack-close" class="primary full" type="button">Salvar e voltar</button>
     </div>
   </div>

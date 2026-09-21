@@ -48,44 +48,58 @@ function money(v){ return '€ ' + (v >= 1e6 ? (v/1e6).toFixed(1)+' mi' : Math.r
 function toast(msg){ const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800); }
 function countryByCode(code){ return COUNTRIES.find(c=>c.code===code); }
 
-const SOUNDTRACK_KEY='beTheLegendSoundtrackV1';
+const SOUNDTRACK_KEY='beTheLegendSoundtrackV2';
+const SOUNDTRACK_LEGACY_KEY='beTheLegendSoundtrackV1';
 const FIFA_SOUNDTRACK=[
-  {id:'f14-love-me-again',fifa:14,title:'Love Me Again',artist:'John Newman'},
-  {id:'f14-dreaming',fifa:14,title:'Dreaming',artist:'Smallpools'},
-  {id:'f14-alive',fifa:14,title:'Alive',artist:'Empire of the Sun'},
-  {id:'f15-the-nights',fifa:15,title:'The Nights',artist:'Avicii'},
-  {id:'f15-walk',fifa:15,title:'Walk',artist:'Kwabs'},
-  {id:'f15-my-type',fifa:15,title:'My Type',artist:'Saint Motel'},
-  {id:'f16-mountain',fifa:16,title:'Mountain At My Gates',artist:'Foals'},
-  {id:'f16-trip-switch',fifa:16,title:'Trip Switch',artist:'Nothing But Thieves'},
-  {id:'f16-conqueror',fifa:16,title:'Conqueror',artist:'AURORA'},
-  {id:'f17-send-them-off',fifa:17,title:'Send Them Off!',artist:'Bastille'},
-  {id:'f17-shelter',fifa:17,title:'Shelter',artist:'Porter Robinson & Madeon'},
-  {id:'f17-are-we-ready',fifa:17,title:'Are We Ready? (Wreck)',artist:'Two Door Cinema Club'},
-  {id:'f18-best-friend',fifa:18,title:'Best Friend',artist:'Sofi Tukker feat. NERVO, The Knocks & Alisa UENO'},
-  {id:'f18-star-roving',fifa:18,title:'Star Roving',artist:'Slowdive'},
-  {id:'f18-system',fifa:18,title:'The System Only Dreams in Total Darkness',artist:'The National'},
-  {id:'f19-genius',fifa:19,title:'Genius',artist:'LSD (Labrinth, Sia & Diplo)'},
-  {id:'f19-feels-like-summer',fifa:19,title:'Feels Like Summer',artist:'Childish Gambino'},
-  {id:'f19-big-dreams',fifa:19,title:'Big Dreams',artist:'Bakar'},
-  {id:'f20-runner',fifa:20,title:'The Runner',artist:'Foals'},
-  {id:'f20-rushing-back',fifa:20,title:'Rushing Back',artist:'Flume feat. Vera Blue'},
-  {id:'f20-phone-numbers',fifa:20,title:'Phone Numbers',artist:'Dominic Fike'},
-  {id:'f21-heat-waves',fifa:21,title:'Heat Waves',artist:'Glass Animals'},
-  {id:'f21-ticket-to-ride',fifa:21,title:'Ticket To Ride',artist:'KAWALA'},
-  {id:'f21-is-it-true',fifa:21,title:'Is It True',artist:'Tame Impala'},
-  {id:'f22-landline',fifa:22,title:'Landline',artist:'binki'},
-  {id:'f22-feet',fifa:22,title:"Feet Don't Fail Me Now",artist:'Joy Crookes'},
-  {id:'f22-skeletons',fifa:22,title:'skeletons',artist:'easy life'},
-  {id:'f23-tonight',fifa:23,title:'Tonight',artist:'Phoenix feat. Ezra Koenig'},
-  {id:'f23-spitting',fifa:23,title:'Spitting Off the Edge of the World',artist:'Yeah Yeah Yeahs feat. Perfume Genius'},
-  {id:'f23-ojitos',fifa:23,title:'Ojitos Lindos',artist:'Bad Bunny & Bomba Estéreo'}
+  {id:'f14-love-me-again',fifa:14,title:'Love Me Again',artist:'John Newman',bundled:true},
+  {id:'f14-dreaming',fifa:14,title:'Dreaming',artist:'Smallpools',bundled:true},
+  {id:'f14-alive',fifa:14,title:'Alive',artist:'Empire of the Sun',bundled:true},
+  {id:'f15-the-nights',fifa:15,title:'The Nights',artist:'Avicii',bundled:true},
+  {id:'f15-walk',fifa:15,title:'Walk',artist:'Kwabs',bundled:true},
+  {id:'f15-my-type',fifa:15,title:'My Type',artist:'Saint Motel',bundled:true},
+  {id:'f16-mountain',fifa:16,title:'Mountain At My Gates',artist:'Foals',bundled:true},
+  {id:'f16-trip-switch',fifa:16,title:'Trip Switch',artist:'Nothing But Thieves',bundled:true},
+  {id:'f16-shine-a-light',fifa:16,title:'Shine A Light',artist:'BANNERS',bundled:true},
+  {id:'f17-send-them-off',fifa:17,title:'Send Them Off!',artist:'Bastille',bundled:true},
+  {id:'f17-are-we-ready',fifa:17,title:'Are We Ready? (Wreck)',artist:'Two Door Cinema Club',bundled:true},
+  {id:'f17-youth',fifa:17,title:'Youth',artist:'Glass Animals',bundled:true},
+  {id:'f18-deadcrush',fifa:18,title:'Deadcrush (Spike Stent Mix)',artist:'alt-J',bundled:true},
+  {id:'f18-supercut',fifa:18,title:'Supercut',artist:'Lorde',bundled:true},
+  {id:'f18-live-in-the-moment',fifa:18,title:'Live in the Moment',artist:'Portugal. The Man',bundled:true},
+  {id:'f19-genius',fifa:19,title:'Genius',artist:'LSD (Labrinth, Sia & Diplo)',bundled:true},
+  {id:'f19-feels-like-summer',fifa:19,title:'Feels Like Summer',artist:'Childish Gambino',bundled:true},
+  {id:'f19-crown',fifa:19,title:'you should see me in a crown',artist:'Billie Eilish',bundled:true},
+  {id:'f20-runner',fifa:20,title:'The Runner',artist:'Foals',bundled:true},
+  {id:'f20-phone-numbers',fifa:20,title:'Phone Numbers',artist:'Dominic Fike & Kenny Beats',bundled:true},
+  {id:'f20-yo-x-ti',fifa:20,title:'Yo x Ti, Tu x Mi',artist:'ROSALÍA & Ozuna',bundled:true},
+  {id:'f21-heat-waves',fifa:21,title:'Heat Waves',artist:'Glass Animals',bundled:true},
+  {id:'f21-is-it-true',fifa:21,title:'Is It True',artist:'Tame Impala',bundled:true},
+  {id:'f21-window',fifa:21,title:'Window',artist:'Still Woozy',bundled:true},
+  {id:'f22-landline',fifa:22,title:'Landline',artist:'binki',bundled:true},
+  {id:'f22-feet',fifa:22,title:"Feet Don't Fail Me Now",artist:'Joy Crookes',bundled:true},
+  {id:'f22-forever-more',fifa:22,title:'forever&more',artist:'ROLE MODEL',bundled:true},
+  {id:'f23-alpha-zulu',fifa:23,title:'Alpha Zulu',artist:'Phoenix',bundled:true},
+  {id:'f23-the-mission',fifa:23,title:'The Mission',artist:'Bakar',bundled:true},
+  {id:'f23-drive',fifa:23,title:'Drive',artist:'moa moa',bundled:true}
 ];
 const defaultSoundtrackSettings=()=>({enabled:true,shuffle:true,volume:.38,selected:FIFA_SOUNDTRACK.map(t=>t.id),currentId:null,wasPlaying:false});
-let soundtrackSettings=(()=>{try{return {...defaultSoundtrackSettings(),...JSON.parse(localStorage.getItem(SOUNDTRACK_KEY)||'{}')}}catch(_){return defaultSoundtrackSettings()}})();
+let soundtrackSettings=(()=>{
+  try{
+    const current=localStorage.getItem(SOUNDTRACK_KEY);
+    if(current)return {...defaultSoundtrackSettings(),...JSON.parse(current)};
+    const legacy=JSON.parse(localStorage.getItem(SOUNDTRACK_LEGACY_KEY)||'{}');
+    return {...defaultSoundtrackSettings(),enabled:legacy.enabled??true,shuffle:legacy.shuffle??true,volume:Number.isFinite(Number(legacy.volume))?Number(legacy.volume):.38};
+  }catch(_){return defaultSoundtrackSettings()}
+})();
 let soundtrackAudio=null;
 let soundtrackPreviewCache=new Map();
 let soundtrackResolving=false;
+let soundtrackSourceKind='prévia';
+let soundtrackCurrentObjectUrl=null;
+let soundtrackImportedIds=new Set();
+let soundtrackImportTarget=null;
+const SOUNDTRACK_DB='beTheLegendAudioV1';
+const SOUNDTRACK_STORE='tracks';
 function saveSoundtrackSettings(){localStorage.setItem(SOUNDTRACK_KEY,JSON.stringify(soundtrackSettings));}
 function esc(value=''){return String(value).replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));}
 const DEFAULT_APPEARANCE={hairEnabled:true,hairStyle:'fade',hairColor:'#17120f',beardEnabled:false,beardStyle:'stubble',skin:'skin-3'};
@@ -1660,13 +1674,47 @@ function selectedSoundtrackTracks(){
   const selected=new Set(Array.isArray(soundtrackSettings.selected)?soundtrackSettings.selected:[]);
   return FIFA_SOUNDTRACK.filter(t=>selected.has(t.id));
 }
+function soundtrackRepoPath(track){return `assets/audio/tracks/${track.id}.mp3`;}
+function soundtrackDb(){
+  return new Promise((resolve,reject)=>{
+    if(!('indexedDB' in window)){resolve(null);return;}
+    const req=indexedDB.open(SOUNDTRACK_DB,1);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(SOUNDTRACK_STORE))db.createObjectStore(SOUNDTRACK_STORE,{keyPath:'id'});};
+    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+  });
+}
+function soundtrackIdbRequest(req){return new Promise((resolve,reject)=>{req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
+async function refreshSoundtrackImportedIds(){
+  try{
+    const db=await soundtrackDb();if(!db){soundtrackImportedIds=new Set();return;}
+    const tx=db.transaction(SOUNDTRACK_STORE,'readonly');const keys=await soundtrackIdbRequest(tx.objectStore(SOUNDTRACK_STORE).getAllKeys());db.close();
+    soundtrackImportedIds=new Set(keys||[]);
+  }catch(_){soundtrackImportedIds=new Set();}
+}
+async function getImportedSoundtrackFile(id){
+  try{const db=await soundtrackDb();if(!db)return null;const tx=db.transaction(SOUNDTRACK_STORE,'readonly');const row=await soundtrackIdbRequest(tx.objectStore(SOUNDTRACK_STORE).get(id));db.close();return row||null;}catch(_){return null;}
+}
+async function saveImportedSoundtrackFile(id,file){
+  if(!id||!file)return false;
+  if(!/^audio\//i.test(file.type||'')&&!/\.(mp3|m4a|aac|ogg|wav|flac)$/i.test(file.name||'')){toast('Escolha um arquivo de áudio válido.');return false;}
+  try{
+    if(navigator.storage?.persist)navigator.storage.persist().catch(()=>{});
+    const db=await soundtrackDb();if(!db)throw new Error('indexeddb');
+    const tx=db.transaction(SOUNDTRACK_STORE,'readwrite');await soundtrackIdbRequest(tx.objectStore(SOUNDTRACK_STORE).put({id,blob:file,name:file.name,type:file.type||'audio/mpeg',size:file.size||0,updatedAt:Date.now()}));db.close();
+    soundtrackImportedIds.add(id);return true;
+  }catch(err){toast(err?.name==='QuotaExceededError'?'Sem espaço suficiente no navegador para guardar esta música.':'Não foi possível guardar o arquivo de áudio.');return false;}
+}
+async function deleteImportedSoundtrackFile(id){
+  try{const db=await soundtrackDb();if(!db)return;const tx=db.transaction(SOUNDTRACK_STORE,'readwrite');await soundtrackIdbRequest(tx.objectStore(SOUNDTRACK_STORE).delete(id));db.close();soundtrackImportedIds.delete(id);}
+  catch(_){toast('Não foi possível remover o arquivo local.');}
+}
 function ensureSoundtrackAudio(){
   if(soundtrackAudio)return soundtrackAudio;
-  soundtrackAudio=new Audio();soundtrackAudio.preload='none';soundtrackAudio.volume=clamp(Number(soundtrackSettings.volume)||.38,0,1);
+  soundtrackAudio=new Audio();soundtrackAudio.preload='metadata';soundtrackAudio.volume=clamp(Number(soundtrackSettings.volume)||.38,0,1);
   soundtrackAudio.addEventListener('ended',()=>playNextSoundtrack(true));
   soundtrackAudio.addEventListener('pause',()=>{soundtrackSettings.wasPlaying=false;saveSoundtrackSettings();syncSoundtrackPlayerUI();});
   soundtrackAudio.addEventListener('play',()=>{soundtrackSettings.wasPlaying=true;saveSoundtrackSettings();syncSoundtrackPlayerUI();});
-  soundtrackAudio.addEventListener('error',()=>{if(!soundtrackResolving){toast('Não foi possível reproduzir esta prévia. Pulando para a próxima.');setTimeout(()=>playNextSoundtrack(true),220);}});
+  soundtrackAudio.addEventListener('error',()=>{if(!soundtrackResolving){toast('Não foi possível reproduzir esta faixa. Pulando para a próxima.');setTimeout(()=>playNextSoundtrack(true),220);}});
   return soundtrackAudio;
 }
 function normalizeMusicQuery(v=''){return String(v).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();}
@@ -1685,14 +1733,32 @@ async function resolveSoundtrackPreview(track){
   }catch(_){url=null;}
   soundtrackPreviewCache.set(track.id,url);return url;
 }
+async function soundtrackRepoFileExists(track){
+  if(track?.bundled||location.protocol==='file:')return true;
+  try{const r=await fetch(soundtrackRepoPath(track),{method:'HEAD',cache:'no-store'});return r.ok;}catch(_){return false;}
+}
+async function resolveSoundtrackSource(track){
+  if(soundtrackImportedIds.has(track.id)){
+    const imported=await getImportedSoundtrackFile(track.id);
+    if(imported?.blob){
+      if(soundtrackCurrentObjectUrl){URL.revokeObjectURL(soundtrackCurrentObjectUrl);soundtrackCurrentObjectUrl=null;}
+      soundtrackCurrentObjectUrl=URL.createObjectURL(imported.blob);
+      return {url:soundtrackCurrentObjectUrl,kind:'música completa'};
+    }
+  }
+  if(track?.bundled)return {url:soundtrackRepoPath(track),kind:'música completa'};
+  if(await soundtrackRepoFileExists(track))return {url:soundtrackRepoPath(track),kind:'música completa'};
+  const preview=await resolveSoundtrackPreview(track);return preview?{url:preview,kind:'prévia'}:null;
+}
 let soundtrackRequestToken=0;
 async function playSoundtrackTrack(id,quiet=false){
   const track=soundtrackTrack(id),audio=ensureSoundtrackAudio();if(!track||!soundtrackSettings.enabled)return;
   const selected=selectedSoundtrackTracks();if(!selected.some(t=>t.id===track.id)){if(!selected.length){audio.pause();soundtrackSettings.currentId=null;saveSoundtrackSettings();syncSoundtrackPlayerUI();}return;}
   soundtrackSettings.currentId=track.id;saveSoundtrackSettings();syncSoundtrackPlayerUI();const token=++soundtrackRequestToken;soundtrackResolving=true;
-  const url=await resolveSoundtrackPreview(track);if(token!==soundtrackRequestToken)return;soundtrackResolving=false;
-  if(!url){if(!quiet)toast(`Prévia indisponível: ${track.title}`);playNextSoundtrack(true);return;}
-  if(audio.src!==url)audio.src=url;audio.volume=clamp(Number(soundtrackSettings.volume)||0,0,1);
+  const source=await resolveSoundtrackSource(track);if(token!==soundtrackRequestToken)return;soundtrackResolving=false;
+  if(!source){if(!quiet)toast(`Áudio indisponível: ${track.title}`);playNextSoundtrack(true);return;}
+  soundtrackSourceKind=source.kind;
+  if(audio.src!==source.url)audio.src=source.url;audio.volume=clamp(Number(soundtrackSettings.volume)||0,0,1);syncSoundtrackPlayerUI();
   try{await audio.play();}catch(_){soundtrackSettings.wasPlaying=false;saveSoundtrackSettings();syncSoundtrackPlayerUI();if(!quiet)toast('Clique em ▶ para iniciar a trilha sonora.');}
 }
 function pickNextSoundtrack(direction=1){
@@ -1707,27 +1773,50 @@ function toggleSoundtrackPlayback(){
   const audio=ensureSoundtrackAudio();if(!soundtrackSettings.enabled){soundtrackSettings.enabled=true;saveSoundtrackSettings();}
   if(!audio.paused){audio.pause();return;}const current=soundtrackTrack(soundtrackSettings.currentId);if(current&&selectedSoundtrackTracks().some(t=>t.id===current.id)&&audio.src){audio.play().catch(()=>playSoundtrackTrack(current.id));}else{const next=pickNextSoundtrack(1);if(next)playSoundtrackTrack(next.id);else toast('Selecione pelo menos uma música.');}
 }
+function startSoundtrackForGameplay(){
+  if(!soundtrackSettings.enabled)return;
+  const audio=ensureSoundtrackAudio();if(!audio.paused)return;
+  const current=soundtrackTrack(soundtrackSettings.currentId);
+  const track=current&&selectedSoundtrackTracks().some(t=>t.id===current.id)?current:pickNextSoundtrack(1);
+  if(track)playSoundtrackTrack(track.id,true);
+}
 function renderSoundtrackList(){
   const box=$('#soundtrack-list');if(!box)return;const selected=new Set(soundtrackSettings.selected||[]);
-  box.innerHTML=Array.from({length:10},(_,i)=>14+i).map(year=>`<section class="soundtrack-year"><header><b>FIFA ${year}</b><small>3 favoritas da comunidade</small></header><div>${FIFA_SOUNDTRACK.filter(t=>t.fifa===year).map(t=>`<label class="soundtrack-track ${selected.has(t.id)?'selected':''}"><input type="checkbox" data-soundtrack-track="${t.id}" ${selected.has(t.id)?'checked':''}><span><strong>${esc(t.title)}</strong><small>${esc(t.artist)}</small></span><em>FIFA ${t.fifa}</em></label>`).join('')}</div></section>`).join('');
+  box.innerHTML=Array.from({length:10},(_,i)=>14+i).map(year=>`<section class="soundtrack-year"><header><b>FIFA ${year}</b><small>3 favoritas da comunidade</small></header><div>${FIFA_SOUNDTRACK.filter(t=>t.fifa===year).map(t=>{const imported=soundtrackImportedIds.has(t.id),full=imported||t.bundled;return `<label class="soundtrack-track ${selected.has(t.id)?'selected':''} ${full?'has-full-audio':''}"><input type="checkbox" data-soundtrack-track="${t.id}" ${selected.has(t.id)?'checked':''}><span><strong>${esc(t.title)}</strong><small>${esc(t.artist)}</small></span><div class="soundtrack-track-actions"><em>${full?'COMPLETA':'PREVIEW'}</em><button type="button" data-soundtrack-import="${t.id}" title="${full?'Substituir o áudio desta música':'Associar um arquivo de áudio a esta música'}">${full?'↻':'＋'} MP3</button>${imported?`<button type="button" class="soundtrack-remove-file" data-soundtrack-remove="${t.id}" title="Remover arquivo salvo">×</button>`:''}</div></label>`;}).join('')}</div></section>`).join('');
   box.querySelectorAll('[data-soundtrack-track]').forEach(input=>input.addEventListener('change',()=>{
     const set=new Set(soundtrackSettings.selected||[]);input.checked?set.add(input.dataset.soundtrackTrack):set.delete(input.dataset.soundtrackTrack);soundtrackSettings.selected=[...set];saveSoundtrackSettings();renderSoundtrackList();syncSoundtrackPlayerUI();
     if(!set.has(soundtrackSettings.currentId)&&soundtrackAudio&&!soundtrackAudio.paused)playNextSoundtrack(true);
   }));
+  box.querySelectorAll('[data-soundtrack-import]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();soundtrackImportTarget=btn.dataset.soundtrackImport;$('#soundtrack-file-input')?.click();}));
+  box.querySelectorAll('[data-soundtrack-remove]').forEach(btn=>btn.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();const id=btn.dataset.soundtrackRemove;await deleteImportedSoundtrackFile(id);renderSoundtrackList();if(soundtrackSettings.currentId===id&&soundtrackAudio&&!soundtrackAudio.paused)playSoundtrackTrack(id,true);toast(soundtrackTrack(id)?.bundled?'Arquivo local removido. A faixa volta a usar o áudio incluído no jogo.':'Arquivo local removido. A faixa volta a usar a prévia.');}));
 }
 function syncSoundtrackPlayerUI(){
   const track=soundtrackTrack(soundtrackSettings.currentId),audio=soundtrackAudio;const playing=!!audio&&!audio.paused&&!audio.ended;
   const play=$('#soundtrack-play');if(play){play.textContent=playing?'❚❚':'▶';play.setAttribute('aria-label',playing?'Pausar':'Reproduzir');}
   if($('#soundtrack-enabled'))$('#soundtrack-enabled').checked=!!soundtrackSettings.enabled;if($('#soundtrack-shuffle'))$('#soundtrack-shuffle').checked=!!soundtrackSettings.shuffle;if($('#soundtrack-volume'))$('#soundtrack-volume').value=Math.round((soundtrackSettings.volume??.38)*100);
-  if($('#soundtrack-current-title'))$('#soundtrack-current-title').textContent=track?track.title:'Nenhuma faixa';if($('#soundtrack-current-meta'))$('#soundtrack-current-meta').textContent=track?`${track.artist} · FIFA ${track.fifa}`:(selectedSoundtrackTracks().length?'Pressione ▶ para começar':'Selecione ao menos uma música');
-  const widget=$('#now-playing');if(widget){widget.classList.toggle('hidden',!soundtrackSettings.enabled||!track);$('#now-playing-title').textContent=track?track.title:'—';$('#now-playing-meta').textContent=track?`${track.artist} · FIFA ${track.fifa}${playing?'':' · pausado'}`:'—';$('#now-playing-toggle').textContent=playing?'❚❚':'♫';}
+  if($('#soundtrack-current-title'))$('#soundtrack-current-title').textContent=track?track.title:'Nenhuma faixa';if($('#soundtrack-current-meta'))$('#soundtrack-current-meta').textContent=track?`${track.artist} · FIFA ${track.fifa} · ${soundtrackSourceKind}`:(selectedSoundtrackTracks().length?'Pressione ▶ para começar':'Selecione ao menos uma música');
+  const widget=$('#now-playing');if(widget){widget.classList.toggle('hidden',!soundtrackSettings.enabled||!track);$('#now-playing-title').textContent=track?track.title:'—';$('#now-playing-meta').textContent=track?`${track.artist} · FIFA ${track.fifa} · ${soundtrackSourceKind}${playing?'':' · pausado'}`:'—';$('#now-playing-toggle').textContent=playing?'❚❚':'♫';}
 }
-function openSoundtrack(){renderSoundtrackList();syncSoundtrackPlayerUI();$('#soundtrack-modal')?.classList.remove('hidden');}
+async function openSoundtrack(){await refreshSoundtrackImportedIds();renderSoundtrackList();syncSoundtrackPlayerUI();$('#soundtrack-modal')?.classList.remove('hidden');}
 function closeSoundtrack(){saveSoundtrackSettings();$('#soundtrack-modal')?.classList.add('hidden');syncSoundtrackPlayerUI();}
+function matchSoundtrackFile(file){
+  const name=normalizeMusicQuery((file.name||'').replace(/\.[^.]+$/,''));
+  let direct=FIFA_SOUNDTRACK.find(t=>name.includes(normalizeMusicQuery(t.id))||normalizeMusicQuery(t.id).includes(name));if(direct)return direct;
+  const scored=FIFA_SOUNDTRACK.map(t=>{const title=normalizeMusicQuery(t.title),artist=normalizeMusicQuery(t.artist.split(/feat\.|&|,/i)[0]);let score=0;if(name.includes(title))score+=8;for(const token of title.split(' '))if(token.length>3&&name.includes(token))score++;for(const token of artist.split(' '))if(token.length>3&&name.includes(token))score+=2;return {t,score};}).sort((a,b)=>b.score-a.score);
+  return scored[0]?.score>=6?scored[0].t:null;
+}
+async function importSoundtrackFiles(files,targetId=null){
+  const arr=[...(files||[])];if(!arr.length)return;
+  let imported=0,unmatched=0;
+  for(const file of arr){const track=targetId?soundtrackTrack(targetId):matchSoundtrackFile(file);if(!track){unmatched++;continue;}if(await saveImportedSoundtrackFile(track.id,file))imported++;}
+  await refreshSoundtrackImportedIds();renderSoundtrackList();syncSoundtrackPlayerUI();
+  if(imported)toast(`${imported} música(s) completa(s) adicionada(s).${unmatched?` ${unmatched} arquivo(s) não identificado(s).`:''}`);else if(unmatched)toast('Não consegui identificar esses arquivos. Use o botão + MP3 ao lado de cada música.');
+}
 function initSoundtrack(){
   soundtrackSettings.selected=(soundtrackSettings.selected||[]).filter(id=>FIFA_SOUNDTRACK.some(t=>t.id===id));if(!soundtrackSettings.selected.length&&soundtrackSettings.enabled===undefined)soundtrackSettings.selected=FIFA_SOUNDTRACK.map(t=>t.id);
-  ensureSoundtrackAudio();saveSoundtrackSettings();renderSoundtrackList();syncSoundtrackPlayerUI();
+  ensureSoundtrackAudio();saveSoundtrackSettings();refreshSoundtrackImportedIds().then(()=>renderSoundtrackList());syncSoundtrackPlayerUI();
   if(soundtrackSettings.currentId&&soundtrackSettings.wasPlaying){const resume=()=>{document.removeEventListener('pointerdown',resume);document.removeEventListener('keydown',resume);playSoundtrackTrack(soundtrackSettings.currentId,true);};document.addEventListener('pointerdown',resume,{once:true});document.addEventListener('keydown',resume,{once:true});}
+  else if(!soundtrackSettings.currentId&&soundtrackSettings.enabled){const autoStart=e=>{if(e.target?.closest?.('#soundtrack-modal,#soundtrack-btn,#now-playing'))return;if(!selectedSoundtrackTracks().length)return;document.removeEventListener('click',autoStart);startSoundtrackForGameplay();};document.addEventListener('click',autoStart);}
 }
 $$('[data-view]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();showView(el.dataset.view);}));
 
@@ -1766,12 +1855,15 @@ $('#soundtrack-select-all')?.addEventListener('click',()=>{
 $('#soundtrack-clear')?.addEventListener('click',()=>{
   soundtrackSettings.selected=[];if(soundtrackAudio)soundtrackAudio.pause();soundtrackSettings.currentId=null;saveSoundtrackSettings();renderSoundtrackList();syncSoundtrackPlayerUI();
 });
+$('#soundtrack-import-all')?.addEventListener('click',()=>$('#soundtrack-bulk-file-input')?.click());
+$('#soundtrack-bulk-file-input')?.addEventListener('change',async e=>{await importSoundtrackFiles(e.target.files);e.target.value='';});
+$('#soundtrack-file-input')?.addEventListener('change',async e=>{const id=soundtrackImportTarget;soundtrackImportTarget=null;await importSoundtrackFiles(e.target.files,id);e.target.value='';});
 document.addEventListener('keydown',e=>{
   if(e.key!=='Escape')return;
   if(!$('#saved-career-modal')?.classList.contains('hidden'))closeSavedCareer();
   else if(!$('#soundtrack-modal')?.classList.contains('hidden'))closeSoundtrack();
 });
-$('#start-btn').addEventListener('click',()=>showView(state.created?'career':attributeDraft?'attribute-draft':'create'));
+$('#start-btn').addEventListener('click',()=>{showView(state.created?'career':attributeDraft?'attribute-draft':'create');startSoundtrackForGameplay();});
 $('#nationality').addEventListener('change',loadClubChoices);
 $('#reroll-clubs').addEventListener('click',()=>{if(creationClubRerollsRemaining<=0)return;creationClubRerollsRemaining--;$('#selected-club').value='';$('#create-submit').disabled=true;drawThreeClubs();updateClubRerollButton();});
 $('#number').addEventListener('input',()=>{sanitizeShirtNumber();updateAppearancePreview();});

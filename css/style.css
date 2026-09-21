@@ -9264,3 +9264,19 @@ body.home-screen main{
 .obj-skyline::after{content:"";position:absolute;inset:18px 7px 5px;background:repeating-linear-gradient(90deg,rgba(255,212,98,.23) 0 3px,transparent 3px 11px);opacity:.6}
 .obj-velvet-rope{width:92px;height:52px;border-top:4px solid #9e3356;border-radius:50%}.obj-velvet-rope::before,.obj-velvet-rope::after{content:"";position:absolute;top:-6px;width:7px;height:57px;border-radius:5px;background:linear-gradient(#d0ad62,#705729)}.obj-velvet-rope::before{left:2px}.obj-velvet-rope::after{right:2px}
 .scene-event-sponsor-nike{--scene-x:18%;--scene-y:22%;--scene-accent:#f5f5f5}.scene-event-sponsor-adidas{--scene-x:82%;--scene-y:18%;--scene-accent:#73b7ff}.scene-event-sponsor-puma{--scene-x:22%;--scene-y:70%;--scene-accent:#e75d68}.scene-event-sponsor-new-balance{--scene-x:78%;--scene-y:68%;--scene-accent:#ef5f54}.scene-event-sponsor-under-armour{--scene-x:50%;--scene-y:16%;--scene-accent:#b7c0c8}.scene-event-sponsor-mizuno{--scene-x:16%;--scene-y:52%;--scene-accent:#5aa7ff}.scene-event-sponsor-umbro{--scene-x:84%;--scene-y:48%;--scene-accent:#6ee0a4}
+
+
+.soundtrack-import-all{border-color:rgba(66,232,141,.26)!important;color:var(--green)!important}
+.soundtrack-local-help{display:grid;gap:4px;margin:-2px 0 13px;padding:10px 12px;border:1px solid rgba(66,232,141,.12);border-radius:12px;background:rgba(66,232,141,.035);font-size:9px;line-height:1.5}
+.soundtrack-local-help b{font-size:10px;color:var(--green)}
+.soundtrack-local-help span{color:var(--muted)}
+.soundtrack-local-help code{color:#d9fff0}
+.soundtrack-track{grid-template-columns:18px minmax(0,1fr) auto}
+.soundtrack-track.has-full-audio{border-color:rgba(66,232,141,.22);box-shadow:inset 0 0 0 1px rgba(66,232,141,.025)}
+.soundtrack-track-actions{display:flex;align-items:center;justify-content:flex-end;gap:5px;min-width:120px}
+.soundtrack-track-actions em{min-width:42px;text-align:right;font-style:normal;font-size:6px;font-weight:900;letter-spacing:.05em;color:rgba(255,255,255,.32)}
+.soundtrack-track.has-full-audio .soundtrack-track-actions em{color:var(--green)}
+.soundtrack-track-actions button{height:27px;padding:0 7px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.04);color:var(--muted);font-size:7px;font-weight:800;cursor:pointer}
+.soundtrack-track-actions button:hover{color:var(--green);border-color:rgba(66,232,141,.28)}
+.soundtrack-track-actions .soundtrack-remove-file{width:27px;padding:0;color:#ff7b83}
+@media(max-width:620px){.soundtrack-track-actions{min-width:88px}.soundtrack-track-actions em{display:none}.soundtrack-track-actions button{padding:0 6px}}

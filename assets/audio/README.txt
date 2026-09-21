@@ -1,12 +1,13 @@
-BE THE LEGEND — TRILHA SONORA
+BE THE LEGEND — TRILHA SONORA COMPLETA
 
-A interface do jogo contém um catálogo de 30 faixas (3 de cada FIFA 14 a FIFA 23).
-Por direitos autorais, este pacote não redistribui arquivos MP3 comerciais.
+Esta versão já inclui as 30 faixas de áudio fornecidas pelo usuário, organizadas em 3 músicas para cada FIFA do 14 ao 23.
 
-Como a reprodução funciona nesta versão:
-- Ao apertar Play, o site procura uma prévia oficial no catálogo público do iTunes/Apple.
-- Quando há prévia disponível, ela é reproduzida e a próxima faixa é iniciada automaticamente.
-- As escolhas, volume, modo aleatório e faixa atual ficam salvos no navegador.
+COMO FUNCIONA
+- O jogo procura primeiro um arquivo completo em assets/audio/tracks/.
+- Como as 30 faixas já estão incluídas, elas tocam completas sem depender da prévia online.
+- A reprodução pode começar ao entrar na gameplay após um clique do usuário, respeitando as regras de autoplay do navegador.
+- O menu Som / Trilha sonora permite ligar/desligar, ajustar volume, embaralhar, avançar/voltar e selecionar quais músicas entram na rotação.
+- O importador continua disponível para substituir uma faixa no navegador.
 
-Se você possuir licença/direito para usar versões completas, esta pasta pode receber os arquivos de áudio
-em uma integração futura sem precisar alterar a interface do menu.
+PUBLICAÇÃO
+Os arquivos de áudio deste pacote foram fornecidos pelo usuário. Antes de publicar o site para terceiros, confirme que possui os direitos ou autorizações necessários para disponibilizar essas gravações.

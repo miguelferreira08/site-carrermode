@@ -1,0 +1,15 @@
+BE THE LEGEND V9.3 — TESTES ESTÁTICOS
+
+[OK] 30 faixas
+[OK] IDs únicos
+[OK] 3 faixas por FIFA 14-23
+[OK] IndexedDB para arquivos completos
+[OK] Importação em lote
+[OK] Importação por faixa
+[OK] Fallback Apple/iTunes
+[OK] Pasta de MP3 no projeto
+[OK] README de nomes
+[OK] Indicador música completa
+
+Faixas encontradas: 30
+FIFAs: 14–23
