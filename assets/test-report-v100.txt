@@ -1,0 +1,51 @@
+BE THE LEGEND — V10.0
+RELATÓRIO DE VALIDAÇÃO
+Data: 2026-09-21
+
+IMPLEMENTADO
+1. Espaçamento/responsividade corrigidos nas situações de partida com três escolhas.
+2. Interações com ídolo condicionadas a GER >= 84 e clube de alto nível.
+3. Cerimônias de Bola de Ouro e Chuteira de Ouro restritas a grande clube da elite europeia; Champions tem peso forte na Bola de Ouro, mas temporadas excepcionais ainda podem competir sem ela.
+4. Bandeiras coloridas com SVG + fallback emoji; potes da Copa 2026 baseados nos potes oficiais da FIFA; sorteio desacelerado.
+5. Copa do Mundo paralisa o calendário de clubes enquanto a seleção estiver viva; nenhuma liga/copa/evento normal fura o torneio; desfecho da seleção é exibido antes da retomada do clube.
+6. Mais variações de interação com ídolo, com prevenção de repetição recente.
+7. Favoritismo removido da interface das partidas (modelo interno preservado para simulação).
+8. Scrollbars estilizadas globalmente.
+9. Aba Início disponível durante carreira ativa, sem apagar a carreira.
+10. Idade mínima 17; máximo de 18 temporadas; sem aposentadoria fixa aos 46; declínio a partir dos 37.
+11. Sistema de lesões por Físico + idade, com tempo de afastamento e histórico.
+12. Carta ICON ao fim da carreira, com GER de auge, posição, nação, facial e RIT/FIN/PAS/DRI/DEF/FIS; arquivada no Hall da Fama.
+13. Tema dos clubes enriquecido com cor secundária/terciária e padrão próprio, incluindo diferenciação entre clubes que compartilham cor principal.
+
+COPA DO MUNDO 2026 — CRITÉRIO DE POTES
+Fonte usada: FIFA, “Sorteio Final da Copa do Mundo da FIFA 2026 tem procedimentos e potes revelados”, 25/11/2025.
+- 4 potes de 12 seleções.
+- Canadá, México e EUA no Pote 1.
+- Outras classificadas conforme Ranking Mundial Masculino da FIFA de 19/11/2025.
+- Quatro vagas da repescagem UEFA + duas da repescagem intercontinental no Pote 4.
+- México em A1, Canadá em B1 e EUA em D1.
+- Máximo de uma seleção por confederação por grupo, exceto UEFA (1–2 por grupo).
+
+TESTES AUTOMATIZADOS / ESTRUTURAIS
+- node --check js/app.js: OK
+- node --check js/data.js: OK
+- HTML: 279 IDs; 0 IDs duplicados.
+- Referências diretas do JavaScript a IDs: 262; 0 referências ausentes.
+- CSS: 1933 regras analisadas; 0 erros de parsing.
+- Áudio: 30 MP3s; 30 cabeçalhos válidos.
+- Copa 2026: 48 seleções únicas; quatro potes de 12.
+- Potes 1–3: todos os países oficiais confirmados nas posições de pote corretas.
+- Pote 4: seis classificadas oficiais + seis vagas simuladas de repescagem.
+- Sorteios: 120 simulações por edição em 2026, 2030, 2034, 2038 e 2042; 0 violações de confederação/anfitriões.
+- Copa campeã: 8 partidas contínuas (3 grupos + Fase de 32 + Oitavas + Quartas + Semi + Final) antes da retomada do clube.
+- Avanço no mata-mata: determinado pelo placar da seleção, não pelo sucesso da escolha individual.
+- Ídolo: bloqueado abaixo de 84 e em clube fraco; liberado em 84+ e clube forte.
+- Prêmios: cerimônia bloqueada fora da elite europeia; Champions aumenta materialmente a força da candidatura à Bola de Ouro.
+- Lesões: Físico alto reduz risco; idade alta aumenta risco; jogos perdidos não contam como aparições.
+- Carreira: limite de 18 temporadas validado; declínio aos 37+ validado.
+- ICON: auge + 6 atributos + nação + posição validados.
+- Bandeiras: SVG colorido + fallback emoji validados.
+- Temas: 270 clubes do mercado recebem paleta em três camadas; Liverpool/Benfica/Stuttgart validados como visualmente distintos.
+
+TESTE VISUAL AUTOMATIZADO
+O Chromium headless disponível neste ambiente não concluiu a inicialização (processo bloqueado/pendente por limitações do ambiente de execução). Por isso, a validação visual automatizada por navegador não foi contabilizada como aprovada. Foram feitos parsing estrutural, validação dos IDs, CSS e testes de lógica acima.

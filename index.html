@@ -12,10 +12,10 @@
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
   <link rel="preconnect" href="https://flagcdn.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=9.9">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=9.9">
-  <link rel="shortcut icon" href="assets/favicon.ico?v=9.9">
-  <link rel="stylesheet" href="css/style.css?v=9.9">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=10.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=10.0">
+  <link rel="shortcut icon" href="assets/favicon.ico?v=10.0">
+  <link rel="stylesheet" href="css/style.css?v=10.0">
 </head>
 <body>
   <header class="topbar">
@@ -121,7 +121,7 @@
       <div class="page-head">
         <p class="eyebrow">CRIAÇÃO DO JOGADOR</p>
         <h2>Comece sua trajetória</h2>
-        <p>Você começa com 17 a 22 anos. Escolha a nacionalidade e depois um dos três clubes sorteados no seu país.</p>
+        <p>A idade mínima para começar é 17 anos. A carreira pode durar no máximo 18 temporadas. Escolha a nacionalidade e depois um dos três clubes sorteados no seu país.</p>
       </div>
 
       <form id="player-form" class="panel form-grid">
@@ -286,6 +286,7 @@
               <span class="birth-chip"><small>🎂</small><b id="p-birthdate"></b></span>
               <span id="p-sponsor-chip" class="sponsor-profile-chip hidden"><small>Patrocínio</small><b id="p-sponsor"></b></span>
               <span id="p-idol-chip" class="idol-profile-chip hidden"><small>Ídolo</small><b id="p-idol"></b></span>
+              <span id="p-injury-chip" class="injury-profile-chip hidden"><small>DM</small><b id="p-injury-status"></b></span>
             </div>
           </div>
           <div class="rating-stack">
@@ -307,8 +308,8 @@
           <h3 id="match-title">Clube A x Clube B</h3>
           <div class="match-context-chip" id="match-context">Temporada</div>
           <div class="versus"><span id="home-team"></span><b>×</b><span id="away-team"></span></div>
-          <div class="match-visual-meter">
-            <div class="match-meter-head"><span id="favorite-line">⚡ Favoritismo</span><strong id="favorite-percent">50%</strong></div>
+          <div class="match-visual-meter hidden" aria-hidden="true">
+            <div class="match-meter-head"><span id="favorite-line"></span><strong id="favorite-percent"></strong></div>
             <div class="match-meter-track"><span id="favorite-meter-fill"></span></div>
             <small id="strength-line"></small>
           </div>
@@ -523,6 +524,10 @@
           <div><small>Posição</small><strong id="legacy-position">—</strong></div>
         </div>
       </div>
+      <section class="legacy-icon-section">
+        <div class="legacy-icon-copy"><p class="eyebrow">ULTIMATE LEGACY</p><h3>Carta ICON da carreira</h3><p>Uma carta comemorativa criada a partir do auge, posição, nacionalidade e atributos finais do jogador.</p></div>
+        <div id="legacy-icon-card" class="icon-card-mount"></div>
+      </section>
       <div class="legacy-card-stats">
         <div><strong id="legacy-games">0</strong><small>Jogos por clubes</small></div>
         <div><strong id="legacy-goals">0</strong><small>Gols</small></div>
@@ -612,6 +617,10 @@
           <div><small>TEMPORADAS</small><strong id="saved-career-seasons">—</strong></div>
         </div>
       </div>
+      <section class="saved-icon-section">
+        <div id="saved-career-icon-card" class="icon-card-mount compact"></div>
+        <div><p class="eyebrow">CARTA ICON ARQUIVADA</p><h3 id="saved-icon-card-title">Legado da carreira</h3><p>A carta preserva o auge e os atributos finais desta carreira salva.</p></div>
+      </section>
       <div class="saved-career-detail-stats">
         <div><strong id="saved-career-games">0</strong><small>Jogos</small></div>
         <div><strong id="saved-career-goals">0</strong><small>Gols</small></div>
@@ -691,7 +700,7 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <script src="js/data.js?v=9.9"></script>
-  <script src="js/app.js?v=9.9"></script>
+  <script src="js/data.js?v=10.0"></script>
+  <script src="js/app.js?v=10.0"></script>
 </body>
 </html>
