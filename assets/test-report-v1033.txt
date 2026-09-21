@@ -1,0 +1,61 @@
+BE THE LEGEND — V10.3.3
+Relatório de validação dos ajustes finais
+Data: 2026-09-21
+
+1) CENÁRIOS DOS EVENTOS
+- INCIDENT_EVENTS: 13/13 possuem cenário mapeado.
+- CAREER_EVENTS: 24/24 possuem cenário mapeado.
+- NATIONAL_TEAM_EVENTS: 11/11 possuem cenário mapeado.
+- Total: 48/48 eventos fixos com scene id exclusivo.
+- 48/48 possuem combinação visual (tema + objetos) exclusiva.
+- 91 props de cenário encontrados; 91/91 possuem representação visual.
+- Todos os 42 temas utilizados possuem CSS correspondente.
+- Eventos dinâmicos de ídolo e patrocinador também recebem cenário próprio.
+
+2) DESENVOLVIMENTO / ESPAÇO NO TIME
+- Novo estado persistente clubRole com confiança, titularidades, entradas do banco,
+  jogos sem utilização e decisões corretas.
+- Nos três primeiros anos, jogadores abaixo de GER 84 disputam espaço conforme GER,
+  força do clube, confiança do treinador e temporada da carreira.
+- Decisão correta em situação de jogo: +6 de confiança, aumentando a chance de titularidade.
+- GER >=84: titular consolidado; após o 3º ano, GER >=80 também fica consolidado.
+- Jogador não utilizado não recebe jogo, gol, assistência nem nota individual.
+
+Calibração Monte Carlo (10.000 temporadas, 55 jogos de equipe, clube elite):
+- Centroavante GER 71, temporada 1: ~26,6 aparições, ~3,9 titularidades,
+  ~7,7 G/A de média; P95 13 G/A.
+- Centroavante GER 71, temporada 2: ~26,6 aparições, ~7,8 G/A.
+- Centroavante GER 71, temporada 3: ~26,8 aparições, ~7,9 G/A.
+- Centroavante GER 93 consolidado: 55 aparições / 55 titularidades,
+  ~78,4 G/A de média; P95 93 G/A.
+Observação: é um teste de calibração probabilística que replica a curva de produção e
+papel no elenco do app.js. O resultado real varia com adversários, decisões, lesões e calendário.
+
+3) PRÊMIOS INDIVIDUAIS
+- Bola de Ouro / Chuteira de Ouro exigem jogador consolidado para cerimônia:
+  GER >=83, volume mínimo de jogos e confiança/tempo de carreira.
+- Jogador GER 71, mesmo em clube grande, não entra na cerimônia de elite apenas por causa do clube.
+
+4) PROGRESSÃO DE GER
+- Curva jovem revisada para evitar travamento de atletas com potencial alto.
+- Exemplos determinísticos do novo ramo de progressão:
+  idade 19, GER 71, POT 93, média 6,40 -> base +3 (antes dos caps sazonais);
+  idade 20, GER 74, POT 93, média 6,75 -> base +4;
+  idade 22, GER 71, POT 93, média 6,20 -> base +3.
+- O teto de GER 95–99 continua difícil e preserva os filtros de elite existentes.
+- Migração V10.3.3: saves existentes com >=2 temporadas, idade <=23, GER <=72 e
+  diferença POT-GER >=12 recebem correção única de até +2 GER, respeitando o cap da temporada.
+
+5) BANDEIRAS DO SORTEIO DA COPA
+- CSS força todas as bandeiras do sorteio a 24x16 px, inclusive a imagem interna.
+- Teste de renderização em Chromium headless: bounding box medido = 24x16 px.
+- Teste visual também confirmou 3 objetos de cenário visíveis no evento de amostra.
+
+6) INTEGRIDADE
+- node --check: app.js OK; data.js OK; auth.js OK; google-auth-config.js OK.
+- HTML: 324 IDs; 0 duplicados.
+- CSS: 2048 chaves de abertura / 2048 de fechamento; 0 erros no parser tinycss2.
+- Cache-busting: CSS e quatro scripts locais em ?v=10.3.3.
+- Áudio: 30 MP3s encontrados; 30/30 com cabeçalho MP3 válido.
+
+Resultado: PASSOU nas verificações acima.

@@ -9003,3 +9003,79 @@ body.home-screen main{
   .account-legacy-grid{grid-template-columns:1fr}.account-top-chip b{max-width:92px}.top-actions .mini-profile{display:none!important}
   .soundtrack-player{grid-template-columns:36px 42px 36px;}.soundtrack-current{grid-column:1/-1;grid-row:2}.soundtrack-volume{grid-column:1/-1}.soundtrack-track-actions em{display:none}
 }
+
+/* ===== V10.3.3 · CENÁRIOS DE EVENTOS RECONSTRUÍDOS ===== */
+#event-modal .career-event-scene{
+  height:210px!important;
+  isolation:isolate;
+  border-color:rgba(255,255,255,.10);
+  background:linear-gradient(180deg,#17293a,#0a121c)!important;
+}
+#event-modal .career-event-scene::before,
+#event-modal .career-event-scene::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0}
+#event-modal .career-event-scene::before{background:radial-gradient(circle at 50% 8%,rgba(255,255,255,.10),transparent 36%)}
+#event-modal .career-event-scene::after{inset:auto 6% 0;height:60px;border-radius:50% 50% 0 0;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.16));transform:perspective(250px) rotateX(56deg);transform-origin:bottom}
+.scene-ambient{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.scene-ambient i{position:absolute;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.36);box-shadow:0 0 12px rgba(255,255,255,.18);animation:eventParticle 4s ease-in-out infinite}
+.scene-ambient i:nth-child(1){left:12%;top:18%}.scene-ambient i:nth-child(2){left:31%;top:34%;animation-delay:-1.2s}.scene-ambient i:nth-child(3){right:29%;top:16%;animation-delay:-2.2s}.scene-ambient i:nth-child(4){right:12%;top:39%;animation-delay:-3.1s}
+.scene-world{position:absolute;inset:0;z-index:2;pointer-events:none}
+.scene-depth{position:absolute;inset:auto 5% 8px;height:62px;z-index:1;perspective:240px;pointer-events:none}
+.scene-depth span{position:absolute;left:50%;bottom:-22px;width:1px;height:94px;background:linear-gradient(transparent,rgba(255,255,255,.11));transform-origin:bottom}
+.scene-depth span:nth-child(1){transform:rotate(61deg)}.scene-depth span:nth-child(2){transform:rotate(90deg)}.scene-depth span:nth-child(3){transform:rotate(119deg)}
+.scene-object{position:absolute;z-index:3;width:102px;height:82px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.11);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.025));box-shadow:0 15px 30px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(3px);transform-origin:center bottom}
+.scene-object::after{content:attr(data-prop);position:absolute;left:7px;right:7px;bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:uppercase;text-align:center;font-size:5.5px;letter-spacing:.09em;color:rgba(255,255,255,.42)}
+.scene-object-glyph{display:block;margin-top:-7px;font-size:35px;line-height:1;color:rgba(255,255,255,.88);text-shadow:0 5px 16px rgba(0,0,0,.42)}
+.scene-object i,.scene-object b,.scene-object em{position:absolute;display:block;pointer-events:none}
+.scene-object i{inset:8px;border-radius:12px;border:1px solid rgba(255,255,255,.045)}
+.scene-object b{left:13px;right:13px;bottom:-7px;height:8px;border-radius:50%;background:rgba(0,0,0,.28);filter:blur(3px)}
+.scene-object em{width:7px;height:7px;right:8px;top:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);opacity:.6}
+.scene-object.obj-index-0{left:8%;bottom:27px;transform:rotate(-3deg)}
+.scene-object.obj-index-1{left:50%;bottom:39px;transform:translateX(-50%) scale(1.06)}
+.scene-object.obj-index-2{right:8%;bottom:27px;transform:rotate(3deg)}
+#event-modal .scene-focus{left:50%;top:24%;width:48px;height:48px;border-radius:16px;font-size:20px;z-index:5;background:rgba(4,9,15,.58);box-shadow:0 10px 25px rgba(0,0,0,.30),0 0 28px color-mix(in srgb,var(--green) 16%,transparent)}
+#event-modal .career-event-scene>small{z-index:7;padding:5px 8px;border-radius:7px;background:rgba(3,8,13,.62);backdrop-filter:blur(6px);color:rgba(255,255,255,.75)}
+
+/* Famílias de cenário — a combinação de tema + três objetos é exclusiva em cada evento. */
+.scene-theme-medical,.scene-theme-clinic,.scene-theme-recovery,.scene-theme-pool{background:radial-gradient(circle at 18% 15%,rgba(91,198,255,.24),transparent 26%),linear-gradient(180deg,#15374a,#07141e)!important}
+.scene-theme-social,.scene-theme-newsroom,.scene-theme-press,.scene-theme-film,.scene-theme-locker-media{background:radial-gradient(circle at 76% 12%,rgba(205,91,255,.20),transparent 28%),linear-gradient(180deg,#35213f,#100c19)!important}
+.scene-theme-locker,.scene-theme-bootroom{background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 58px),linear-gradient(180deg,#2b303d,#0d1119)!important}
+.scene-theme-city{background:radial-gradient(circle at 70% 18%,rgba(101,92,255,.26),transparent 28%),linear-gradient(180deg,#18233f,#080d19)!important}
+.scene-theme-office,.scene-theme-boardroom,.scene-theme-deadline{background:radial-gradient(circle at 16% 12%,rgba(83,142,255,.14),transparent 24%),linear-gradient(180deg,#222b3d,#0b1019)!important}
+.scene-theme-stadium,.scene-theme-fans,.scene-theme-community,.scene-theme-charity-match,.scene-theme-museum{background:radial-gradient(circle at 50% 2%,rgba(245,193,73,.24),transparent 30%),linear-gradient(180deg,#3a2b17,#110d08)!important}
+.scene-theme-pitch,.scene-theme-night-pitch,.scene-theme-academy{background:radial-gradient(circle at 50% 5%,rgba(73,234,141,.18),transparent 31%),linear-gradient(180deg,#153c28,#07140d)!important}
+.scene-theme-tactics,.scene-theme-analysis{background:radial-gradient(circle at 78% 16%,rgba(67,184,255,.20),transparent 27%),linear-gradient(180deg,#143245,#08141e)!important}
+.scene-theme-lab{background:linear-gradient(120deg,rgba(72,220,255,.13),transparent 35%),linear-gradient(180deg,#17313a,#081319)!important}
+.scene-theme-studio,.scene-theme-sponsor-contract{background:radial-gradient(circle at 50% 0,rgba(245,206,89,.30),transparent 33%),linear-gradient(180deg,#382b12,#100c06)!important}
+.scene-theme-airport{background:linear-gradient(145deg,rgba(117,198,255,.17),transparent 40%),linear-gradient(180deg,#19384c,#071621)!important}
+.scene-theme-tunnel{background:linear-gradient(90deg,rgba(0,0,0,.58),transparent 28% 72%,rgba(0,0,0,.58)),radial-gradient(circle at 50% 0,rgba(255,255,255,.16),transparent 25%),linear-gradient(180deg,#2a3440,#090e15)!important}
+.scene-theme-national-pitch,.scene-theme-national-press,.scene-theme-national-tactics,.scene-theme-national-locker,.scene-theme-national-stadium{background:radial-gradient(circle at 12% 10%,rgba(55,214,123,.23),transparent 28%),radial-gradient(circle at 85% 10%,rgba(242,201,76,.15),transparent 25%),linear-gradient(180deg,#17392f,#07150f)!important}
+.scene-theme-worldcup-arrival,.scene-theme-worldcup-pitch,.scene-theme-worldcup-lounge,.scene-theme-worldcup-analysis,.scene-theme-worldcup-tunnel{background:radial-gradient(circle at 50% 0,rgba(233,197,81,.28),transparent 32%),linear-gradient(145deg,#233e39,#11170c 70%,#090d08)!important}
+.scene-theme-idol{background:radial-gradient(circle at 50% 0,rgba(242,201,76,.30),transparent 33%),linear-gradient(180deg,#322a16,#0d0b08)!important}
+.scene-theme-career{background:radial-gradient(circle at 18% 10%,rgba(66,232,141,.16),transparent 28%),linear-gradient(180deg,#17293a,#09121b)!important}
+
+/* Variações específicas ajudam eventos da mesma família a não parecerem clones. */
+.scene-event-training-clash .scene-object{border-color:rgba(255,91,91,.28)}
+.scene-event-controversy .scene-ambient i{background:#ff5e86;box-shadow:0 0 18px #ff5e86}
+.scene-event-nightlife::before{background:linear-gradient(115deg,rgba(158,70,255,.18),transparent 38%),radial-gradient(circle at 76% 15%,rgba(255,80,142,.18),transparent 23%)!important}
+.scene-event-derby-heat .scene-ambient i{width:9px;height:3px;border-radius:1px;background:#ffbb45;animation:confettiDrift 2.6s linear infinite}
+.scene-event-travel-delay .scene-object.obj-plane{background:linear-gradient(145deg,rgba(124,202,255,.18),rgba(255,255,255,.03))}
+.scene-event-media .scene-object.obj-camera,.scene-event-documentary .scene-object.obj-film-camera,.scene-event-captain-camera .scene-object.obj-film-camera{box-shadow:0 0 28px rgba(255,255,255,.12),0 15px 30px rgba(0,0,0,.24)}
+.scene-event-recovery-pool::after{background:repeating-radial-gradient(ellipse at center,rgba(87,210,255,.16) 0 2px,transparent 3px 9px)!important;animation:poolRipple 2.3s linear infinite}
+
+/* ===== V10.3.3 · SORTEIO DA COPA DO MUNDO ===== */
+#world-cup-draw-modal{padding:18px;overflow:auto}
+#world-cup-draw-modal .world-cup-draw-card{width:min(1180px,96vw);max-height:94vh;overflow:auto;padding:20px;border-radius:22px;background:linear-gradient(150deg,#0b1d22,#071218 55%,#0b1512);border:1px solid rgba(93,220,164,.25)}
+.wc-draw-heading{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:12px}.wc-draw-heading h2{margin:4px 0 7px;font-size:27px}.wc-draw-heading p{margin:0;max-width:780px;color:var(--muted);line-height:1.45}.wc-draw-trophy{display:grid;place-items:center;width:54px;height:54px;flex:0 0 auto;border-radius:16px;border:1px solid rgba(242,201,76,.28);background:rgba(242,201,76,.08);font-size:25px}
+#wc-draw-hosts,#world-cup-hosts,.world-cup-hosts{display:block}.wc-host-card{display:grid;gap:9px;margin:10px 0 12px;padding:12px;border:1px solid rgba(66,232,141,.20);border-radius:14px;background:rgba(66,232,141,.035)}.wc-host-card.simulated{border-color:rgba(242,201,76,.22);background:rgba(242,201,76,.035)}.wc-host-heading{display:flex;justify-content:space-between;gap:10px;align-items:center}.wc-host-heading span{font-size:8px;letter-spacing:.08em;color:var(--green);font-weight:900}.wc-host-heading strong{font-size:9px;color:var(--muted)}.wc-host-main,.wc-host-centenary{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.wc-host-centenary{padding-top:7px;border-top:1px solid rgba(255,255,255,.06)}.wc-host-centenary>small{width:100%;color:var(--muted);font-size:7px;text-transform:uppercase;letter-spacing:.08em}.wc-host-team{display:inline-flex;gap:6px;align-items:center;padding:5px 7px;border-radius:8px;background:rgba(255,255,255,.045)}.wc-host-team b{font-size:9px}.wc-host-card p{margin:0;color:var(--muted);font-size:8px}
+.national-flag-image{position:relative;display:inline-grid!important;place-items:center;width:24px!important;height:16px!important;min-width:24px!important;max-width:24px!important;min-height:16px!important;max-height:16px!important;overflow:hidden;border-radius:2px;vertical-align:middle;background:#1a2530;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.national-flag-image>b{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;line-height:1;overflow:hidden}
+.national-flag-image>img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;max-width:none!important;min-height:0!important;max-height:none!important;object-fit:cover!important;display:block!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important}
+.wc-draw-rule-strip{display:flex;gap:7px;flex-wrap:wrap;margin:11px 0}.wc-draw-rule-strip span{padding:6px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.035);font-size:8px;color:#d4dde1}
+.wc-draw-pots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 13px}.wc-draw-pots details{border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.025);overflow:hidden}.wc-draw-pots summary{display:flex;justify-content:space-between;gap:8px;padding:9px 10px;cursor:pointer;font-weight:800;font-size:9px}.wc-draw-pots summary span{color:var(--muted);font-weight:600}.wc-draw-pots details>div{display:grid;gap:3px;max-height:180px;overflow:auto;padding:0 7px 7px}.wc-draw-pots details>div>span{display:grid;grid-template-columns:24px minmax(0,1fr);gap:6px;align-items:center;min-height:28px;padding:4px 5px;border-radius:7px;background:rgba(255,255,255,.025);font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc-draw-stage{padding:11px;border:1px solid rgba(255,255,255,.10);border-radius:15px;background:rgba(0,0,0,.12)}.wc-draw-stage-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}.wc-draw-stage-head strong{font-size:9px;letter-spacing:.08em}.wc-draw-stage-head span{font-size:8px;color:var(--muted)}
+.wc-draw-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.wc-draw-group{overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.08);background:#0d1820}.wc-draw-group.player-group{border-color:rgba(255,255,255,.50);box-shadow:inset 0 0 0 1px rgba(66,232,141,.18)}.wc-draw-group header{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:7px 8px;background:rgba(255,255,255,.035)}.wc-draw-group header b{font-size:8px}.wc-draw-group header span{padding:2px 5px;border-radius:999px;background:rgba(66,232,141,.10);color:var(--green);font-size:5.5px;font-weight:900}.wc-draw-group>div{display:grid}.wc-draw-team{display:grid;grid-template-columns:16px 24px minmax(0,1fr) auto;gap:5px;align-items:center;min-height:29px;padding:5px 7px;border-top:1px solid rgba(255,255,255,.045)}.wc-draw-team>small{color:#60717b;font-size:6px;text-align:center}.wc-draw-team strong{font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wc-draw-team em{font-style:normal;color:#6f858f;font-size:5.5px}.wc-draw-team.empty{opacity:.45}.wc-draw-ball{display:grid;place-items:center;width:22px;height:16px;color:#51636d;font-size:7px}.wc-draw-team.revealed{animation:wcTeamReveal .42s ease both;background:linear-gradient(90deg,rgba(66,232,141,.035),transparent 42%)}
+.wc-draw-note{display:block;margin:8px 2px 0;color:var(--muted);font-size:7px;line-height:1.45}.wc-draw-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.wc-draw-actions button{min-width:150px}
+@keyframes wcTeamReveal{from{opacity:0;transform:translateY(-4px);filter:blur(2px)}to{opacity:1;transform:none;filter:none}}
+
+@media(max-width:900px){.wc-draw-pots{grid-template-columns:repeat(2,minmax(0,1fr))}.wc-draw-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){#event-modal .career-event-scene{height:245px!important}.scene-object{width:88px;height:76px}.scene-object.obj-index-0{left:4%}.scene-object.obj-index-2{right:4%}.scene-object-glyph{font-size:29px}.wc-draw-pots,.wc-draw-groups{grid-template-columns:1fr}.wc-draw-heading h2{font-size:22px}.wc-draw-trophy{width:44px;height:44px}.wc-draw-actions{flex-direction:column}.wc-draw-actions button{width:100%}}
