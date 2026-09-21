@@ -1,0 +1,20 @@
+BE THE LEGEND — V10.3.2
+Correção de organização visual
+
+Alterações:
+- Facial do card da carreira atual recebe containing block próprio e não escapa mais para cima dos textos.
+- Meu Legado reorganizado: conta, ID, tipo, datas e ações em grid responsivo.
+- Hall da Fama ocupa a largura útil da página de Legado.
+- Player "Tocando agora" passa a ser um card fixo e discreto no canto inferior direito.
+- Trilha sonora recebe estilos completos para player, playlist, fila e catálogo.
+- Contato recebe layout e formulário responsivos.
+- Tela de login, Termos e Privacidade recebem estilos próprios.
+- Chip da conta na topbar estilizado.
+- Scrollbars estilizadas e responsivas.
+- Cache-busting atualizado para 10.3.2.
+
+Validações:
+- CSS carregado via css/style.css?v=10.3.2.
+- Scripts carregados uma única vez e na ordem: google-auth-config -> auth -> data -> app.
+- Mock visual 1440x900 renderizado em Chromium via set_content para Home e Meu Legado.
+- Sem overflow horizontal nos mocks (scrollWidth = viewport width).
