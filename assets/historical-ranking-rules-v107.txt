@@ -1,0 +1,16 @@
+Be The Legend — Ranking histórico V10.7
+
+1. O score histórico continua sendo calculado por auge, desempenho, números, títulos, prêmios, clubes, seleção, relevância e longevidade.
+2. As travas de elegibilidade por posição da V10.6 continuam valendo para Top 100/50/25/10/5/#1 bruto.
+3. Ajuste final de posição:
+   - Meia ofensivo, meia central e volante: +5 posições em relação ao rank-base, quando dentro do Top 100.
+   - Lateral, zagueiro e goleiro: nunca podem terminar em #1. Se o cálculo bruto produzir #1, o resultado final é #2.
+   - Atacantes/pontas mantêm a possibilidade de #1 se cumprirem os requisitos extremos.
+4. Se o +5 de um meio-campista ultrapassar #100, o jogador fica fora do Top 100.
+5. Defensores/goleiros só chegam ao Top 10 se passarem pelas travas de carreira lendária já existentes; o novo teto não facilita sua entrada.
+
+Testes principais:
+- ATA extremo ainda pode ser #1.
+- MEI/MC/VOL recebem exatamente +5 posições nos cenários de regressão.
+- Nenhum lateral/zagueiro/goleiro pode ser #1, mesmo com métricas extremas.
+- Zagueiros/goleiros lendários/extremos ainda podem ocupar posições #2–#10 quando cumprem os requisitos.

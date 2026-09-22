@@ -1,0 +1,76 @@
+BE THE LEGEND — V10.4.0
+Relatório de validação da entrega
+Data: 2026-09-22
+
+1) FOTO DE PERFIL / TERMOS / PRIVACIDADE
+- Upload JPG, PNG e WebP na criação e no editor de aparência.
+- Recorte 1:1 em 384 px, compressão WebP e centralização automática.
+- Quando a API FaceDetector existe no navegador, o enquadramento usa o maior rosto detectado; caso contrário usa recorte central seguro.
+- Foto processada permanece no save local; termos e política de privacidade foram atualizados.
+
+2) HALL DA FAMA / CARDS
+- Migração V10.4 limpa os cards arquivados existentes sem apagar a carreira ativa.
+- Hall da Fama usa altura calculada pela topbar real (--app-topbar-height), com rolagem interna.
+- Cards compactados; modal da carreira arquivada limitado a 92dvh com rolagem interna.
+
+3) OPÇÕES / SELECTS
+- 11/11 selects estáticos são elegíveis para o componente customizado.
+- Popup próprio com estado selecionado, busca quando há muitas opções, bandeiras no seletor de país e navegação por teclado.
+- O select nativo continua como fonte de verdade para value/change/required.
+
+4) EVENTOS / SITUAÇÕES / INTERAÇÕES
+- EVENT_SCENE_LIBRARY: 48/48 ids fixos possuem scene id próprio.
+- 12 layouts de cenário disponíveis, além de props/temas próprios e variação determinística por evento.
+- Eventos, situações de partida, patrocínio, seleção e ídolos têm linguagens de layout diferentes.
+- Patrocínios usam logos transparentes oficiais via Simple Icons, com fallback textual.
+- Supercopas têm identidade visual própria nas decisões.
+
+5) PAUSA
+- Pausar grava state.journeyPaused, encerra a simulação e fecha a interação atual.
+- Eventos/decisões não reabrem enquanto journeyPaused está ativo.
+- Apenas “Retomar jornada” limpa a pausa e reabre a interação pendente.
+- Botões de pausa foram ampliados e ancorados no canto superior direito do card.
+
+6) DECISÕES EM PARTIDA / COPA DO MUNDO
+- Resultado agora exibe placar em destaque, escudos/bandeiras, nomes, competição e fase.
+- Empate de mata-mata mostra primeiro o estado “vaga será decidida nos pênaltis”.
+- “Seleção eliminada” só é exibido quando a eliminação estiver efetivamente resolvida.
+
+7) VALOR DE MERCADO
+- Curva por GER, idade, potencial, força do clube, reputação e forma.
+- Exemplo de calibração: GER 92, 25 anos, POT 95, clube força 90 e reputação 50 => ~€203,6 mi.
+- Saves antigos subavaliados são reaproximados do alvo na migração/normalização.
+
+8) FREQUÊNCIA
+- INTERACTION_FREQUENCY: 0,85 -> 0,765, redução relativa exata de 10% nas chances controladas pelo multiplicador.
+
+9) BOLA DE OURO
+- Campeão da Copa do Mundo recebe forte prioridade.
+- Sem Champions, apenas rivais da mesma seleção campeã podem terminar acima na lógica especial.
+- Copa do Mundo + Champions: jogador é forçado a 120 pts e todos os rivais ficam no máximo em 119 pts.
+
+10) SUPERCOPAS
+- Supercopa do Brasil: final.
+- Supercopa da Espanha: semifinal + final.
+- Supercoppa Italiana: semifinal + final.
+- FA Community Shield, DFL-Supercup, Trophée des Champions, Supertaça Cândido de Oliveira e Johan Cruyff Shield: final.
+- UEFA Super Cup e Finalissima: final única.
+
+11) ARTILHARIA E ASSISTÊNCIAS
+- Painel por competição com abas “Artilharia” e “Assistências”.
+- Usa pool de jogadores atuais do projeto + jogadores ativos extras; registra números reais do usuário.
+- Estado de jogadores do mundo persiste e pode sofrer transferências a cada temporada.
+
+12) RANKING HISTÓRICO
+- Lista-base validada: 100 jogadores, de Pelé (#1) a Djalminha (#100), na ordem fornecida.
+- Critérios internos: auge, títulos, números, protagonismo, relevância, idolatria, clubes, seleção, prêmios e longevidade.
+- Card final possui “Ver ranking histórico”; lista mostra ranking, bandeira, nome e posição.
+
+13) INTEGRIDADE
+- node --check: app.js OK; data.js OK; auth.js OK; google-auth-config.js OK.
+- HTML: 343 IDs; 0 duplicados.
+- CSS: parser tinycss2 = 0 erros; contagem de chaves equilibrada.
+- git diff --check nos arquivos da entrega = OK.
+- Cache-busting de CSS e scripts locais atualizado para v10.4.0.
+
+Resultado: PASSOU nas verificações estáticas e de calibração acima.

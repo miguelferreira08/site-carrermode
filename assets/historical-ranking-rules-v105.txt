@@ -1,0 +1,32 @@
+BE THE LEGEND — RANKING HISTÓRICO V10.5
+
+Objetivo
+- Evitar que uma carreira apenas boa ou muito boa seja tratada como histórica.
+- O Top 100 exige combinação de auge, desempenho, números, títulos e relevância.
+- O #1 exige, além da pontuação, travas mínimas por posição.
+- Cumprir as travas é condição necessária; a pontuação geral ainda precisa ser suficiente.
+
+Referências de desenho
+- Ballon d'Or: desempenho individual/decisivo, conquistas coletivas e classe/fair play.
+- FIFA Power Rankings: avaliação por ataque, criatividade e defesa; goleiros separados.
+- IFFHS: contexto histórico e avaliação de especialistas em rankings de século.
+
+Patamar mínimo para poder chegar ao #1
+Centroavante: 1000 G/A; 30 títulos; 4 Champions; 1 Copa; 5 Bolas de Ouro; 3 Chuteiras de Ouro; auge 94; média 7,75; 800 jogos; ídolo de clube.
+Ponta/segundo atacante: 900 G/A; 28 títulos; 4 Champions; 1 Copa; 4 Bolas de Ouro; 2 Chuteiras; auge 94; média 7,75; 800 jogos; ídolo.
+Meia ofensivo: 800 G/A; 28 títulos; 3 Champions; 1 Copa; 3 Bolas de Ouro; 1 Chuteira; auge 94; média 7,70; 800 jogos; ídolo.
+Meia central: 650 G/A; 28 títulos; 3 Champions; 1 Copa; 2 Bolas de Ouro; auge 93; média 7,65; 850 jogos; ídolo.
+Volante: 450 G/A + 2200 desarmes; 28 títulos; 3 Champions; 1 Copa; 2 Bolas de Ouro; auge 93; média 7,60; 850 jogos; ídolo.
+Lateral: 350 G/A + 2200 desarmes + 250 jogos sem sofrer gol; 28 títulos; 3 Champions; 1 Copa; 1 Bola de Ouro; auge 92; média 7,55; 850 jogos; ídolo.
+Zagueiro: 150 G/A + 2400 desarmes + 280 jogos sem sofrer gol; 28 títulos; 3 Champions; 1 Copa; 1 Bola de Ouro; auge 93; média 7,60; 850 jogos; ídolo.
+Goleiro: 3000 defesas + 300 jogos sem sofrer gol; 28 títulos; 3 Champions; 1 Copa; 1 Bola de Ouro; auge 93; média 7,60; 900 jogos; ídolo.
+
+Faixas adicionais
+- Top 5, Top 10, Top 25, Top 50 e Top 100 possuem travas progressivamente menores.
+- Pontuação abaixo de 620 ou carreira que não passa nas travas de Top 100 aparece como “Fora do Top 100”, sem posição artificial #101–#300.
+
+Novos dados acumulados
+- Assistências pela seleção.
+- Defesas (goleiros).
+- Desarmes (volantes, laterais e zagueiros).
+- Jogos sem sofrer gol para posições defensivas.
