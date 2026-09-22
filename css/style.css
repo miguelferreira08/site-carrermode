@@ -9408,3 +9408,106 @@ select option:checked{background:linear-gradient(90deg,color-mix(in srgb,var(--g
 /* Supercopas têm identidade própria nas decisões: dourado, final única e moldura mais cerimonial. */
 #match-decision-modal .decision-card[data-competition-theme^="supercup-"]{border-radius:12px 30px 12px 30px!important;border-color:color-mix(in srgb,var(--comp-secondary) 42%,rgba(255,255,255,.10))!important;background-image:linear-gradient(145deg,color-mix(in srgb,var(--comp-primary) 82%,#071016),#071016)!important}
 #match-decision-modal .decision-card[data-competition-theme^="supercup-"] .decision-competition-theme-badge{background:linear-gradient(90deg,color-mix(in srgb,var(--comp-secondary) 15%,transparent),rgba(255,255,255,.025));border-color:color-mix(in srgb,var(--comp-secondary) 32%,transparent)}
+
+/* v10.7.1 layout + realism refinements */
+@font-face{
+  font-family:'Unisportion FC';
+  src:local('Unisportion FC'),local('Unisports FC'),local('Unisport FC');
+  font-display:swap;
+}
+:root{
+  --btl-display-font:'Unisportion FC','Unisports FC',Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --next-match-crest-size:132px;
+}
+body,button,input,select,textarea{font-family:var(--btl-display-font)!important}
+
+#career .next-match .next-team-visual{min-width:140px!important;max-width:172px!important}
+#career .next-match .next-team-visual .crest-shell{width:var(--next-match-crest-size)!important;height:var(--next-match-crest-size)!important;border-radius:28px!important;padding:12px!important;background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.028))!important;box-shadow:0 18px 34px rgba(0,0,0,.26),inset 0 0 0 1px rgba(255,255,255,.06)!important}
+#career .next-match .next-team-visual .club-badge-img{width:100%!important;height:100%!important}
+#career .next-match .next-team-visual.national .national-flag-image{width:116px!important;height:78px!important;min-width:116px!important;max-width:116px!important;min-height:78px!important;max-height:78px!important;border-radius:10px!important}
+.next-match .versus{font-size:26px!important;margin:0 12px!important}
+.next-match .panel-action,.next-match button.primary{margin-top:8px}
+
+.overlay-pause-btn{position:absolute!important;top:18px!important;right:18px!important;left:auto!important;z-index:110!important;min-height:40px!important;padding:10px 16px!important;font-size:11px!important;letter-spacing:.04em!important;box-shadow:0 10px 24px rgba(0,0,0,.28)!important}
+.resume-career-overlay{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:46px!important;padding:12px 18px!important;font-size:12px!important;font-weight:900!important;letter-spacing:.03em!important;border-radius:14px!important;box-shadow:0 12px 30px rgba(13,190,111,.20)!important}
+#season-year + .resume-career-overlay,.season-card .resume-career-overlay{margin-top:12px!important}
+
+#decision-result{display:grid!important;gap:12px!important;padding:14px 16px 16px!important;line-height:1.55!important}
+#decision-result strong{font-size:15px!important}
+#decision-result span{font-size:12px!important;color:#d7e1e8!important}
+
+.penalty-shootout-preview{display:grid!important;gap:12px!important;padding:14px!important;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:linear-gradient(160deg,rgba(14,20,30,.96),rgba(7,12,19,.94))!important}
+.penalty-shootout-shell{display:grid;gap:12px}
+.penalty-shootout-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#d8e2e9;font-size:11px}
+.penalty-team-row{display:grid;grid-template-columns:minmax(120px,1fr) minmax(0,1.4fr) 36px;align-items:center;gap:12px}
+.penalty-team-meta{display:flex;align-items:center;gap:10px;min-width:0}.penalty-team-meta strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.penalty-team-meta .crest-shell{width:54px!important;height:54px!important;border-radius:16px!important;padding:6px!important}
+.penalty-dot-row{display:flex;gap:10px;flex-wrap:nowrap;justify-content:flex-start}
+.penalty-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:900;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.0)}
+.penalty-dot.pending{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+.penalty-dot.chosen{background:rgba(245,199,70,.16);border-color:rgba(245,199,70,.55);color:#f5c746}
+.penalty-dot.made{background:rgba(46,200,113,.22);border-color:rgba(46,200,113,.78);color:#fff}
+.penalty-dot.missed{background:rgba(235,87,87,.22);border-color:rgba(235,87,87,.78);color:#fff}
+.penalty-dot.skipped{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.16);color:#d5dde6}
+.penalty-dot.player-slot{box-shadow:0 0 0 2px rgba(245,199,70,.2)}
+.penalty-row-score{text-align:right;font-size:20px;color:#fff}
+
+.leaderboard-competition-tabs{gap:9px!important;padding-bottom:8px!important}
+.leaderboard-competition-tabs button,.leaderboard-mode-tabs button{padding:9px 14px!important;font-size:9px!important}
+.leaderboard-mode-tabs{margin:10px 0 14px!important}
+.competition-leaderboard{gap:8px!important}
+.leaderboard-head,.leaderboard-row{grid-template-columns:30px minmax(0,1.25fr) minmax(0,1fr) 48px!important;gap:10px!important}
+.leaderboard-head{padding:0 12px 8px!important;font-size:8px!important}
+.leaderboard-row{min-height:54px!important;padding:10px 12px!important;border-radius:14px!important}
+.leaderboard-row>span{font-size:10px!important}.leaderboard-row>span strong{font-size:12px!important}.leaderboard-row>span small{font-size:8px!important}.leaderboard-row>strong{font-size:18px!important}
+
+.scene-person-card{top:20px!important;padding:10px 16px!important;gap:10px!important;max-width:min(84%,360px);justify-content:center;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.scene-person-card small{display:block;font-size:9px!important;line-height:1.2!important}
+.visual-stage{gap:16px!important}
+
+#p-sponsor{display:inline-flex;align-items:center;gap:8px;min-width:0}
+#p-sponsor .inline-logo{flex:0 0 auto;max-width:72px;height:18px}
+#p-sponsor span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.historical-ranking-row .ranking-flag{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif!important;font-size:20px!important}
+
+.saved-career-card{display:grid!important;grid-template-columns:92px minmax(0,1fr) 230px!important;gap:16px!important;padding:18px!important;min-height:152px!important;max-height:none!important;border-radius:20px!important}
+.saved-career-info h4{font-size:20px!important;line-height:1.08!important;margin-bottom:4px!important}
+.saved-career-info p{margin:0!important;color:#d8e3ec!important}
+.saved-career-clubs,#saved-career-club-list{display:flex;flex-wrap:wrap;gap:8px!important;align-items:center}
+.saved-career-clubs span,#saved-career-club-list span{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:11px;line-height:1}
+.saved-career-title-breakdown{gap:6px!important;max-height:none!important}
+.saved-career-title-breakdown span{padding:4px 8px;border-radius:10px;background:rgba(255,255,255,.03)}
+.saved-career-title-breakdown em{display:block;max-width:140px;overflow:hidden;text-overflow:ellipsis}
+.saved-career-numbers{gap:8px!important}.saved-career-numbers>div{min-height:58px;display:grid;align-content:center;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.saved-career-open-hint{font-size:11px!important}
+
+.saved-career-detail-card{padding:20px!important}
+.saved-career-detail-head{align-items:flex-start!important;gap:18px!important}
+#saved-career-detail-face{width:108px!important;height:132px!important;border-radius:22px!important;overflow:hidden;background:rgba(255,255,255,.04);display:grid;place-items:center}
+.saved-career-detail-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important}
+.saved-career-detail-stats>div{padding:12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.saved-career-detail-sections{display:grid;gap:16px!important}
+.saved-career-honours,.saved-career-history-shell{padding:14px!important;border-radius:16px!important;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+.saved-title-count-list{display:grid;gap:8px;margin-bottom:14px}.saved-title-count-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.04)}
+.saved-career-honour-row{display:flex;align-items:center;gap:12px;padding:8px 0}
+.saved-icon-section{display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr)!important;gap:22px!important;align-items:center}
+.saved-icon-section .fifa-icon-card{justify-self:center}
+
+@media(max-width:900px){
+  #career .next-match .next-team-visual{min-width:120px!important;max-width:144px!important}
+  #career .next-match .next-team-visual .crest-shell{width:108px!important;height:108px!important}
+  #career .next-match .next-team-visual.national .national-flag-image{width:96px!important;height:64px!important;min-width:96px!important;max-width:96px!important;min-height:64px!important;max-height:64px!important}
+  .saved-career-card{grid-template-columns:76px minmax(0,1fr)!important}.saved-career-numbers{grid-column:1/-1!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .saved-career-detail-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .saved-icon-section{grid-template-columns:1fr!important}
+}
+@media(max-width:620px){
+  .overlay-pause-btn{top:12px!important;right:12px!important}
+  #career .next-match .next-team-visual{min-width:102px!important;max-width:124px!important}
+  #career .next-match .next-team-visual .crest-shell{width:94px!important;height:94px!important;border-radius:22px!important}
+  #career .next-match .next-team-visual.national .national-flag-image{width:82px!important;height:56px!important;min-width:82px!important;max-width:82px!important;min-height:56px!important;max-height:56px!important}
+  .penalty-team-row{grid-template-columns:1fr;gap:8px}.penalty-row-score{text-align:left}
+  .leaderboard-head,.leaderboard-row{grid-template-columns:24px minmax(0,1.1fr) minmax(0,.8fr) 38px!important}
+  .saved-career-detail-stats{grid-template-columns:1fr}
+}
