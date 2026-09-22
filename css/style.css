@@ -9511,3 +9511,521 @@ body,button,input,select,textarea{font-family:var(--btl-display-font)!important}
   .leaderboard-head,.leaderboard-row{grid-template-columns:24px minmax(0,1.1fr) minmax(0,.8fr) 38px!important}
   .saved-career-detail-stats{grid-template-columns:1fr}
 }
+
+/* v10.7.2 · Hall da Fama, tipografia, flags e goleiros */
+@font-face{
+  font-family:'Unisportion FC';
+  src:local('UT Unisportion FC Regular'),local('Unisportion FC Regular'),local('Unisportion FC');
+  font-display:swap;
+}
+:root{--btl-display-font:'Unisportion FC','UT Unisportion FC Regular',Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--next-match-crest-size:150px}
+html,body,body *{font-family:var(--btl-display-font)!important}
+.national-flag-image b,.btl-select-flag,.btl-select-option-flag{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif!important}
+body{font-size:16px}
+small,.field-help,.muted{font-size:max(10px,.72em)}
+button{font-size:max(11px,.82em)}
+
+.btl-select-flag,.btl-select-option-flag{display:inline-grid!important;place-items:center;width:28px;height:20px;flex:0 0 28px;overflow:hidden;border-radius:5px}
+.btl-select-flag .national-flag-image,.btl-select-option-flag .national-flag-image{width:28px!important;height:19px!important;min-width:28px!important;max-width:28px!important;min-height:19px!important;max-height:19px!important;border-radius:4px!important;box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+.btl-select-flag .national-flag-image img,.btl-select-option-flag .national-flag-image img{width:100%!important;height:100%!important;object-fit:cover!important}
+.btl-select-flag .national-flag-image b,.btl-select-option-flag .national-flag-image b{font-size:15px!important}
+
+/* Hall: visão fechada deliberadamente simples: identidade + OVR + ranking. */
+#legacy .saved-careers-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;overflow:auto!important;padding:2px 4px 6px 0!important}
+.saved-career-summary-card{position:relative!important;display:grid!important;grid-template-columns:78px minmax(0,1fr) 164px!important;grid-template-rows:1fr auto!important;gap:14px 16px!important;min-height:144px!important;max-height:none!important;padding:18px 18px 14px!important;border-radius:20px!important;overflow:hidden!important;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012))!important}
+.saved-career-summary-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--green) 10%,transparent),transparent 34%);pointer-events:none}
+.saved-career-summary-flag{grid-column:1;grid-row:1;align-self:center;display:grid;place-items:center;width:78px;height:58px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08)}
+.saved-career-summary-flag .national-flag-image{width:62px!important;height:42px!important;min-width:62px!important;max-width:62px!important;min-height:42px!important;max-height:42px!important;border-radius:6px!important}
+.saved-career-summary-flag .national-flag-image img{width:100%!important;height:100%!important;object-fit:cover!important}
+.saved-career-flag-fallback{font-size:11px;text-align:center;color:var(--muted)}
+.saved-career-summary-main{grid-column:2;grid-row:1;min-width:0;align-self:center;padding-right:6px}
+.saved-career-summary-main .saved-career-kicker{display:block;margin-bottom:5px;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.12em}
+.saved-career-summary-main h4{margin:0 0 7px!important;font-size:23px!important;line-height:1.02!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-career-summary-main p{display:flex!important;gap:8px!important;align-items:center!important;flex-wrap:wrap;margin:0!important;font-size:12px!important;color:#e6edf2!important}
+.saved-career-summary-main p span{color:var(--muted)}
+.saved-career-summary-metrics{grid-column:3;grid-row:1;display:grid;grid-template-columns:1fr 1fr;gap:8px;align-self:center}
+.saved-career-summary-metrics>div{min-height:76px;display:grid;place-items:center;padding:9px;border-radius:15px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);text-align:center}
+.saved-career-summary-metrics small{font-size:8px!important;color:var(--muted);letter-spacing:.08em}.saved-career-summary-metrics strong{font-size:28px!important;line-height:1!important;margin-top:3px}
+.saved-career-summary-card .saved-career-open-hint{position:static!important;grid-column:2/-1;grid-row:2;justify-self:end;font-size:11px!important;color:var(--muted)}
+.saved-career-summary-card .saved-career-delete{top:10px!important;right:10px!important;left:auto!important;width:28px!important;height:28px!important;border-radius:50%!important;padding:0!important}
+
+/* Carreira aberta: título agregado em cards, sem lista redundante dos últimos troféus. */
+.saved-career-detail-card{width:min(1180px,96vw)!important;height:min(92dvh,900px)!important;padding:22px!important;display:grid!important;gap:16px!important}
+.saved-career-detail-head{padding:8px 0 10px!important}
+.saved-career-detail-hero{display:grid!important;grid-template-columns:126px minmax(0,1fr)!important;gap:18px!important;align-items:center!important;min-height:140px!important;padding:14px!important;border-radius:18px!important;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}
+#saved-career-detail-face{width:112px!important;height:132px!important;border-radius:20px!important;overflow:hidden!important}
+.saved-career-detail-summary{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important}
+.saved-career-detail-summary>div{min-height:74px;padding:10px!important;border-radius:14px!important;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.saved-career-detail-grid{display:grid!important;grid-template-columns:minmax(260px,.8fr) minmax(0,1.7fr)!important;gap:16px!important;align-items:start!important}
+.saved-career-detail-grid>section{min-width:0;padding:14px!important;border-radius:16px!important;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}
+.saved-career-detail-grid h3{margin:0 0 12px!important;font-size:17px!important}
+.saved-title-trophy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.saved-title-trophy-card{position:relative;display:grid;grid-template-columns:68px minmax(0,1fr) 42px;align-items:center;gap:12px;min-height:90px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+.saved-title-trophy-card .honour-art{width:60px!important;height:66px!important;min-width:60px!important;display:grid!important;place-items:center!important;background:transparent!important}
+.saved-title-trophy-card .honour-art img{width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 7px 10px rgba(0,0,0,.28))!important;background:transparent!important}
+.saved-title-trophy-card>div{min-width:0}.saved-title-trophy-card>div strong{display:block;font-size:12px!important;line-height:1.2}.saved-title-trophy-card>div span{display:block;margin-top:5px;color:var(--muted);font-size:10px!important}.saved-title-trophy-card>b{font-size:21px!important;text-align:right;color:var(--gold)}
+.saved-career-detail-clubs{gap:8px!important}.saved-career-detail-clubs span{font-size:11px!important;padding:7px 10px!important}
+
+/* Carta ICON: rosto centralizado e sem corte lateral. */
+.saved-icon-section{grid-template-columns:minmax(260px,330px) minmax(0,1fr)!important;padding:22px!important;gap:26px!important}
+.saved-icon-section .fifa-icon-card{--card-w:250px!important}
+.icon-card-face{overflow:visible!important;place-items:end center!important}
+.icon-card-face .face-avatar{transform:scale(1.18)!important;transform-origin:center bottom!important;margin:0 0 2px!important;max-width:100%!important}
+.icon-card-face .player-photo{transform:scale(.88)!important;object-position:center center!important}
+
+/* Próxima partida: escudos significativamente maiores. */
+#career .next-match .next-team-visual{min-width:160px!important;max-width:184px!important}
+#career .next-match .next-team-visual .crest-shell{width:150px!important;height:150px!important;border-radius:30px!important;padding:13px!important}
+#career .next-match .next-team-visual.national .national-flag-image{width:132px!important;height:88px!important;min-width:132px!important;max-width:132px!important;min-height:88px!important;max-height:88px!important}
+.next-match .versus{gap:22px!important;align-items:center!important}
+.next-match .versus>b{font-size:30px!important}
+
+/* Grid de atributos ganha mais respiro e comporta os sete atributos de goleiro. */
+.player-attributes{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:10px!important}
+.player-attribute{min-height:98px!important;padding:11px 9px!important}.player-attribute>span{font-size:9px!important}.player-attribute>strong{font-size:24px!important}.player-attribute>small{font-size:8px!important;line-height:1.25!important}
+
+.penalty-team-meta .penalty-crest{width:54px!important;height:54px!important}
+
+@media(max-width:1000px){
+  #legacy .saved-careers-list{grid-template-columns:1fr!important}
+  .saved-career-detail-grid{grid-template-columns:1fr!important}
+  .saved-title-trophy-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .player-attributes{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media(max-width:650px){
+  .saved-career-summary-card{grid-template-columns:66px minmax(0,1fr)!important;grid-template-rows:auto auto auto!important}
+  .saved-career-summary-flag{width:62px;height:48px}.saved-career-summary-flag .national-flag-image{width:52px!important;height:34px!important;min-width:52px!important;max-width:52px!important;min-height:34px!important;max-height:34px!important}
+  .saved-career-summary-main{grid-column:2}.saved-career-summary-main h4{font-size:19px!important}
+  .saved-career-summary-metrics{grid-column:1/-1;grid-row:2;grid-template-columns:1fr 1fr}.saved-career-summary-card .saved-career-open-hint{grid-column:1/-1;grid-row:3}
+  .saved-career-detail-hero{grid-template-columns:1fr!important}.saved-career-detail-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}.saved-title-trophy-grid{grid-template-columns:1fr}
+  .saved-icon-section{grid-template-columns:1fr!important}.saved-icon-section .fifa-icon-card{--card-w:220px!important}
+  #career .next-match .next-team-visual{min-width:126px!important;max-width:144px!important}#career .next-match .next-team-visual .crest-shell{width:116px!important;height:116px!important;border-radius:24px!important}
+  #career .next-match .next-team-visual.national .national-flag-image{width:102px!important;height:68px!important;min-width:102px!important;max-width:102px!important;min-height:68px!important;max-height:68px!important}
+  .player-attributes{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+.goalkeeper-icon-card .icon-card-stats{grid-template-columns:1fr 1fr!important;grid-template-rows:repeat(4,1fr)!important;grid-auto-flow:column!important;gap:1px 14px!important;padding:5px 14px!important}
+.goalkeeper-icon-card .icon-card-stats span{font-size:9px!important}.goalkeeper-icon-card .icon-card-stats b{font-size:12px!important;min-width:22px!important}
+
+/* v10.7.2 · agrupamento de títulos no encerramento da carreira */
+.legacy-honours-preview{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important}
+.legacy-grouped-title{display:grid!important;grid-template-columns:62px minmax(0,1fr) 44px!important;align-items:center!important;gap:12px!important;min-height:88px!important;padding:10px 12px!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:14px!important;background:rgba(255,255,255,.035)!important}
+.legacy-grouped-title .honour-art{width:56px!important;height:64px!important;min-width:56px!important;display:grid!important;place-items:center!important;background:transparent!important}
+.legacy-grouped-title .honour-art img{width:100%!important;height:100%!important;object-fit:contain!important;background:transparent!important;filter:drop-shadow(0 7px 10px rgba(0,0,0,.28))!important}
+.legacy-grouped-title>span{min-width:0}.legacy-grouped-title>span strong{display:block!important;font-size:12px!important;line-height:1.2!important}.legacy-grouped-title>span small{display:block!important;margin-top:4px!important;color:var(--muted)!important;font-size:10px!important}.legacy-grouped-title>b{justify-self:end;font-size:20px!important;color:var(--gold)!important}
+@media(max-width:650px){.legacy-honours-preview{grid-template-columns:1fr!important}}
+
+/* =========================================================
+   V10.7.3 · AUDITORIA DE LAYOUT E RESPONSIVIDADE
+   Correções após inspeção 1440×900 / 1024×768 / 390×844.
+   ========================================================= */
+
+/* A fonte escolhida pelo jogo deve valer para toda a interface, inclusive
+   números e componentes que antes ainda forçavam Space Grotesk/Inter. */
+:root{
+  --btl-display-font:'Unisportion FC','Unisports FC','Unisport FC',Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','Apple Color Emoji','Segoe UI Emoji',sans-serif;
+}
+html,body,body *:not(svg):not(path){font-family:var(--btl-display-font)!important}
+
+/* O utilitário hidden precisa vencer regras posteriores com display!important. */
+#resume-career-overlay.hidden{display:none!important}
+
+/* ===== NAVEGAÇÃO MOBILE ===== */
+@media(max-width:860px){
+  .topbar{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:auto auto!important;
+    align-items:center!important;
+    gap:8px 10px!important;
+    min-height:0!important;
+    padding:9px 12px 8px!important;
+  }
+  .topbar>.logo{grid-column:1;grid-row:1;min-width:0;font-size:17px!important}
+  .top-actions{grid-column:2;grid-row:1;min-width:0;margin:0!important;gap:6px!important}
+  .topbar nav{
+    grid-column:1/-1!important;
+    grid-row:2!important;
+    order:initial!important;
+    width:100%!important;
+    max-width:100%!important;
+    display:flex!important;
+    gap:5px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:1px 0 2px!important;
+    scrollbar-width:none!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  .topbar nav::-webkit-scrollbar{display:none!important}
+  .topbar nav button{
+    flex:0 0 auto!important;
+    min-height:34px!important;
+    padding:7px 10px!important;
+    border-radius:9px!important;
+    border:1px solid rgba(255,255,255,.055)!important;
+    background:rgba(255,255,255,.018)!important;
+    font-size:9px!important;
+    white-space:nowrap!important;
+  }
+  .topbar nav button.active{background:color-mix(in srgb,var(--green) 9%,rgba(255,255,255,.02))!important;border-color:color-mix(in srgb,var(--green) 34%,rgba(255,255,255,.08))!important}
+  .account-top-chip{min-height:34px!important;padding:6px 8px!important}
+  .account-top-chip b{max-width:82px!important;font-size:9px!important}
+  #reset-career{min-height:34px!important;padding:6px 8px!important;font-size:9px!important}
+}
+
+/* ===== DASHBOARD DA CARREIRA ===== */
+#career.page{min-width:0!important;overflow-x:clip!important}
+.dashboard-grid{width:100%!important;min-width:0!important;grid-template-columns:minmax(0,1.15fr) minmax(0,.95fr) minmax(0,.95fr)!important;grid-template-areas:
+  'profile next next'
+  'profile attrs attrs'
+  'season comps leaders'
+  'national comps leaders'
+  'news news news'!important;
+  align-items:start!important;
+}
+.dashboard-grid>*{min-width:0!important;max-width:100%!important}
+.competition-leaders-card{grid-area:leaders!important;min-width:0!important}
+.competitions-card{grid-area:comps!important}
+.national-card{grid-area:national!important}
+.season-card{grid-area:season!important}
+.news-card{grid-area:news!important}
+
+/* Logo de patrocinador no perfil não pode herdar o palco gigante dos eventos. */
+#p-sponsor{display:inline-flex!important;align-items:center!important;gap:6px!important;min-width:0!important;max-width:100%!important}
+#p-sponsor .sponsor-transparent-logo{
+  display:inline-grid!important;
+  place-items:center!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:18px!important;
+  font-size:10px!important;
+  letter-spacing:0!important;
+}
+#p-sponsor .sponsor-transparent-logo img{width:auto!important;height:17px!important;max-width:58px!important;max-height:17px!important;object-fit:contain!important}
+#p-sponsor>span:last-child{min-width:0!important;max-width:90px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.sponsor-profile-chip{max-width:100%!important}
+
+/* Próxima partida: escudos grandes, mas sem criar largura mínima no mobile. */
+.next-match{min-width:0!important;overflow:hidden!important}
+.next-match .versus{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
+.next-match .versus>span{flex:1 1 0!important;min-width:0!important;max-width:none!important}
+.next-match .next-team-visual{width:100%!important;min-width:0!important;max-width:none!important}
+
+@media(max-width:1100px) and (min-width:861px){
+  .dashboard-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-areas:
+    'profile next'
+    'attrs attrs'
+    'season comps'
+    'national comps'
+    'leaders leaders'
+    'news news'!important}
+}
+
+@media(max-width:860px){
+  #career.page{width:100%!important;padding:22px 14px 72px!important}
+  .dashboard-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:none!important;
+    gap:12px!important;
+  }
+  .profile-card,.next-match,.player-attributes-card,.season-card,.competitions-card,.competition-leaders-card,.national-card,.news-card{grid-area:auto!important;width:100%!important;min-width:0!important;max-width:100%!important}
+  .profile-card{
+    grid-template-columns:84px minmax(0,1fr)!important;
+    gap:12px!important;
+    padding:14px!important;
+  }
+  .profile-card>div:nth-child(2){min-width:0!important;width:auto!important}
+  .profile-card h2{font-size:21px!important;white-space:normal!important;overflow-wrap:anywhere}
+  .profile-meta-chips{min-width:0!important;max-width:100%!important}
+  .profile-meta-chips>span{max-width:100%!important;min-width:0!important;font-size:9px!important;padding:5px 7px!important}
+  .rating-stack{
+    grid-column:1/-1!important;
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  .overall,.potential{min-width:0!important;width:100%!important;padding:10px!important;border:1px solid var(--border)!important}
+  .potential{border-left:1px solid var(--border)!important;border-top:1px solid var(--border)!important}
+  .overall strong,.potential strong{font-size:25px!important;text-align:center!important}
+  .club-line,.value-line,.edit-appearance-btn,.retire-career{grid-column:1/-1!important;min-width:0!important;width:100%!important}
+  .value-line{gap:10px!important}.value-line strong{white-space:nowrap!important}
+  .next-match{padding:14px!important}
+  .next-match .versus{margin:0!important;padding:16px 0!important;gap:7px!important;justify-content:center!important;min-height:150px!important}
+  .next-match .versus>b{flex:0 0 auto!important;font-size:24px!important}
+  #career .next-match .next-team-visual{width:100%!important;min-width:0!important;max-width:100%!important}
+  #career .next-match .next-team-visual .crest-shell{width:112px!important;height:112px!important;border-radius:24px!important;padding:9px!important}
+  #career .next-match .next-team-visual.national .national-flag-image{width:100px!important;height:66px!important;min-width:100px!important;max-width:100px!important;min-height:66px!important;max-height:66px!important}
+  .player-attributes-card{padding:14px!important}
+  .player-attributes-card .section-title{gap:8px!important;align-items:flex-start!important;flex-wrap:wrap!important}
+  .player-attributes{width:100%!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .player-attribute{min-width:0!important;min-height:86px!important;padding:9px!important}
+  .player-attribute>span,.player-attribute>strong,.player-attribute>small{min-width:0!important;width:100%!important}
+  .legend-key{display:flex!important;flex-wrap:wrap!important;gap:6px!important}
+  .competition-leaders-card,.competitions-card,.national-card,.season-card,.news-card{padding:14px!important}
+}
+
+@media(max-width:420px){
+  #career .next-match .next-team-visual .crest-shell{width:104px!important;height:104px!important}
+  #career .next-match .next-team-visual.national .national-flag-image{width:92px!important;height:62px!important;min-width:92px!important;max-width:92px!important;min-height:62px!important;max-height:62px!important}
+  .next-match .versus{gap:4px!important}
+}
+
+/* ===== HALL DA FAMA ===== */
+#legacy.legacy-page.active{overflow:auto!important;align-content:start!important}
+#legacy .game-hall{align-self:start!important;height:auto!important;max-height:calc(100dvh - var(--app-topbar-height,72px) - 190px)!important;grid-template-rows:auto auto!important;overflow:hidden!important}
+#legacy .saved-careers-list{height:auto!important;max-height:100%!important;overflow:auto!important}
+.saved-career-summary-card{min-width:0!important;max-width:100%!important}
+.saved-career-summary-main,.saved-career-summary-metrics{min-width:0!important}
+
+/* ===== MODAL DA CARREIRA SALVA ===== */
+.saved-career-detail-card{
+  width:min(1120px,calc(100vw - 32px))!important;
+  height:min(92dvh,860px)!important;
+  max-height:92dvh!important;
+  overflow:auto!important;
+  padding:20px!important;
+  gap:14px!important;
+}
+.saved-career-detail-head{position:sticky!important;top:-20px!important;z-index:20!important;display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:14px!important;padding:12px 0 11px!important}
+.saved-career-detail-head>div{min-width:0!important}.saved-career-detail-head h2{margin:4px 0 5px!important}.saved-career-detail-head p{max-width:100%!important;overflow-wrap:anywhere!important}
+.saved-career-detail-hero{
+  display:grid!important;
+  grid-template-columns:112px minmax(0,1fr)!important;
+  gap:16px!important;
+  align-items:center!important;
+  min-height:0!important;
+  padding:14px!important;
+}
+#saved-career-detail-face{width:100px!important;height:118px!important;justify-self:center!important}
+.saved-career-detail-summary{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:9px!important;
+  min-width:0!important;
+  width:100%!important;
+}
+.saved-career-detail-summary>div{display:grid!important;align-content:center!important;justify-items:center!important;min-width:0!important;min-height:68px!important;padding:9px!important;text-align:center!important}
+.saved-career-detail-summary small{font-size:8px!important;line-height:1.2!important;white-space:normal!important}.saved-career-detail-summary strong{font-size:22px!important;line-height:1.05!important}
+.saved-icon-section{
+  display:grid!important;
+  grid-template-columns:230px minmax(0,1fr)!important;
+  gap:22px!important;
+  align-items:center!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:16px!important;
+}
+.saved-icon-section .icon-card-mount{min-width:0!important;min-height:310px!important}
+.saved-icon-section .fifa-icon-card{--card-w:210px!important;max-width:100%!important}
+.saved-icon-section>div:last-child{min-width:0!important}.saved-icon-section>div:last-child h3{margin:5px 0 7px!important;font-size:19px!important}.saved-icon-section>div:last-child p:last-child{margin:0!important;color:var(--muted)!important;line-height:1.5!important}
+.saved-career-detail-stats{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+.saved-career-detail-stats>div{min-width:0!important;min-height:64px!important;padding:9px!important;text-align:center!important}.saved-career-detail-stats strong{font-size:19px!important}.saved-career-detail-stats small{font-size:8px!important}
+.saved-career-detail-grid{grid-template-columns:minmax(220px,.72fr) minmax(0,1.7fr)!important;gap:14px!important}
+.saved-title-trophy-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+.saved-title-trophy-card{min-width:0!important;grid-template-columns:58px minmax(0,1fr) 34px!important;gap:10px!important;min-height:82px!important;padding:9px 10px!important}
+.saved-title-trophy-card .honour-art{width:52px!important;height:58px!important;min-width:52px!important}.saved-title-trophy-card>div strong{font-size:11px!important;overflow-wrap:anywhere}.saved-title-trophy-card>div span{font-size:9px!important}.saved-title-trophy-card>b{font-size:17px!important}
+.saved-career-history-wrap{min-width:0!important}.saved-career-history-wrap .table-wrap{max-height:180px!important;overflow:auto!important}
+.saved-career-detail-actions{
+  position:sticky!important;
+  bottom:-20px!important;
+  z-index:18!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:8px!important;
+  padding:10px 0 4px!important;
+}
+.saved-career-detail-actions button{min-width:0!important;width:100%!important;min-height:42px!important}
+
+@media(max-width:760px){
+  .saved-career-detail-card{width:calc(100vw - 16px)!important;height:calc(100dvh - 16px)!important;max-height:calc(100dvh - 16px)!important;padding:12px!important;border-radius:16px!important;gap:11px!important}
+  .saved-career-detail-head{top:-12px!important;padding:10px 0!important}
+  .saved-career-detail-head .eyebrow{font-size:8px!important}.saved-career-detail-head h2{font-size:23px!important}.saved-career-detail-head p:last-child{font-size:10px!important;line-height:1.4!important}
+  .saved-career-detail-hero{grid-template-columns:78px minmax(0,1fr)!important;gap:10px!important;padding:10px!important;align-items:start!important}
+  #saved-career-detail-face{width:72px!important;height:84px!important;border-radius:14px!important}
+  .saved-career-detail-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+  .saved-career-detail-summary>div{min-height:52px!important;padding:7px!important}.saved-career-detail-summary strong{font-size:18px!important}.saved-career-detail-summary small{font-size:7.5px!important}
+  .saved-icon-section{grid-template-columns:148px minmax(0,1fr)!important;gap:12px!important;padding:10px!important}
+  .saved-icon-section .icon-card-mount{min-height:220px!important}
+  .saved-icon-section .fifa-icon-card{--card-w:145px!important}
+  .saved-icon-section>div:last-child h3{font-size:15px!important}.saved-icon-section>div:last-child p{font-size:9px!important}
+  .saved-career-detail-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}.saved-career-detail-stats>div{min-height:52px!important;padding:7px!important}.saved-career-detail-stats strong{font-size:16px!important}
+  .saved-career-detail-grid{grid-template-columns:1fr!important;gap:10px!important}.saved-career-detail-grid>section{padding:10px!important}.saved-career-detail-grid h3{font-size:15px!important;margin-bottom:9px!important}
+  .saved-title-trophy-grid{grid-template-columns:1fr!important}.saved-title-trophy-card{grid-template-columns:50px minmax(0,1fr) 32px!important;min-height:72px!important}.saved-title-trophy-card .honour-art{width:46px!important;height:50px!important;min-width:46px!important}
+  .saved-career-detail-actions{grid-template-columns:1fr!important;bottom:-12px!important}.saved-career-detail-actions button{min-height:40px!important;font-size:10px!important}
+}
+
+@media(max-width:420px){
+  .saved-icon-section{grid-template-columns:1fr!important;text-align:center!important}
+  .saved-icon-section .icon-card-mount{min-height:218px!important}.saved-icon-section .fifa-icon-card{--card-w:150px!important}
+}
+
+/* ===== RANKING HISTÓRICO / TIPOGRAFIA PEQUENA ===== */
+.historical-current-rank small,.historical-current-rank span,.historical-criteria b,.historical-ranking-columns{font-size:8px!important}
+.historical-ranking-row>span:last-child,.historical-ranking-gap{font-size:9px!important}
+.account-legacy-grid small,.contact-destination span,.soundtrack-current small,.soundtrack-queue-head small,.soundtrack-year header small,.soundtrack-track-actions em,.now-playing small,.wc-host-centenary>small,.wc-draw-group header span,.wc-draw-team>small,.wc-draw-team em,.wc-draw-note,.scene-object::after{font-size:8px!important}
+.saved-career-kicker,.saved-career-numbers small{font-size:8px!important}
+
+@media(max-width:620px){
+  .historical-ranking-card{width:calc(100vw - 16px)!important;height:calc(100dvh - 16px)!important;max-height:calc(100dvh - 16px)!important;padding:12px!important}
+  .historical-ranking-head h2{font-size:22px!important}.historical-ranking-head p{font-size:9px!important}
+  .historical-player-summary{grid-template-columns:1fr!important;gap:8px!important}.historical-criteria{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}.historical-criteria span{min-height:42px!important;padding:5px!important}.historical-criteria b{font-size:7.5px!important}.historical-criteria strong{font-size:11px!important}
+  .historical-ranking-columns,.historical-ranking-row{grid-template-columns:36px 42px minmax(0,1fr) 38px!important;gap:6px!important;padding-left:8px!important;padding-right:8px!important}.historical-ranking-row>strong{font-size:10px!important}.historical-ranking-row .ranking-flag{font-size:18px!important}
+}
+
+/* Contato/legado: rótulos legíveis sem alterar a densidade geral. */
+.contact-destination strong{font-size:13px!important}.account-legacy-grid strong{font-size:12px!important}
+
+/* Elementos decorativos do rosto não devem aumentar a largura rolável dos cards. */
+.home-career-face,.avatar.face-avatar,#saved-career-detail-face{contain:paint!important}
+.home-career-face .face-jersey{max-width:82px!important;left:50%!important;transform:translateX(-50%)!important}
+
+/* Tabelas continuam roláveis no mobile, sem forçar a largura da página. */
+.table-wrap,.saved-career-history-wrap,.saved-career-history-wrap .table-wrap{max-width:100%!important;overflow-x:auto!important}
+
+
+/* V10.7.3b · correções finas encontradas na segunda passada visual. */
+.profile-card{grid-template-columns:92px minmax(0,1fr)!important}
+.profile-card .rating-stack{grid-column:1/-1!important;width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+.profile-card .overall,.profile-card .potential{min-width:0!important;width:100%!important;text-align:center!important}
+.profile-card .potential{border-left:1px solid var(--border)!important;padding-left:12px!important}
+.profile-card>div:nth-child(2){min-width:0!important}
+
+/* Os arcos decorativos ficam dentro do card e deixam de gerar scrollWidth falso. */
+.next-match::after{width:112px!important;height:112px!important;right:0!important;top:0!important;transform:none!important;border-radius:0 0 0 100%!important}
+.home-career-slot::after{right:0!important;bottom:0!important;width:120px!important;height:120px!important;border-radius:100% 0 0 0!important;box-shadow:0 0 0 22px rgba(255,255,255,.012),0 0 0 44px rgba(255,255,255,.006)!important}
+
+/* O modal é um fluxo vertical rolável; flex impede faixas do grid fixo de
+   encolherem e sobreporem a carta ICON. */
+.saved-career-detail-card{display:flex!important;flex-direction:column!important;align-items:stretch!important}
+.saved-career-detail-card>*{flex:0 0 auto!important;min-width:0!important}
+.saved-career-detail-head{flex-direction:row!important}
+.saved-career-detail-hero{min-height:146px!important}
+
+@media(max-width:760px){
+  .saved-career-detail-card{width:calc(100vw - 24px)!important;max-width:calc(100vw - 24px)!important;height:calc(100dvh - 20px)!important;max-height:calc(100dvh - 20px)!important}
+  .saved-career-detail-hero{min-height:120px!important}
+  .saved-career-detail-head{flex-direction:row!important}
+  .modal-backdrop{padding:10px!important}
+}
+@media(max-width:620px){
+  .historical-ranking-card{width:calc(100vw - 24px)!important;max-width:calc(100vw - 24px)!important}
+}
+
+/* V10.7.3c · centralização correta das faciais nas cartas arquivadas. */
+#saved-career-detail-face .player-face.compact{
+  transform:scale(.55)!important;
+  transform-origin:center center!important;
+  margin:0!important;
+}
+.saved-icon-section .fifa-icon-card,
+.legacy-icon-section .fifa-icon-card{
+  --card-w:220px!important;
+  padding:20px 20px 18px!important;
+  grid-template-columns:62px minmax(0,1fr)!important;
+  grid-template-rows:30px 64px minmax(58px,1fr) 34px 1px 86px 22px!important;
+}
+.saved-icon-section .icon-card-face,
+.legacy-icon-section .icon-card-face{min-width:0!important;overflow:hidden!important;place-items:end center!important}
+.saved-icon-section .icon-card-face .player-face.compact,
+.legacy-icon-section .icon-card-face .player-face.compact{
+  transform:scale(.70)!important;
+  transform-origin:center bottom!important;
+  margin:0 0 -18px!important;
+}
+.saved-icon-section .icon-card-rating strong,
+.legacy-icon-section .icon-card-rating strong{font-size:31px!important}
+.saved-icon-section .icon-card-name,
+.legacy-icon-section .icon-card-name{font-size:14px!important}
+.saved-icon-section .icon-card-stats,
+.legacy-icon-section .icon-card-stats{padding:6px 12px!important;gap:1px 10px!important}
+.saved-icon-section .icon-card-stats span,
+.legacy-icon-section .icon-card-stats span{font-size:10px!important}
+.saved-icon-section .icon-card-stats b,
+.legacy-icon-section .icon-card-stats b{font-size:12px!important;min-width:21px!important}
+
+@media(max-width:760px){
+  .saved-icon-section .fifa-icon-card,.legacy-icon-section .fifa-icon-card{--card-w:205px!important}
+  .saved-icon-section .icon-card-mount{min-height:292px!important}
+}
+
+/* V10.7.3d · avatar do resumo da carreira salva centralizado de fato. */
+#saved-career-detail-face{position:relative!important;display:block!important;overflow:hidden!important}
+#saved-career-detail-face .player-face.compact{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  margin:0!important;
+  transform:translate(-50%,-50%) scale(.55)!important;
+  transform-origin:center center!important;
+}
+
+/* V10.7.3e · decisões e pênaltis sempre cabem na viewport. */
+#match-decision-modal{overflow:hidden!important;padding:12px!important}
+#match-decision-modal .decision-card{
+  width:min(650px,100%)!important;
+  max-height:calc(100dvh - 24px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+}
+#match-decision-modal .overlay-pause-btn,
+#event-modal .overlay-pause-btn{
+  position:sticky!important;
+  top:8px!important;
+  right:auto!important;
+  margin-left:auto!important;
+  margin-bottom:-40px!important;
+  width:max-content!important;
+  z-index:120!important;
+}
+#decision-choices.penalty-order-choices{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin-top:12px!important;
+}
+#decision-choices.penalty-order-choices .decision-option{
+  min-width:0!important;
+  min-height:72px!important;
+  padding:10px 8px!important;
+  text-align:center!important;
+}
+#decision-choices.penalty-order-choices .decision-option strong{font-size:11px!important}
+#decision-choices.penalty-order-choices .decision-option small{font-size:8px!important;line-height:1.3!important}
+
+@media(max-width:620px){
+  #match-decision-modal{align-items:center!important;overflow:hidden!important;padding:8px!important}
+  #match-decision-modal .decision-card{
+    width:100%!important;
+    max-width:100%!important;
+    max-height:calc(100dvh - 16px)!important;
+    margin:0!important;
+    padding:46px 10px 12px!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+  }
+  #decision-choices.penalty-order-choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+  #decision-choices.penalty-order-choices .decision-option{min-height:62px!important;padding:8px!important}
+  #decision-choices.penalty-order-choices .decision-option:last-child:nth-child(odd){grid-column:1/-1!important}
+  .penalty-shootout-preview{padding:10px!important;gap:9px!important}
+  .penalty-shootout-shell{gap:9px!important}
+  .penalty-team-row{gap:8px!important}
+  .penalty-team-meta .crest-shell,.penalty-team-meta .penalty-crest{width:46px!important;height:46px!important}
+  .penalty-dot-row{gap:6px!important}
+  .penalty-dot{width:22px!important;height:22px!important;font-size:11px!important}
+}
+
+/* V10.7.3f · acabamento final da auditoria. */
+@media(min-width:861px){
+  #legacy .game-hall{width:min(780px,100%)!important;justify-self:start!important}
+}
+@media(max-width:620px){
+  #match-decision-modal .decision-card{max-height:calc(100dvh - 24px)!important}
+}
+@media(min-width:861px){
+  #legacy .game-hall{width:min(780px,100%)!important}
+  #legacy .saved-careers-list{grid-template-columns:1fr!important}
+}
