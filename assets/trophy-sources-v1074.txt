@@ -1,0 +1,27 @@
+Be The Legend v10.7.4 — referências visuais atualizadas
+
+Coppa Italia
+- Wikimedia Commons: File:Coppa Italia (Italy Cup).svg
+- https://commons.wikimedia.org/wiki/File:Coppa_Italia_(Italy_Cup).svg
+- SVG transparente; a página do arquivo informa domínio público para a geometria simples e também CC BY-SA 3.0 para o trabalho do uploader.
+
+Copa América
+- Wikimedia Commons: File:Copa tr icon.png
+- https://commons.wikimedia.org/wiki/File:Copa_tr_icon.png
+- Ícone transparente da taça da Copa América; a página do arquivo o descreve como “Copa America trophy icon”.
+
+UEFA Super Cup
+- Wikimedia Commons: File:UEFA - Super Cup.png
+- https://upload.wikimedia.org/wikipedia/commons/a/a1/UEFA_-_Super_Cup.png
+- PNG transparente utilizado como representação da taça.
+
+Brasileirão
+- assets/trophies/brasileirao-transparent.svg
+- Arte transparente local já existente no projeto e priorizada sobre a versão com fundo.
+
+Ipswich Town
+- Escudo real do clube em SVG (Wikimedia/Wikipedia):
+- https://upload.wikimedia.org/wikipedia/en/4/43/Ipswich_Town.svg
+
+Observação de tipografia
+- O CSS usa o nome interno “UT Unisportion FC” / “Unisportion FC” por local(), sem incorporar nem redistribuir arquivos da fonte.

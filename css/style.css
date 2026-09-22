@@ -10029,3 +10029,92 @@ html,body,body *:not(svg):not(path){font-family:var(--btl-display-font)!importan
   #legacy .game-hall{width:min(780px,100%)!important}
   #legacy .saved-careers-list{grid-template-columns:1fr!important}
 }
+
+/* ============================================================
+   V10.7.4 · SAVES, ESCUDOS, TROFÉUS, RANKING E TIPOGRAFIA
+   ============================================================ */
+
+/* A família comercial instalada pelo usuário costuma expor o nome interno
+   "UT Unisportion FC". Colocamos esse nome primeiro e aplicamos a pilha em
+   absolutamente todo texto da interface; os emojis/bandeiras mantêm fonte
+   colorida própria. */
+@font-face{
+  font-family:'UT Unisportion FC';
+  src:local('UT Unisportion FC'),local('UT Unisportion FC Regular'),local('Unisportion FC Regular'),local('UnisportionFC-Regular');
+  font-style:normal;
+  font-weight:100 900;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Unisportion FC';
+  src:local('UT Unisportion FC'),local('UT Unisportion FC Regular'),local('Unisportion FC Regular'),local('UnisportionFC-Regular');
+  font-style:normal;
+  font-weight:100 900;
+  font-display:swap;
+}
+:root{--btl-display-font:'UT Unisportion FC','Unisportion FC','UT Unisportion FC Regular','Unisportion FC Regular','UnisportionFC-Regular',sans-serif!important}
+html,body,body *,button,input,select,option,optgroup,textarea,table,thead,tbody,tfoot,tr,th,td,label,a,p,span,strong,b,small,em,i,h1,h2,h3,h4,h5,h6{font-family:var(--btl-display-font)!important}
+.national-flag-image,.national-flag-image *, .ranking-flag,.btl-select-flag,.btl-select-option-flag{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif!important}
+
+/* Carta ICON arquivada: centralizada, inteira e com texto um pouco mais afastado
+   da borda esquerda. */
+.saved-icon-section{overflow:visible!important;align-items:center!important}
+.saved-icon-section .icon-card-mount{display:grid!important;place-items:center!important;min-height:320px!important;overflow:visible!important;padding:8px!important}
+.saved-icon-section .fifa-icon-card{justify-self:center!important;align-self:center!important;max-width:100%!important;margin:0 auto!important}
+.saved-icon-section>div:last-child{padding-left:18px!important;padding-right:10px!important}
+@media(max-width:760px){
+  .saved-icon-section>div:last-child{padding:4px 8px 0!important;text-align:center!important}
+  .saved-icon-section .icon-card-mount{min-height:292px!important}
+}
+
+/* Clubes da carreira: somente escudos, sem nomes soltos. */
+.saved-career-detail-clubs{display:flex!important;flex-wrap:wrap!important;gap:12px!important;align-items:center!important}
+.saved-career-club-badge{display:grid!important;place-items:center!important;width:66px!important;height:66px!important;padding:0!important;border-radius:16px!important;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.08)!important}
+.saved-career-club-badge .crest-shell{width:54px!important;height:54px!important;padding:2px!important;border:0!important;background:transparent!important;box-shadow:none!important}
+.saved-career-club-badge .club-badge-img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;margin:auto!important}
+
+/* Troféus arquivados: o contêiner nunca pinta fundo atrás da taça. */
+.saved-title-trophy-card .honour-art,.saved-title-trophy-card .honour-art img{background:transparent!important}
+.saved-title-trophy-card .honour-art{overflow:visible!important}
+.saved-title-trophy-card .honour-art img{object-fit:contain!important;object-position:center!important;mix-blend-mode:normal!important}
+
+/* O modal salvo agora possui três ações, incluindo o ranking congelado daquela
+   carreira específica. */
+.saved-career-detail-actions{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#saved-career-view-ranking{border-color:color-mix(in srgb,var(--gold) 48%,var(--border))!important;background:color-mix(in srgb,var(--gold) 8%,rgba(255,255,255,.02))!important;color:#fff!important}
+@media(max-width:760px){.saved-career-detail-actions{grid-template-columns:1fr!important}}
+
+/* Escudos: centralização, contraste e aproveitamento real do espaço. */
+.crest-shell,.penalty-crest,.next-team-visual .crest-shell,.decision-score-team .crest-shell,.leaderboard-team-visual .crest-shell{
+  display:grid!important;place-items:center!important;overflow:hidden!important;background:rgba(255,255,255,.075)!important;border:1px solid rgba(255,255,255,.13)!important;
+}
+.crest-shell .club-badge-img,.penalty-crest .club-badge-img,.next-team-visual .club-badge-img,.decision-score-team .club-badge-img,.leaderboard-team-visual .club-badge-img{
+  display:block!important;width:94%!important;height:94%!important;max-width:94%!important;max-height:94%!important;object-fit:contain!important;object-position:center!important;margin:auto!important;transform:none!important;background:transparent!important;
+}
+.decision-score-team .crest-shell{width:62px!important;height:62px!important;padding:3px!important;border-radius:15px!important}
+.decision-score-team .next-team-visual{display:grid!important;place-items:center!important;min-width:66px!important;max-width:66px!important}
+
+/* Próxima partida: crescimento também no mobile, sem provocar overflow. */
+#career .next-match .next-team-visual{min-width:174px!important;max-width:188px!important}
+#career .next-match .next-team-visual .crest-shell{width:168px!important;height:168px!important;padding:8px!important;border-radius:32px!important}
+@media(max-width:760px){
+  #career .next-match .next-team-visual{min-width:138px!important;max-width:146px!important}
+  #career .next-match .next-team-visual .crest-shell{width:132px!important;height:132px!important;padding:6px!important;border-radius:26px!important}
+  .next-match .versus{gap:8px!important}
+}
+@media(max-width:410px){
+  #career .next-match .next-team-visual{min-width:126px!important;max-width:132px!important}
+  #career .next-match .next-team-visual .crest-shell{width:120px!important;height:120px!important}
+}
+
+/* Destaques das competições: coluna da equipe vira um escudo proporcional. */
+.leaderboard-head,.leaderboard-row{grid-template-columns:30px minmax(0,1.35fr) 64px 48px!important}
+.leaderboard-head>span:nth-child(3){text-align:center!important}
+.leaderboard-team-visual{display:grid!important;place-items:center!important;width:56px!important;height:44px!important;justify-self:center!important;overflow:visible!important}
+.leaderboard-team-visual .crest-shell{width:42px!important;height:42px!important;padding:2px!important;border-radius:11px!important}
+.leaderboard-team-visual.national .national-flag-image{width:42px!important;height:28px!important;min-width:42px!important;max-width:42px!important;min-height:28px!important;max-height:28px!important;border-radius:5px!important}
+.leaderboard-team-visual.national .national-flag-image img{width:100%!important;height:100%!important;object-fit:cover!important}
+@media(max-width:620px){
+  .leaderboard-head,.leaderboard-row{grid-template-columns:24px minmax(0,1fr) 50px 38px!important}
+  .leaderboard-team-visual{width:46px!important;height:38px!important}.leaderboard-team-visual .crest-shell{width:36px!important;height:36px!important}
+}
