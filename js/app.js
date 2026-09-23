@@ -996,10 +996,20 @@ const CLUB_BADGE_ALIASES = {
 };
 const CLUB_BADGE_STATIC = {
   'Ipswich Town':['https://upload.wikimedia.org/wikipedia/en/4/43/Ipswich_Town.svg'],
+  'Bayern de Munique':['https://commons.wikimedia.org/wiki/Special:FilePath/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg'],
   'Sport':[
     'https://sportrecife.com.br/wp-content/uploads/2024/05/sport-clube-recife.svg',
     'https://pt.wikipedia.org/wiki/Special:FilePath/Sport-clube-recife.svg'
   ]
+};
+const CURRENT_EUROPE_LOGO_FOLDERS={ENG:'England - Premier League',DE:'Germany - Bundesliga',ES:'Spain - LaLiga',IT:'Italy - Serie A',FR:'France - Ligue 1',PT:'Portugal - Liga Portugal',NL:'Netherlands - Eredivisie',SCO:'Scotland - Scottish Premiership',BE:'Belgium - Jupiler Pro League',TR:'Türkiye - Süper Lig'};
+const CURRENT_EUROPE_LOGO_NAMES={
+  'Arsenal':'Arsenal FC','Liverpool':'Liverpool FC','Chelsea':'Chelsea FC','Everton':'Everton FC','Fulham':'Fulham FC','Bournemouth':'AFC Bournemouth','Brighton':'Brighton & Hove Albion','Sunderland':'Sunderland AFC','Tottenham':'Tottenham Hotspur','West Ham':'West Ham United','Wolverhampton':'Wolverhampton Wanderers',
+  'Bayern de Munique':'Bayern Munich','Bayer Leverkusen':'Bayer 04 Leverkusen','Stuttgart':'VfB Stuttgart','Hoffenheim':'TSG 1899 Hoffenheim','Augsburg':'FC Augsburg','Mainz':'1.FSV Mainz 05','Union Berlin':'1.FC Union Berlin','Hamburgo':'Hamburger SV','Köln':'1.FC Köln','Werder Bremen':'SV Werder Bremen','Schalke 04':'FC Schalke 04','Paderborn':'SC Paderborn 07','Elversberg':'SV 07 Elversberg',
+  'Barcelona':'FC Barcelona','Athletic Club':'Athletic Bilbao','Osasuna':'CA Osasuna','Alavés':'Deportivo Alavés','Getafe':'Getafe CF','Levante':'Levante UD','Málaga':'Málaga CF','Deportivo La Coruña':'Deportivo A Coruña',
+  'Milan':'AC Milan','Roma':'AS Roma','Napoli':'SSC Napoli','Atalanta':'Atalanta BC','Monza':'AC Monza','Venezia':'Venezia FC',
+  'Marseille':'Olympique Marseille','Lyon':'Olympique Lyon','Paris Saint-Germain':'Paris Saint-Germain','Brest':'Stade Brestois 29','Rennes':'Stade Rennais FC','Strasbourg':'RC Strasbourg Alsace','Toulouse':'FC Toulouse','Lille':'LOSC Lille','Nice':'OGC Nice','Monaco':'AS Monaco','Auxerre':'AJ Auxerre',
+  'Sporting CP':'Sporting CP','Celtic':'Celtic FC','Rangers':'Rangers FC','Hearts':'Heart of Midlothian FC','St Mirren':'St. Mirren FC'
 };
 const CLUB_COUNTRY_SLUG={BR:'brazil',AR:'argentina',UY:'uruguay',CO:'colombia',CL:'chile',ES:'spain',ENG:'england',SCO:'scotland',GB:'united-kingdom',DE:'germany',IT:'italy',FR:'france',PT:'portugal',NL:'netherlands',BE:'belgium',TR:'turkey',MX:'mexico',US:'usa',JP:'japan',SA:'saudi-arabia'};
 const CLUB_LOGO_CATALOG_URL='https://raw.githubusercontent.com/hixcoder/football-teams-flags/refs/heads/main/football_teams.json';
@@ -1050,9 +1060,13 @@ async function exactClubBadge(name){
   return '';
 }
 function clubBadgeSources(name,exact=''){
-  const country=CLUB_COUNTRY_SLUG[clubCodeFor(name)]||'england';
-  const slug=slugifyClub((CLUB_BADGE_ALIASES[name]?.[0]||name));
+  const code=clubCodeFor(name),country=CLUB_COUNTRY_SLUG[code]||'england';
   const sources=[...(CLUB_BADGE_STATIC[name]||[]),exact];
+  const currentFolder=CURRENT_EUROPE_LOGO_FOLDERS[code],currentName=CURRENT_EUROPE_LOGO_NAMES[name]||name;
+  if(currentFolder){
+    const githubBase='https://raw.githubusercontent.com/luukhopman/football-logos/master/logos';
+    for(const file of [...new Set([currentName,name,...clubAliasCandidates(name)])])sources.push(`${githubBase}/${encodeURIComponent(currentFolder)}/${encodeURIComponent(file)}.png`);
+  }
   for(const file of repoFileVariants(name))sources.push(`https://raw.githubusercontent.com/JoseArroyave/football-logos/refs/heads/main/logos/${country}/${encodeURIComponent(file)}.svg`);
   sources.push(fallbackClubDataUri(name),'assets/fallback-club.svg');
   return [...new Set(sources.filter(Boolean))];
@@ -2383,106 +2397,60 @@ function advanceKnockout(comp){
   if(comp.stageIndex>=comp.stages.length){comp.active=false;comp.won=true;addTrophy(comp.name);}
 }
 function buildShootoutScenario(pending){
-  const taker=state.player.position==='Goleiro'
-    ?'A disputa foi para os pênaltis. Escolha qual penalidade da série você quer assumir como batedor de emergência.'
-    :'Escolha qual dos 5 pênaltis da sua equipe você quer bater. Se a disputa acabar antes por eliminação matemática, você nem chega a cobrar.';
-  const base=state.player.position==='Goleiro'?[{label:'Cobrança segura no canto esquerdo',effect:'Boa margem de acerto, sem arriscar demais.',chance:.72,type:'goal'},{label:'Cobrança firme no canto direito',effect:'Boa margem de acerto, com mais potência.',chance:.74,type:'goal'},{label:'Chapar no alto, no centro',effect:'Mais ousadia e menos margem para erro.',chance:.62,type:'goal'}]:[{label:'Forte no ângulo esquerdo',effect:'Alta exigência técnica, mas muito difícil de pegar.',chance:.76,type:'goal'},{label:'Rasteiro no canto direito',effect:'Cobrança segura buscando deslocar o goleiro.',chance:.74,type:'goal'},{label:'Cavadinha no centro',effect:'Muita personalidade, porém bastante risco.',chance:.60,type:'goal'}];
-  return {visual:'penalty',minute:120,title:'Disputa por pênaltis',description:taker,options:base,prompt:'Escolha a cobrança que você vai executar quando chegar sua vez'};
+  const base=[{label:'Forte no ângulo esquerdo',effect:'Alta exigência técnica, mas muito difícil de pegar.',chance:.76,type:'goal'},{label:'Rasteiro no canto direito',effect:'Cobrança segura buscando deslocar o goleiro.',chance:.74,type:'goal'},{label:'Cavadinha no centro',effect:'Muita personalidade, porém bastante risco.',chance:.60,type:'goal'}];
+  return {visual:'penalty',minute:120,title:'Disputa por pênaltis',description:'Chegou a sua cobrança. Escolha como bater.',options:base,prompt:'Escolha sua cobrança'};
 }
-function buildPenaltyOrderOptions(){
-  return Array.from({length:5},(_,i)=>({slot:i+1,label:`${i+1}º pênalti`,effect:i===4?'Pode nem ser batido se a disputa já estiver decidida.':'Você será o cobrador dessa ordem.'}));
+function buildPenaltyOrderOptions(){return Array.from({length:5},(_,i)=>({slot:i+1,label:`${i+1}º pênalti`,effect:i===4?'Pode nem ser batido se a disputa já estiver decidida.':'A disputa será simulada até chegar a sua vez.'}));}
+function penaltyTeamVisualMarkup(pending,team){
+  if(pending.scope==='worldcup'||pending.event?.type==='national')return `<span class="penalty-national-flag">${nationalFlagImage(codeForCountryName(team),team)}</span>`;
+  return clubCrestMarkup(team,team===pending.team?state.player?.clubCountry:'');
 }
-function penaltyProgressMarkup(pending,{showChosenSlot=false,showOutcome=false}={}){
-  const clubs=[{name:pending.home,side:'home',user:pending.team===pending.home},{name:pending.away,side:'away',user:pending.team===pending.away}];
-  const first=showOutcome?pending.shootout?.first:pending.firstShooter;
-  const renderDots=(club)=>Array.from({length:5},(_,i)=>{
-    const slot=i+1;let cls='pending',icon='';
-    const kicks=(pending.shootout?.kicks||[]).filter(k=>k.team===club.name&&k.round===slot),playerKick=showOutcome&&pending.shootout?.playerKick&&pending.shootout.playerKick.team===club.name&&pending.shootout.playerKick.round===slot;
-    if(showOutcome&&kicks.length){cls=kicks[0].scored?'made':'missed';icon=kicks[0].scored?'✓':'✕';}
-    else if(showOutcome&&playerKick&&pending.shootout?.playerKick?.taken===false){cls='skipped';icon='–';}
-    else if(showChosenSlot&&club.user&&pending.playerKickRound===slot){cls='chosen';icon='★';}
-    return `<span class="penalty-dot ${cls}${playerKick?' player-slot':''}" data-penalty-side="${club.side}" data-penalty-round="${slot}" title="${slot}º pênalti">${icon}</span>`;
-  }).join('');
-  return `<div class="penalty-shootout-shell"><div class="penalty-shootout-head"><span>Ordem inicial: <b>${esc(first||pending.home)}</b></span>${showOutcome&&pending.shootout?.suddenDeath?`<span>Morte súbita: <b>${pending.shootout.suddenDeath.home}-${pending.shootout.suddenDeath.away}</b></span>`:''}</div>${clubs.map(club=>`<div class="penalty-team-row"><div class="penalty-team-meta">${clubCrestMarkup(club.name,club.user?state.player?.clubCountry:'')}<strong>${esc(club.name)}</strong></div><div class="penalty-dot-row">${renderDots(club)}</div><b class="penalty-row-score" data-penalty-score="${club.side}">${showOutcome?(pending.shootout?.score?.[club.side]??0):0}</b></div>`).join('')}</div>`;
+function penaltyProgressMarkup(pending){
+  const shoot=pending.shootoutLive||{kicks:[],score:{home:0,away:0}},clubs=[{name:pending.home,side:'home'},{name:pending.away,side:'away'}];
+  const dots=club=>Array.from({length:5},(_,i)=>{const round=i+1,k=shoot.kicks.find(x=>x.team===club.name&&x.round===round),chosen=club.name===pending.team&&pending.playerKickRound===round;let cls=k?(k.scored?'made':'missed'):(chosen?'chosen':'pending'),icon=k?(k.scored?'✓':'✕'):(chosen?'★':'');return `<span class="penalty-dot ${cls}${k?.isPlayer?' player-slot':''}" data-penalty-team="${esc(club.name)}" data-penalty-round="${round}">${icon}</span>`;}).join('');
+  return `<div class="penalty-shootout-shell"><div class="penalty-shootout-head"><span>${shoot.phase==='sudden'?'Cobranças alternadas':'Série inicial de 5 cobranças'}</span><span><b>${shoot.score.home||0} × ${shoot.score.away||0}</b></span></div>${clubs.map(club=>`<div class="penalty-team-row"><div class="penalty-team-meta">${penaltyTeamVisualMarkup(pending,club.name)}<strong>${esc(club.name)}</strong></div><div class="penalty-dot-row">${dots(club)}</div><b class="penalty-row-score">${shoot.score[club.side]||0}</b></div>`).join('')}${shoot.phase==='sudden'?`<div class="penalty-sudden-list">${(shoot.kicks||[]).filter(k=>k.round>5).map(k=>`<span class="${k.scored?'made':'missed'}">${esc(k.team)} · ${k.round}º ${k.scored?'✓':'✕'}</span>`).join('')}</div>`:''}</div>`;
+}
+function initPenaltyLive(pending){
+  if(pending.shootoutLive)return pending.shootoutLive;
+  const first=Math.random()<.5?pending.home:pending.away;
+  return pending.shootoutLive={first,nextTeam:first,round:1,kicks:[],score:{home:0,away:0},remaining:{home:5,away:5},phase:'standard',waitingForPlayer:false,finished:false};
+}
+function shootoutSide(pending,team){return team===pending.home?'home':'away';}
+function shootoutOpponent(pending,team){return team===pending.home?pending.away:pending.home;}
+function shootoutMathematicallyFinished(pending,live){return live.score.home>live.score.away+live.remaining.away||live.score.away>live.score.home+live.remaining.home;}
+function simulatedPenaltyChance(pending,team){const user=team===pending.team,base=user?clamp(.69+((state.player?.overall||70)-75)*.004,.57,.86):.72;return base;}
+function appendPenaltyKick(pending,team,round,scored,isPlayer=false){const live=initPenaltyLive(pending),side=shootoutSide(pending,team);live.kicks.push({team,round,scored,isPlayer});live.score[side]+=scored?1:0;if(round<=5)live.remaining[side]=Math.max(0,(live.remaining[side]||0)-1);}
+function advancePenaltyCursor(pending){const live=initPenaltyLive(pending),other=shootoutOpponent(pending,live.nextTeam);if(other===live.first){live.round++;}live.nextTeam=other;}
+function renderPenaltyLive(pending){const visual=$('#decision-visual');visual.className='decision-visual penalty-shootout-preview';visual.innerHTML=penaltyProgressMarkup(pending);hydratePenaltyBadges(visual);}
+function finalizePenaltyShootout(pending){
+  const live=initPenaltyLive(pending);live.finished=true;const teamWin=(live.score.home>live.score.away?pending.home:pending.away)===pending.team,p=state.player;
+  if(pending.scope==='worldcup'){const event=pending.event||{type:'national',worldCup:true,competition:'FIFA World Cup',stage:pending.stage,home:pending.home,away:pending.away,opponent:pending.home===p.nationality?pending.away:pending.home,opponentCode:codeForCountryName(pending.home===p.nationality?pending.away:pending.home)};state.pendingPenaltyShootout=null;processWorldCupResult(event,pending.scoreFor??0,pending.scoreAgainst??0,teamWin);}
+  else{const comp=pending.scope==='cup'?state.season.cup:state.season.continental?.knockout;if(teamWin){if(comp)advanceKnockout(comp);}else if(comp){comp.active=false;comp.eliminated=true;}if(pending.scope==='continental'&&state.season.continental?.knockout===comp&&!comp.active){state.season.continental.active=false;state.season.continental.won=!!comp.won;state.season.continental.eliminated=!!comp.eliminated;}state.pendingPenaltyShootout=null;}
+  save();renderPenaltyLive(pending);$('#decision-choices').classList.add('hidden');$('#decision-result').classList.remove('hidden');$('#decision-result').innerHTML=`<strong>${teamWin?'Sua equipe vence nos pênaltis!':'Sua equipe perde nos pênaltis.'}</strong><span>Placar da disputa: ${live.score.home}-${live.score.away}${live.phase==='sudden'?' após cobranças alternadas.':'.'}</span>`;$('#decision-continue').classList.remove('hidden');
+}
+function continuePenaltySimulation(pending){
+  const live=initPenaltyLive(pending);if(live.finished)return;
+  $('#decision-choices').classList.add('hidden');$('#decision-result').classList.add('hidden');renderPenaltyLive(pending);
+  const tick=()=>{
+    if(live.finished)return;
+    if(live.phase==='standard'&&shootoutMathematicallyFinished(pending,live)){finalizePenaltyShootout(pending);return;}
+    if(live.phase==='standard'&&live.round>5){if(live.score.home!==live.score.away){finalizePenaltyShootout(pending);return;}live.phase='sudden';live.round=6;live.nextTeam=live.first;}
+    const isPlayerTurn=live.phase==='standard'&&live.nextTeam===pending.team&&live.round===pending.playerKickRound;
+    if(isPlayerTurn){live.waitingForPlayer=true;renderPenaltyLive(pending);const scenario=buildShootoutScenario(pending);$('#decision-title').textContent=`Sua vez · ${pending.playerKickRound}º pênalti`;$('#decision-description').textContent='A disputa chegou à cobrança que você escolheu.';$('#decision-choices').classList.remove('hidden');$('#decision-choices').innerHTML=scenario.options.map((o,i)=>`<button class="event-choice decision-option" data-decision-option="${i}"><strong>${o.label}</strong><small>${o.effect}</small></button>`).join('');$('#decision-choices').querySelectorAll('[data-decision-option]').forEach(b=>b.addEventListener('click',()=>resolvePenaltyShootout(+b.dataset.decisionOption)));return;}
+    const team=live.nextTeam,round=live.round,scored=Math.random()<simulatedPenaltyChance(pending,team);appendPenaltyKick(pending,team,round,scored,false);advancePenaltyCursor(pending);renderPenaltyLive(pending);playMatchVisualFX('penalty',scored?'success':'miss','shootout');
+    if(live.phase==='sudden'&&live.nextTeam===live.first&&live.kicks.filter(k=>k.round===round).length===2&&live.score.home!==live.score.away){setTimeout(()=>finalizePenaltyShootout(pending),500);return;}
+    setTimeout(tick,560);
+  };
+  setTimeout(tick,420);
 }
 function openPenaltyShootoutDecision(){
   const pending=state.pendingPenaltyShootout;if(!pending)return;
-  const card=$('#match-decision-modal .decision-card');card.classList.remove('scene-night','scene-rain','scene-sunset','scene-derby','scene-fog','scene-floodlights','scene-finale');card.classList.add('scene-finale');applyDecisionCompetitionTheme(card,pending);
-  $('#decision-competition').textContent=`${pending.competition} · ${pending.stage} · pênaltis`;
-  $('#decision-match').textContent=`${pending.home} x ${pending.away}`;
-  $('#decision-result').classList.add('hidden');$('#decision-continue').classList.add('hidden');
-  const visual=$('#decision-visual'),choiceBox=$('#decision-choices');
-  visual.innerHTML='';visual.className='decision-visual hidden';choiceBox.innerHTML='';choiceBox.classList.remove('hidden','penalty-order-choices');
-  if(!pending.playerKickRound){
-    choiceBox.classList.add('penalty-order-choices');
-    const options=buildPenaltyOrderOptions();
-    $('#decision-title').textContent="120' · Escolha qual pênalti você vai bater";
-    $('#decision-description').textContent='A disputa terá até 5 cobranças por lado. Se a sua equipe já estiver eliminada matematicamente antes da sua vez, você não bate.';
-    visual.className='decision-visual penalty-shootout-preview';
-    visual.innerHTML=penaltyProgressMarkup(pending,{showChosenSlot:false,showOutcome:false});hydratePenaltyBadges(visual);
-    choiceBox.innerHTML=options.map((o,i)=>`<button class="event-choice decision-option" data-penalty-order="${i+1}"><strong>${o.label}</strong><small>${o.effect}</small></button>`).join('');
-    choiceBox.querySelectorAll('[data-penalty-order]').forEach(b=>b.addEventListener('click',()=>{pending.playerKickRound=Number(b.dataset.penaltyOrder);save();openPenaltyShootoutDecision();}));
-    $('#match-decision-modal').classList.remove('hidden');playMatchVisualFX('penalty','intro','shootout');return;
-  }
-  const scenario=buildShootoutScenario(pending);
-  $('#decision-title').textContent=`120' · Você cobrará o ${pending.playerKickRound}º pênalti`;
-  $('#decision-description').textContent=scenario.description;
-  visual.className='decision-visual penalty-shootout-preview';visual.innerHTML=penaltyProgressMarkup(pending,{showChosenSlot:true,showOutcome:false});hydratePenaltyBadges(visual);
-  choiceBox.innerHTML=scenario.options.map((o,i)=>`<button class="event-choice decision-option" data-decision-option="${i}"><strong>${o.label}</strong><small>${o.effect}</small></button>`).join('');
-  choiceBox.querySelectorAll('[data-decision-option]').forEach(b=>b.addEventListener('click',()=>resolvePenaltyShootout(+b.dataset.decisionOption)));
-  $('#match-decision-modal').classList.remove('hidden');playMatchVisualFX('penalty','intro','shootout');
-}
-function simulateShootoutSeries(pending,option){
-  const p=state.player,attrs=p.attributes||{};
-  const playerSkill=((attrs.finishing||p.overall||70)+(attrs.dribbling||70)*.12+(attrs.passing||70)*.08+(p.reputation||0)*.18)/100;
-  const userFirst=pending.team===pending.home;
-  const strengthFor=clamp(((p.overall||70)+(p.potential||70))/200,.60,.95),strengthAgainst=clamp((((pending.opponentStrength||p.clubStrength||76)||76))/100,.58,.92);
-  const teamBase=clamp(.68+(strengthFor-.75)*.18,.58,.88),oppBase=clamp(.67+(strengthAgainst-.75)*.15,.56,.86),first=Math.random()<.5?pending.home:pending.away;
-  const kicks=[];let scoreHome=0,scoreAway=0,remainingHome=5,remainingAway=5;let playerKick={team:pending.team,round:pending.playerKickRound,taken:false,scored:false};
-  const canEndEarly=()=>scoreHome>scoreAway+remainingAway||scoreAway>scoreHome+remainingHome;
-  const takeKick=(team,round)=>{const isHome=team===pending.home,isPlayer=userFirst===isHome&&round===pending.playerKickRound;let chance=isPlayer?clamp(option.chance+(playerSkill-.78)*.18,.48,.94):(isHome===userFirst?teamBase:oppBase);const scored=Math.random()<chance;if(isHome){remainingHome=Math.max(0,remainingHome-1);if(scored)scoreHome++;}else{remainingAway=Math.max(0,remainingAway-1);if(scored)scoreAway++;}kicks.push({team,round,scored,isPlayer});if(isPlayer)playerKick={team,round,taken:true,scored};};
-  for(let round=1;round<=5;round++){
-    const order=first===pending.home?[pending.home,pending.away]:[pending.away,pending.home];
-    for(const team of order){const isHome=team===pending.home,userRound=userFirst===isHome&&round===pending.playerKickRound;if(canEndEarly()){if(userRound&&!playerKick.taken)playerKick={team,round,taken:false,scored:false};continue;}takeKick(team,round);}if(canEndEarly())break;
-  }
-  let suddenDeath=null;
-  if(scoreHome===scoreAway){let sdHome=0,sdAway=0,round=6;while(round<=10&&scoreHome===scoreAway){const order=first===pending.home?[pending.home,pending.away]:[pending.away,pending.home];const pair=[];for(const team of order){const chance=team===pending.home?(userFirst?teamBase:oppBase):(userFirst?oppBase:teamBase);const scored=Math.random()<chance;if(team===pending.home){if(scored)scoreHome++;sdHome+=scored?1:0;}else{if(scored)scoreAway++;sdAway+=scored?1:0;}kicks.push({team,round,scored,isPlayer:false,sudden:true});pair.push(scored);}suddenDeath={home:sdHome,away:sdAway};if(pair[0]!==pair[1])break;round++;}}
-  return {first,kicks,playerKick,score:{home:scoreHome,away:scoreAway},winner:scoreHome>scoreAway?pending.home:pending.away,suddenDeath};
-}
-function animatePenaltyShootout(pending,shootout,onDone){
-  const visual=$('#decision-visual');if(!visual){onDone?.();return;}
-  visual.className='decision-visual penalty-shootout-preview';visual.innerHTML=penaltyProgressMarkup(pending,{showChosenSlot:true,showOutcome:false});hydratePenaltyBadges(visual);
-  const standard=shootout.kicks.filter(k=>k.round<=5),live={home:0,away:0};let i=0;
-  const step=()=>{
-    if(i>=standard.length){
-      if(shootout.playerKick?.taken===false){const side=shootout.playerKick.team===pending.home?'home':'away';const dot=visual.querySelector(`[data-penalty-side="${side}"][data-penalty-round="${shootout.playerKick.round}"]`);if(dot){dot.className='penalty-dot skipped player-slot';dot.textContent='–';}}
-      setTimeout(()=>onDone?.(),420);return;
-    }
-    const kick=standard[i++],side=kick.team===pending.home?'home':'away',dot=visual.querySelector(`[data-penalty-side="${side}"][data-penalty-round="${kick.round}"]`);
-    if(dot){dot.className=`penalty-dot ${kick.scored?'made':'missed'}${kick.isPlayer?' player-slot':''}`;dot.textContent=kick.scored?'✓':'✕';}
-    if(kick.scored)live[side]++;const score=visual.querySelector(`[data-penalty-score="${side}"]`);if(score)score.textContent=live[side];
-    playMatchVisualFX('penalty',kick.scored?'success':'miss','shootout');setTimeout(step,520);
-  };
-  setTimeout(step,280);
+  const card=$('#match-decision-modal .decision-card');card.classList.add('scene-finale');applyDecisionCompetitionTheme(card,pending);$('#decision-competition').textContent=`${pending.competition} · ${pending.stage} · pênaltis`;$('#decision-match').textContent=`${pending.home} x ${pending.away}`;$('#decision-result').classList.add('hidden');$('#decision-continue').classList.add('hidden');$('#decision-visual').className='decision-visual penalty-shootout-preview';
+  if(!pending.playerKickRound){$('#decision-title').textContent="120' · Escolha qual pênalti você vai bater";$('#decision-description').textContent='Depois da escolha, as cobranças serão simuladas na ordem normal até chegar a sua vez.';$('#decision-visual').innerHTML=penaltyProgressMarkup(pending);hydratePenaltyBadges($('#decision-visual'));const box=$('#decision-choices');box.className='event-choices penalty-order-choices';box.innerHTML=buildPenaltyOrderOptions().map(o=>`<button class="event-choice decision-option" data-penalty-order="${o.slot}"><strong>${o.label}</strong><small>${o.effect}</small></button>`).join('');box.querySelectorAll('[data-penalty-order]').forEach(b=>b.addEventListener('click',()=>{pending.playerKickRound=Number(b.dataset.penaltyOrder);initPenaltyLive(pending);save();continuePenaltySimulation(pending);}));$('#match-decision-modal').classList.remove('hidden');return;}
+  continuePenaltySimulation(pending);$('#match-decision-modal').classList.remove('hidden');
 }
 function resolvePenaltyShootout(index){
-  const pending=state.pendingPenaltyShootout;if(!pending)return;const option=buildShootoutScenario(pending).options[index],p=state.player,shootout=simulateShootoutSeries(pending,option);pending.shootout=shootout;
-  const teamWin=shootout.winner===pending.team,playerTaken=shootout.playerKick?.taken,success=!!shootout.playerKick?.scored;
-  $('#decision-choices').classList.add('hidden');$('#decision-result').classList.add('hidden');$('#decision-continue').classList.add('hidden');$('#decision-description').textContent='A disputa está em andamento. Cada cobrança será registrada abaixo.';
-  if(pending.scope==='worldcup'){
-    const event=pending.event||{type:'national',worldCup:true,competition:'FIFA World Cup',stage:pending.stage,home:pending.home,away:pending.away,opponent:pending.home===p.nationality?pending.away:pending.home,opponentCode:codeForCountryName(pending.home===p.nationality?pending.away:pending.home)};
-    state.pendingPenaltyShootout=null;processWorldCupResult(event,pending.scoreFor??0,pending.scoreAgainst??0,teamWin);state.news.push(`${p.name} ${!playerTaken?'não chega a bater porque a disputa termina antes da sua vez.':success?'converte sua cobrança':'desperdiça sua cobrança'}, e ${p.nationality} ${teamWin?'vence':'perde'} a disputa de pênaltis.`);
-  }else{
-    const comp=pending.scope==='cup'?state.season.cup:state.season.continental?.knockout;
-    if(teamWin){state.news.push(`${p.name} ${!playerTaken?'não precisa bater porque a disputa já estava decidida.':success?'converte sua cobrança':'perde sua cobrança'}, mas ${pending.team} se classifica nos pênaltis.`);if(comp)advanceKnockout(comp);}else{if(comp){comp.active=false;comp.eliminated=true;}state.news.push(`${pending.team} cai nos pênaltis em ${pending.competition}.`);}
-    if(pending.scope==='continental'&&state.season.continental?.knockout===comp&&!comp.active){state.season.continental.active=false;state.season.continental.won=!!comp.won;state.season.continental.eliminated=!!comp.eliminated;}state.pendingPenaltyShootout=null;
-  }
-  save();
-  animatePenaltyShootout(pending,shootout,()=>{
-    render();const visual=$('#decision-visual');visual.className='decision-visual penalty-shootout-preview';visual.innerHTML=penaltyProgressMarkup({...pending,shootout},{showChosenSlot:true,showOutcome:true});hydratePenaltyBadges(visual);
-    $('#decision-result').classList.remove('hidden');const playerText=!playerTaken?'A disputa acabou antes da sua vez, então você nem precisou bater.':success?'Você converteu a sua cobrança.':'Você desperdiçou a sua cobrança.';
-    $('#decision-result').innerHTML=`<strong>${teamWin?'Sua equipe vence nos pênaltis!':'Sua equipe perde nos pênaltis.'}</strong><span>${playerText} Placar da série: ${shootout.score.home}-${shootout.score.away}${shootout.suddenDeath?' após morte súbita.':''}</span>`;$('#decision-continue').classList.remove('hidden');playMatchVisualFX('penalty',teamWin?'success':'miss','shootout');
-  });
+  const pending=state.pendingPenaltyShootout;if(!pending)return;const live=initPenaltyLive(pending),option=buildShootoutScenario(pending).options[index];if(!live.waitingForPlayer)return;live.waitingForPlayer=false;const attrs=state.player?.attributes||{},skill=((attrs.finishing||state.player?.overall||70)+(attrs.dribbling||70)*.12+(attrs.passing||70)*.08)/100,chance=clamp(option.chance+(skill-.78)*.18,.48,.94),scored=Math.random()<chance;appendPenaltyKick(pending,pending.team,live.round,scored,true);advancePenaltyCursor(pending);$('#decision-choices').classList.add('hidden');renderPenaltyLive(pending);playMatchVisualFX('penalty',scored?'success':'miss','shootout');setTimeout(()=>continuePenaltySimulation(pending),650);
 }
 
 function processKnockout(comp,event,pf,pa){
@@ -3088,6 +3056,24 @@ function competitionStatus(){
 }
 const CURRENT_PLAYER_META={
 'Mohamed Salah':['Liverpool','ENG','EG'],'Kylian Mbappé':['Real Madrid','ES','FR'],'Erling Haaland':['Manchester City','ENG','NO'],'Jude Bellingham':['Real Madrid','ES','ENG'],'Ousmane Dembélé':['Paris Saint-Germain','FR','FR'],'Rodri':['Manchester City','ENG','ES'],'Virgil van Dijk':['Liverpool','ENG','NL'],'Raphinha':['Barcelona','ES','BR'],'Lamine Yamal':['Barcelona','ES','ES'],'Pedri':['Barcelona','ES','ES'],'Vini Jr.':['Real Madrid','ES','BR'],'Joshua Kimmich':['Bayern de Munique','DE','DE'],'Harry Kane':['Bayern de Munique','DE','ENG'],'Florian Wirtz':['Liverpool','ENG','DE'],'Federico Valverde':['Real Madrid','ES','UY'],'Jamal Musiala':['Bayern de Munique','DE','DE'],'Lautaro Martínez':['Inter de Milão','IT','AR'],'Robert Lewandowski':['Barcelona','ES','PL'],'Bukayo Saka':['Arsenal','ENG','ENG'],'Cole Palmer':['Chelsea','ENG','ENG'],'Kevin De Bruyne':['Napoli','IT','BE'],'Frenkie de Jong':['Barcelona','ES','NL'],'Bruno Fernandes':['Manchester United','ENG','PT'],'Martin Ødegaard':['Arsenal','ENG','NO'],'Michael Olise':['Bayern de Munique','DE','FR'],'Paulo Dybala':['Roma','IT','AR'],'Hakan Çalhanoğlu':['Inter de Milão','IT','TR'],'Nico Williams':['Athletic Club','ES','ES'],'Nuno Mendes':['Paris Saint-Germain','FR','PT'],'Lionel Messi':['Inter Miami','US','AR'],'Neymar Jr':['Santos','BR','BR'],'Cristiano Ronaldo':['Al-Nassr','SA','PT'],'Achraf Hakimi':['Paris Saint-Germain','FR','MA'],'Theo Hernández':['Al-Hilal','SA','FR'],'William Saliba':['Arsenal','ENG','FR'],'Gabriel Magalhães':['Arsenal','ENG','BR'],'Vitinha':['Paris Saint-Germain','FR','PT'],'Khvicha Kvaratskhelia':['Paris Saint-Germain','FR','GE'],'Nicolò Barella':['Inter de Milão','IT','IT'],'Declan Rice':['Arsenal','ENG','ENG'],'Alexander Isak':['Liverpool','ENG','SE'],'Victor Osimhen':['Galatasaray','TR','NG'],'Viktor Gyökeres':['Arsenal','ENG','SE'],'Julián Álvarez':['Atlético de Madrid','ES','AR'],'João Neves':['Paris Saint-Germain','FR','PT'],'Alessandro Bastoni':['Inter de Milão','IT','IT'],'Rúben Dias':['Manchester City','ENG','PT'],'Bernardo Silva':['Manchester City','ENG','PT'],'Rafael Leão':['Milan','IT','PT'],'Jules Koundé':['Barcelona','ES','FR']};
+const CURRENT_PLAYER_BIRTH_YEARS={
+'Mohamed Salah':1992,'Kylian Mbappé':1998,'Erling Haaland':2000,'Jude Bellingham':2003,'Ousmane Dembélé':1997,'Rodri':1996,'Virgil van Dijk':1991,'Raphinha':1996,'Lamine Yamal':2007,'Pedri':2002,'Vini Jr.':2000,'Joshua Kimmich':1995,'Harry Kane':1993,'Florian Wirtz':2003,'Federico Valverde':1998,'Jamal Musiala':2003,'Lautaro Martínez':1997,'Robert Lewandowski':1988,'Bukayo Saka':2001,'Cole Palmer':2002,'Kevin De Bruyne':1991,'Frenkie de Jong':1997,'Bruno Fernandes':1994,'Martin Ødegaard':1998,'Michael Olise':2001,'Paulo Dybala':1993,'Hakan Çalhanoğlu':1994,'Nico Williams':2002,'Nuno Mendes':2002,'Lionel Messi':1987,'Neymar Jr':1992,'Cristiano Ronaldo':1985,'Achraf Hakimi':1998,'Theo Hernández':1997,'William Saliba':2001,'Gabriel Magalhães':1997,'Vitinha':2000,'Khvicha Kvaratskhelia':2001,'Nicolò Barella':1997,'Declan Rice':1999,'Alexander Isak':1999,'Victor Osimhen':1998,'Viktor Gyökeres':1998,'Julián Álvarez':2000,'João Neves':2004,'Alessandro Bastoni':1999,'Rúben Dias':1997,'Bernardo Silva':1994,'Rafael Leão':1999,'Jules Koundé':1998};
+function inferredWorldPlayerBirthYear(name=''){
+  if(CURRENT_PLAYER_BIRTH_YEARS[name])return CURRENT_PLAYER_BIRTH_YEARS[name];
+  return START_YEAR-(22+(stableHash(name)%12));
+}
+function worldPlayerAge(wp,year=state.season?.year||START_YEAR){return Math.max(16,(Number(year)||START_YEAR)-(wp.birthYear||inferredWorldPlayerBirthYear(wp.name)));}
+function worldRetirementChance(age){if(age<36)return 0;return ({36:.06,37:.11,38:.20,39:.32,40:.48,41:.66,42:.84,43:.96})[age]??(age>=44?1:0);}
+function simulateWorldRetirements(year=state.season?.year||START_YEAR){
+  ensureWorldPlayers().forEach(wp=>{
+    if(wp.retired)return;
+    wp.birthYear=wp.birthYear||inferredWorldPlayerBirthYear(wp.name);
+    const age=worldPlayerAge(wp,year),chance=worldRetirementChance(age);
+    if(chance<=0)return;
+    const forced=age>=44||(wp.name==='Cristiano Ronaldo'&&age>=43);
+    if(forced||Math.random()<chance){wp.retired=true;wp.retiredYear=year;wp.retiredAge=age;wp.club='';}
+  });
+}
 const EXTRA_ACTIVE_PLAYERS=[
 {name:'Giorgian de Arrascaeta',rating:86,position:'MEI',club:'Flamengo',countryCode:'BR',nationalCode:'UY'},
 {name:'Pedro',rating:84,position:'ATA',club:'Flamengo',countryCode:'BR',nationalCode:'BR'},
@@ -3135,15 +3121,17 @@ const EXTRA_ACTIVE_PLAYERS=[
 ];
 function ensureWorldPlayers(){
   if(!Array.isArray(state.worldPlayers)||!state.worldPlayers.length){
-    const base=(typeof CURRENT_DRAFT_PLAYERS!=='undefined'?CURRENT_DRAFT_PLAYERS:[]).map(x=>{const m=CURRENT_PLAYER_META[x.name]||[];return {id:normalizeKey(x.name),name:x.name,rating:x.rating||84,position:x.position||'ATA',club:m[0]||'',countryCode:m[1]||'',nationalCode:m[2]||''};});
-    state.worldPlayers=[...base,...EXTRA_ACTIVE_PLAYERS.map(x=>({...x,id:normalizeKey(x.name)}))];
+    const base=(typeof CURRENT_DRAFT_PLAYERS!=='undefined'?CURRENT_DRAFT_PLAYERS:[]).map(x=>{const m=CURRENT_PLAYER_META[x.name]||[];return {id:normalizeKey(x.name),name:x.name,rating:x.rating||84,position:x.position||'ATA',club:m[0]||'',countryCode:m[1]||'',nationalCode:m[2]||'',birthYear:inferredWorldPlayerBirthYear(x.name),retired:false};});
+    state.worldPlayers=[...base,...EXTRA_ACTIVE_PLAYERS.map(x=>({...x,id:normalizeKey(x.name),birthYear:x.birthYear||inferredWorldPlayerBirthYear(x.name),retired:false}))];
   }
+  state.worldPlayers.forEach(wp=>{wp.birthYear=wp.birthYear||inferredWorldPlayerBirthYear(wp.name);wp.retired=!!wp.retired;});
   return state.worldPlayers;
 }
 function simulateWorldTransfers(){
+  simulateWorldRetirements(state.season?.year||START_YEAR);
   const pool=allTransferClubs().filter(c=>(c.strength||0)>=76);
   ensureWorldPlayers().forEach(wp=>{
-    if(Math.random()>.035)return;
+    if(wp.retired||Math.random()>.035)return;
     const currentClub=findClubData(wp.club,wp.countryCode)||findClubDataAny(wp.club)||{};
     const currentConf=confederation(wp.countryCode);
     const elite=(wp.rating||0)>=86;
@@ -3182,8 +3170,20 @@ function simulatedLeaderStat(wp,title,year,progress){
   const goalRate=att?.16+(rating-72)*.022:mid?.08+(rating-72)*.010:.025+(rating-72)*.0035,assistRate=att?.09+(rating-72)*.009:mid?.13+(rating-72)*.012:.045+(rating-72)*.004;
   return {games,goals:Math.max(0,Math.round(games*goalRate*noise)),assists:Math.max(0,Math.round(games*assistRate*(1.06-(noise-.86))))};
 }
+function worldPlayerEligibleForCompetition(wp,title=''){
+  if(!wp||wp.retired||!wp.club)return false;
+  const strength=clubStrength(wp.club,wp.countryCode)||findClubDataAny(wp.club)?.strength||wp.rating||75;
+  if(/UEFA Champions League/i.test(title))return confederation(wp.countryCode)==='UEFA'&&strength>=82;
+  if(/UEFA Europa League/i.test(title))return confederation(wp.countryCode)==='UEFA'&&strength>=77;
+  if(/UEFA Conference League/i.test(title))return confederation(wp.countryCode)==='UEFA'&&strength>=73;
+  if(/Libertadores|Sudamericana/i.test(title))return confederation(wp.countryCode)==='CONMEBOL';
+  if(/AFC Champions/i.test(title))return confederation(wp.countryCode)==='AFC';
+  if(/CAF Champions/i.test(title))return confederation(wp.countryCode)==='CAF';
+  if(/CONCACAF Champions/i.test(title))return confederation(wp.countryCode)==='CONCACAF';
+  return true;
+}
 function leaderboardCandidates(title){
-  const players=ensureWorldPlayers();
+  const players=ensureWorldPlayers().filter(wp=>worldPlayerEligibleForCompetition(wp,title));
   const specificClubs=clubsForLeaderboardCompetition(title);
   if(specificClubs?.size){
     let scoped=players.filter(wp=>specificClubs.has(wp.club));
@@ -3196,7 +3196,6 @@ function leaderboardCandidates(title){
   if(title===s.league?.name||title===s.cup?.name)list=players.filter(x=>x.countryCode===s.countryAtStart);
   else if(/Champions League|Europa League|Conference League|Libertadores|Sudamericana|AFC Champions|CAF Champions|CONCACAF Champions/i.test(title))list=players.filter(x=>confederation(x.countryCode)===confederation(s.countryAtStart));
   else if(/Supercopa|Super Cup|Community Shield|Trophée|Cruyff Shield|Recopa/i.test(title))list=players.filter(x=>x.countryCode===s.countryAtStart);
-  if(list.length<9)list=[...list,...players.filter(x=>!list.includes(x)).sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,12-list.length)];
   return list.slice(0,30);
 }
 function leaderboardTeamVisual(row,title=''){
